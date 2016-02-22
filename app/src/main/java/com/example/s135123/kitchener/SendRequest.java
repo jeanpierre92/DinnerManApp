@@ -16,17 +16,17 @@ public class SendRequest implements Runnable {
 
     String requestType;
     URL url;
-    String parameters;
+    FatSecretRequest fatSecretRequest;
+    MainActivity main;
 
     final String USER_AGENT = "Mozilla/5.0";
     JSONObject jsonObj;
-    public boolean isDone;
 
-    SendRequest(String requestType, URL url, String parameters) {
+    SendRequest(MainActivity main, String requestType, URL url, FatSecretRequest fatSecretRequest) {
+        this.main = main;
         this.requestType = requestType;
         this.url = url;
-        this.parameters = parameters;
-        this.isDone = false;
+        this.fatSecretRequest = fatSecretRequest;
     }
 
     @Override
@@ -79,16 +79,10 @@ public class SendRequest implements Runnable {
         // create JSON object from the string
         try {
             jsonObj = new JSONObject(response.toString());
-
-            // jsonObject is ready
-            isDone = true;
-            System.out.println("isDone == true");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
 
-    public JSONObject getJSON() {
-        return jsonObj;
+        main.foodRequestDone(jsonObj);
     }
 }

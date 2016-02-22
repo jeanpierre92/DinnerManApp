@@ -53,12 +53,11 @@ public class MainActivity extends AppCompatActivity {
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-                SendRequest foodRequest = new SendRequest("POST", requestURL, "a=foo&oauth_consumer_key=64ff745f9f58447eb62cb6eb2ab906bb&oauth_nonce=abc&oauth_signature_method=HMAC-SHA1&oauth_timestamp=12345678&oauth_version=1.0&z=bar");
-                while (!foodRequest.isDone) {
-                    ;
-                }
-                JSONObject returnedJSONobject = foodRequest.getJSON();
-                System.out.println(returnedJSONobject.toString());
+
+                FatSecretRequest fat = new FatSecretRequest();
+
+                SendRequest foodRequest = new SendRequest(MainActivity.this, "POST", requestURL, fat);
+                // Implement loading bar here?
             }
         });
 
@@ -69,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("button click ID: TestButton");
             }
         });
+    }
+
+    public void foodRequestDone(JSONObject jsonObj) {
+        System.out.println(jsonObj.toString());
     }
 
     @Override
