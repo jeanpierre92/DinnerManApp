@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -44,7 +47,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("button click ID: FoodButton");
-                sendPostRequest();
+                URL requestURL = null;
+                try {
+                    requestURL = new URL("http://platform.fatsecret.com/rest/server.api");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                SendRequest foodRequest = new SendRequest("POST", requestURL, "a=foo&oauth_consumer_key=64ff745f9f58447eb62cb6eb2ab906bb&oauth_nonce=abc&oauth_signature_method=HMAC-SHA1&oauth_timestamp=12345678&oauth_version=1.0&z=bar");
+                while (!foodRequest.isDone) {
+                    ;
+                }
+                JSONObject returnedJSONobject = foodRequest.getJSON();
+                System.out.println(returnedJSONobject.toString());
             }
         });
 
@@ -55,63 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("button click ID: TestButton");
             }
         });
-    }
-
-    private void sendPostRequest() {
-
-        final String USER_AGENT = "Mozilla/5.0";
-        String url = "https://platform.fatsecret.com/rest/server.api";
-
-        URL obj = null;
-        HttpsURLConnection con = null;
-        try {
-            obj = new URL(url);
-            con = (HttpsURLConnection) obj.openConnection();
-            con.setRequestMethod("POST");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        con.setRequestProperty("User-Agent", USER_AGENT);
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-
-        String urlParameters = "a=foo&oauth_consumer_key=demo&oauth_nonce=abc&oauth_signature_method=HMAC-SHA1&oauth_timestamp=12345678&oauth_version=1.0&z=bar";
-
-        int responseCode = 0;
-        // Send post request
-        con.setDoOutput(true);
-        try {
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.flush();
-            wr.close();
-
-            responseCode = con.getResponseCode();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("\nSending 'POST' request to URL : " + url);
-        System.out.println("Post parameters : " + urlParameters);
-        System.out.println("Response Code : " + responseCode);
-
-        StringBuffer response = new StringBuffer();
-        try {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //print result
-        System.out.println(response.toString());
     }
 
     @Override
