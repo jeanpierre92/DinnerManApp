@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                FatSecretRequest fat = new FatSecretRequest();
+                String[] fatSecretParameters = {};
+                FatSecretRequest fat = new FatSecretRequest("64ff745f9f58447eb62cb6eb2ab906bb", fatSecretParameters);
 
                 SendRequest foodRequest = new SendRequest(MainActivity.this, "POST", requestURL, fat);
                 // Implement loading bar here?

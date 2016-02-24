@@ -9,17 +9,16 @@ import java.security.SecureRandom;
 public class FatSecretRequest {
 
     String consumerKey;
-    int timeStamp;
     String[] arguments;
 
     String signatureMethod;
     String nonce;
     String version;
     String returnString;
+    int timeStamp;
 
-    FatSecretRequest(String consumerKey, int timeStamp, String[] arguments) {
+    FatSecretRequest(String consumerKey, String[] arguments) {
         this.consumerKey = consumerKey;
-        this.timeStamp = timeStamp;
         this.arguments = arguments;
 
         signatureMethod = "HMAC-SHA1";
@@ -36,6 +35,12 @@ public class FatSecretRequest {
         // Create a random string that the fatSecretAPI needs
         SecureRandom random = new SecureRandom();
         nonce = new BigInteger(130, random).toString(32);
+    }
+
+    private void makeTimeStamp() {
+        // Get the current
+        Long timeStampLong = System.currentTimeMillis()/1000;
+        timeStamp = timeStampLong.intValue();
     }
 
     public String getConsumerKey() {
