@@ -1,7 +1,11 @@
 package com.example.s135123.kitchener;
 
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by s135123 on 22-2-2016.
@@ -15,20 +19,34 @@ public class FatSecretRequest {
     String nonce;
     String version;
     String returnString;
-    int timeStamp;
+    String fatSecretURL;
+    String httpMethod;
+    String format;
+    String timeStamp;
 
-    FatSecretRequest(String consumerKey, String[] arguments) {
-        this.consumerKey = consumerKey;
+    FatSecretRequest(String[] arguments) {
         this.arguments = arguments;
 
         signatureMethod = "HMAC-SHA1";
-        makeNonce();
         version = "1.0";
+        fatSecretURL = "http://platform.fatsecret.com/rest/server.api";
+        httpMethod = "POST";
+        format = "json";
+        makeNonce();
+        makeTimeStamp();
         makeReturnString();
     }
 
     private void makeReturnString() {
-
+        //first sort the array
+        List<String> sortedArray = Arrays.asList(arguments);
+        sortedArray.add(consumerKey);
+        sortedArray.add(signatureMethod);
+        sortedArray.add(version);
+        sortedArray.add(nonce);
+        sortedArray.add(timeStamp);
+        Arrays.sort(sortedArray.toArray());;
+        URLEncoder test = URLEncoder.encode(sortedArray.toString(), "US-ASCII");
     }
 
     private void makeNonce() {
@@ -40,14 +58,14 @@ public class FatSecretRequest {
     private void makeTimeStamp() {
         // Get the current
         Long timeStampLong = System.currentTimeMillis()/1000;
-        timeStamp = timeStampLong.intValue();
+        timeStamp = timeStampLong.intValue() + "";
     }
 
     public String getConsumerKey() {
         return consumerKey;
     }
 
-    public String getArguments() {
+    public String getArgumentsSortedSigned() {
         return returnString;
     }
 

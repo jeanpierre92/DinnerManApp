@@ -48,7 +48,7 @@ public class SendRequest implements Runnable {
         con.setDoOutput(true);
         try {
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(parameters);
+            wr.writeBytes(fatSecretRequest.getArgumentsSortedSigned());
             wr.flush();
             wr.close();
 
@@ -58,7 +58,7 @@ public class SendRequest implements Runnable {
         }
 
         System.out.println("\nSending 'POST' request to URL : " + url);
-        System.out.println("Post parameters : " + parameters);
+        System.out.println("Post parameters : " + fatSecretRequest.getArgumentsSortedSigned());
         System.out.println("Response Code : " + responseCode);
 
         StringBuffer response = new StringBuffer();

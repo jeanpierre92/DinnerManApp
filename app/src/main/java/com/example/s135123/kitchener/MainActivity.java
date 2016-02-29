@@ -54,8 +54,9 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                String[] fatSecretParameters = {};
-                FatSecretRequest fat = new FatSecretRequest("64ff745f9f58447eb62cb6eb2ab906bb", fatSecretParameters);
+                String[] fatSecretParameters = {"oauth_consumer_key=64ff745f9f58447eb62cb6eb2ab906bb",
+                                                "method=food.get", "recipe_id=91"};
+                FatSecretRequest fat = new FatSecretRequest(fatSecretParameters);
 
                 SendRequest foodRequest = new SendRequest(MainActivity.this, "POST", requestURL, fat);
                 // Implement loading bar here?
