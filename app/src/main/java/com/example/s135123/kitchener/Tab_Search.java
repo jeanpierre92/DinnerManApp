@@ -13,6 +13,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -20,6 +21,7 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by s136693 on 5-3-2016.
  */
 public class Tab_Search extends Fragment {
+    ArrayList<Recipe> recipes = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
