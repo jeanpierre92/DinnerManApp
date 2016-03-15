@@ -4,12 +4,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by s130604 on 5-3-2016.
  */
-public class Recipe {
+public class Recipe implements Serializable{
 
 
     //Deze waardes kunnen leeg zijn, afhankelijk van wat de API geeft
@@ -42,114 +43,116 @@ public class Recipe {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try {
-            id = o.getInt("id");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            title = o.getString("title");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            image = o.getString("image");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            readyInMinutes = o.getInt("readyInMinutes");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            cookingMinutes = o.getInt("cookingMinutes");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            preparationMinutes = o.getInt("preparationMinutes");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            summary = o.getString("summary");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JSONArray instructionsJsonArray = null;
-        try {
-            instructionsJsonArray = o.getJSONArray("instructions");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            for (int i = 0; i < instructionsJsonArray.length(); i++) {
-                instructions.add(instructionsJsonArray.getString(i));
+        if (o != null) {
+            try {
+                id = o.getInt("id");
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            cheap = o.getBoolean("cheap");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JSONArray badgesJsonArray = null;
-        try {
-            badgesJsonArray = o.getJSONArray("badges");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            for (int i = 0; i < badgesJsonArray.length(); i++) {
-                badges.add(badgesJsonArray.getString(i));
+            try {
+                title = o.getString("title");
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JSONArray ingredientsJsonArray = null;
-        try {
-            ingredientsJsonArray = o.getJSONArray("ingredients");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            for (int i = 0; i < ingredientsJsonArray.length(); i++) {
-                ingredients.add(new Ingredient(ingredientsJsonArray.getJSONObject(i)));
+            try {
+                image = o.getString("image");
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        try {
-            fat = o.getInt("fat");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            calories = o.getInt("calories");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            protein = o.getInt("protein");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            carbs = o.getInt("carbs");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            try {
+                readyInMinutes = o.getInt("readyInMinutes");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                cookingMinutes = o.getInt("cookingMinutes");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                preparationMinutes = o.getInt("preparationMinutes");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-        try {
-            servings = o.getInt("servings");
-        } catch (JSONException e) {
-            e.printStackTrace();
+            try {
+                summary = o.getString("summary");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JSONArray instructionsJsonArray = null;
+            try {
+                instructionsJsonArray = o.getJSONArray("instructions");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                for (int i = 0; i < instructionsJsonArray.length(); i++) {
+                    instructions.add(instructionsJsonArray.getString(i));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                cheap = o.getBoolean("cheap");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JSONArray badgesJsonArray = null;
+            try {
+                badgesJsonArray = o.getJSONArray("badges");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                for (int i = 0; i < badgesJsonArray.length(); i++) {
+                    badges.add(badgesJsonArray.getString(i));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JSONArray ingredientsJsonArray = null;
+            try {
+                ingredientsJsonArray = o.getJSONArray("ingredients");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                for (int i = 0; i < ingredientsJsonArray.length(); i++) {
+                    ingredients.add(new Ingredient(ingredientsJsonArray.getJSONObject(i)));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                fat = o.getInt("fat");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                calories = o.getInt("calories");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                protein = o.getInt("protein");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                carbs = o.getInt("carbs");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                servings = o.getInt("servings");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.s135123.kitchener;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,8 +32,9 @@ public class Tab_Search extends Fragment {
         but1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("button click ID: FoodButton");
-                sendPostRequest();
+                Intent i = new Intent(getActivity(), RecipeInfoActivity.class);
+                i.putExtra("Recipe", new Recipe(""));
+                startActivity(i);
             }
         });
 
