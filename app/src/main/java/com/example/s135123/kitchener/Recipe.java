@@ -22,12 +22,10 @@ public class Recipe {
     int preparationMinutes;
 
     String summary;
-    String instructions;
+    ArrayList<String> instructions = new ArrayList<>();
     boolean cheap = false;
     ArrayList<String> badges;   //properties of the recipe
     ArrayList<Ingredient> ingredients;
-
-    String cuisine;
 
     int fat;
     int calories;
@@ -36,99 +34,123 @@ public class Recipe {
 
     int servings; //number of servings I assume
 
-    /*
-    example of complexSearchResultJson:
-    {
-         "missedIngredientCount":7,
-         "id":311403,
-         "title":"Italian Hamburger Slices",
-         "imageType":"jpeg",
-         "protein":"41g",
-         "fat":"53g",
-         "likes":0,
-         "usedIngredientCount":3,
-         "calories":907,
-         "image":"https://spoonacular.com/recipeImages/Italian-Hamburger-Slices-311403.jpeg",
-         "carbs":"68g"
-      }
-     */
-
     //these are all json strings
-    public Recipe(String cuisineJson, String summaryJson, String informationJson, String extractedByUrlJson, String complexSearchResultJson) {
-        JSONObject cuisineObject = null;
+    public Recipe(String json) {
+        JSONObject o = null;
         try {
-            cuisineObject = new JSONObject(cuisineJson);
-        } catch (Exception e) {
+            o = new JSONObject(json);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        cuisine = getJsonInfo(cuisineObject, "cuisine");
+        try {
+            id = o.getInt("id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            title = o.getString("title");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            image = o.getString("image");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        JSONObject summaryObject = null;
         try {
-            summaryObject = new JSONObject(summaryJson);
-        } catch (Exception e) {
+            readyInMinutes = o.getInt("readyInMinutes");
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        summary = getJsonInfo(summaryObject, "summary");
+        try {
+            cookingMinutes = o.getInt("cookingMinutes");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            preparationMinutes = o.getInt("preparationMinutes");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        JSONObject extractedByUrlObject = null;
         try {
-            extractedByUrlObject = new JSONObject(extractedByUrlJson);
-        } catch (Exception e) {
+            summary = o.getString("summary");
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        instructions = getJsonInfo(extractedByUrlObject, "instructions");
-
-        JSONObject informationObject = null;
+        JSONArray instructionsJsonArray = null;
         try {
-            informationObject = new JSONObject(informationJson);
-        } catch (Exception e) {
+            instructionsJsonArray = o.getJSONArray("instructions");
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        readyInMinutes = Integer.parseInt(getJsonInfo(informationObject, "readyInMinutes"));
-        preparationMinutes = Integer.parseInt(getJsonInfo(informationObject, "preparationMinutes"));
-        cookingMinutes = Integer.parseInt(getJsonInfo(informationObject, "cookingMinutes"));
-        servings = Integer.parseInt(getJsonInfo(informationObject, "servings"));
-        id = Integer.parseInt(getJsonInfo(informationObject, "id"));
-        title = getJsonInfo(informationObject, "title");
-        image = getJsonInfo(informationObject, "image");
-        if (getJsonInfo(informationObject, "cheap").equals("true")) {
-            cheap = true;
-        }
-        JSONArray ingredientJSONArray = null;
         try {
-            ingredientJSONArray = informationObject.getJSONArray("extendedIngredients");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        for (int i = 0; i < ingredientJSONArray.length(); i++) {
-            try {
-                JSONObject ingredientJSON = ingredientJSONArray.getJSONObject(i);
-                Ingredient ingredient = new Ingredient(ingredientJSON);
-                ingredients.add(ingredient);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            for (int i = 0; i < instructionsJsonArray.length(); i++) {
+                instructions.add(instructionsJsonArray.getString(i));
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        JSONArray badgesJSONArray = null;
+
         try {
-            badgesJSONArray = informationObject.getJSONArray("badges");
-            for (int i = 0; i < badgesJSONArray.length(); i++) {
-                badges.add(badgesJSONArray.getString(i));
+            cheap = o.getBoolean("cheap");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JSONArray badgesJsonArray = null;
+        try {
+            badgesJsonArray = o.getJSONArray("badges");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            for (int i = 0; i < badgesJsonArray.length(); i++) {
+                badges.add(badgesJsonArray.getString(i));
             }
-        } catch (Exception e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        JSONObject searchObject = null;
+        JSONArray ingredientsJsonArray = null;
         try {
-            searchObject = new JSONObject(complexSearchResultJson);
-        } catch (Exception e) {
+            ingredientsJsonArray = o.getJSONArray("ingredients");
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        protein = Integer.parseInt(getJsonInfo(searchObject, "protein"));
-        fat = Integer.parseInt(getJsonInfo(searchObject, "fat"));
-        carbs = Integer.parseInt(getJsonInfo(searchObject, "carbs"));
-        calories = Integer.parseInt(getJsonInfo(searchObject, "calories"));
+        try {
+            for (int i = 0; i < ingredientsJsonArray.length(); i++) {
+                ingredients.add(new Ingredient(ingredientsJsonArray.getJSONObject(i)));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            fat = o.getInt("fat");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            calories = o.getInt("calories");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            protein = o.getInt("protein");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            carbs = o.getInt("carbs");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            servings = o.getInt("servings");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getJsonInfo(JSONObject o, String info) {
@@ -139,7 +161,7 @@ public class Recipe {
         }
         return "";
     }
-    
+
     public int getId() {
         return id;
     }
@@ -168,7 +190,7 @@ public class Recipe {
         return summary;
     }
 
-    public String getInstructions() {
+    public ArrayList<String> getInstructions() {
         return instructions;
     }
 
@@ -182,10 +204,6 @@ public class Recipe {
 
     public ArrayList<Ingredient> getIngredients() {
         return ingredients;
-    }
-
-    public String getCuisine() {
-        return cuisine;
     }
 
     public int getFat() {
