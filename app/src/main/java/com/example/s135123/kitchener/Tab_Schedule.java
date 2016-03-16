@@ -10,11 +10,10 @@ import android.view.ViewGroup;
 /**
  * Created by s136693 on 5-3-2016.
  */
-public class Tab_Schedule extends Fragment {
-
+public class Tab_Schedule extends android.support.v4.app.Fragment {
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.tab_schedule,container,false);
-        return v;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.tab_schedule, container, false);
     }
 }

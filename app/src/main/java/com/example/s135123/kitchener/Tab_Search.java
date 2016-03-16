@@ -20,7 +20,7 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Created by s136693 on 5-3-2016.
  */
-public class Tab_Search extends Fragment {
+public class Tab_Search extends android.support.v4.app.Fragment {
     ArrayList<Recipe> recipes = new ArrayList<>();
 
     @Override
