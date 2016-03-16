@@ -136,14 +136,16 @@ public class MainActivity extends AppCompatActivity {
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
-                fragmentClass = Tab_Schedule.class;
+                fragmentClass = Profile.class;
                 break;
             case R.id.nav_second_fragment:
-                fragmentClass = Tab_Recommendations.class;
+                fragmentClass = Favorites.class;
                 break;
             case R.id.nav_third_fragment:
-                fragmentClass = Tab_Search.class;
+                fragmentClass = Allergens.class;
                 break;
+            case R.id.nav_fourth_fragment:
+                fragmentClass = Settings.class;
             default:
                 fragmentClass = Tab_Schedule.class;
         }
