@@ -39,21 +39,35 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Medium Text"
         android:id="@+id/nutrition"
         android:layout_below="@id/title"
+        android:paddingTop="16dp"
         android:layout_alignParentLeft="true" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Medium Text"
-        android:id="@+id/servings"
+        android:id="@+id/servingsAndMinutes"
         android:layout_below="@id/title"
         android:layout_toRightOf="@+id/nutrition"
         android:layout_alignParentRight="true"
-        android:gravity="center_vertical|right" />
+        android:paddingTop="16dp"
+        android:paddingLeft="40dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="\nSummary"
+        android:textStyle="bold"
+        android:id="@+id/summaryTitle"
+        android:layout_below="@id/nutrition"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_alignEnd="@+id/imageView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -61,7 +75,31 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Medium Text"
         android:id="@+id/summary"
-        android:layout_below="@id/nutrition"
+        android:layout_below="@id/summaryTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_alignEnd="@+id/imageView" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="\nInstructions"
+        android:textStyle="bold"
+        android:id="@+id/instructionsTitle"
+        android:layout_below="@id/summary"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_alignEnd="@+id/imageView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Medium Text"
+        android:id="@+id/instructions"
+        android:layout_below="@id/instructionsTitle"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/imageView"

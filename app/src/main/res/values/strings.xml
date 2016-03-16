@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Kitchener</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_recipe_info">RecipeInfoActivity</string>
+    <string name="title_activity_recipe_info">Recipe information</string>
 </resources>

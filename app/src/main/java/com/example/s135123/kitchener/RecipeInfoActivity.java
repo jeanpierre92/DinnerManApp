@@ -19,10 +19,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import java.util.ArrayList;
+
 public class RecipeInfoActivity extends AppCompatActivity {
     Recipe recipe;
     ImageView imageView;
     TextView summaryView;
+    TextView instructionsView;
     TextView titleView;
     TextView nutritionView;
     TextView servingsView;
@@ -32,16 +35,6 @@ public class RecipeInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_info);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        Intent i = getIntent();
         recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
@@ -64,15 +57,27 @@ public class RecipeInfoActivity extends AppCompatActivity {
         //summaryView.setText(recipe.getSummary());
         summaryView.setText("Forget going out to eat or ordering takeout every time you crave African food. Try making African Beef Curry at home. This recipe serves 4 and costs $1.76 per serving. This main course has 464 calories, 36g of protein, and 10g of fat per serving. Only a few people made this recipe, and 1 would say it hit the spot. It is a good option if you're following a gluten free and dairy free diet. This recipe from Taste of Home requires green bell pepper, canned tomatoes, salt, and curry powder. To use up the raisins you could follow this main course with the Chocolate Brownies With Raisins as a dessert. From preparation to the plate, this recipe takes roughly 1 hour and 45 minutes. With a spoonacular score of 85%, this dish is awesome. If you like this recipe, take a look at these similar recipes: South African Beef Curry, African Curry, and African Veg Curry.");
 
+        instructionsView = (TextView) findViewById(R.id.instructions);
+        instructionsView.setText("");
+        //ArrayList<String> instructions =recipe.getInstructions();
+        ArrayList<String> instructions = new ArrayList<>();
+        instructions.add("first instruction");
+        instructions.add("second instruction");
+        for(int i = 0; i<instructions.size();i++){
+            int num=i+1;
+            instructionsView.append(num+". "+instructions.get(i)+"\n");
+        }
         titleView = (TextView) findViewById(R.id.title);
         titleView.setText("Title");
 
         nutritionView = (TextView) findViewById(R.id.nutrition);
         //nutritionView.setText("Calories: "+recipe.getCalories()+"g\nFat: "+recipe.getFat()+"g\nProtein: "+recipe.getProtein()+"g\nCarbs: "+recipe.getCarbs()+"g");
         nutritionView.setText("Calories: 55g\nFat: 5g\nProtein: 5g\nCarbs: 5g");
-        servingsView = (TextView) findViewById((R.id.servings));
-        //servingsView.setText(recipe.getServings()+" servings");
-        servingsView.setText("5 servings");
+        servingsView = (TextView) findViewById((R.id.servingsAndMinutes));
+        /*servingsView.setText(recipe.getServings()+" servings\n"+recipe.getPreparationMinutes()+" minutes to prepare\n"+
+        recipe.getCookingMinutes()+" minutes to cook\nTotal time: "+recipe.getReadyInMinutes()+" minutes);*/
+
+        servingsView.setText("5 servings\n5 minutes to prepare\n5 minutes to cook\nTotal time: 5");
     }
 
 }
