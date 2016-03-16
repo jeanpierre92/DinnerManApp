@@ -24,6 +24,8 @@ public class RecipeInfoActivity extends AppCompatActivity {
     ImageView imageView;
     TextView summaryView;
     TextView titleView;
+    TextView nutritionView;
+    TextView servingsView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,13 @@ public class RecipeInfoActivity extends AppCompatActivity {
 
         titleView = (TextView) findViewById(R.id.title);
         titleView.setText("Title");
+
+        nutritionView = (TextView) findViewById(R.id.nutrition);
+        //nutritionView.setText("Calories: "+recipe.getCalories()+"g\nFat: "+recipe.getFat()+"g\nProtein: "+recipe.getProtein()+"g\nCarbs: "+recipe.getCarbs()+"g");
+        nutritionView.setText("Calories: 55g\nFat: 5g\nProtein: 5g\nCarbs: 5g");
+        servingsView = (TextView) findViewById((R.id.servings));
+        //servingsView.setText(recipe.getServings()+" servings");
+        servingsView.setText("5 servings");
     }
 
 }
