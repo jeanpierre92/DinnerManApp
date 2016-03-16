@@ -2,4 +2,28 @@
     <string name="app_name">Kitchener</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_recipe_info">RecipeInfoActivity</string>
+    
+    <string-array name="sample_recipe_titles">
+        <item>Chilli con carne</item>
+        <item>Spiced carrot and lentil soup</item>
+        <item>Chicken and chorizo jambalaya</item>
+        <item>Summer-in-winter chicken</item>
+        <item>Spicy root a lentil casserole</item>
+        <item>Mustard-stuffed chicken</item>
+        <item>Red lentil, chickpea and chilli soup</item>
+        <item>Falafel burgers</item>
+        <item>Chicken biryani</item>
+    </string-array>
+
+    <string-array name="sample_recipe_descriptions">
+        <item>This great chilli has to be one of the best dishes to serve to friends for a casual get-together.</item>
+        <item>A delicious, spicy blend, packed full of iron and low fat to boot. It\'s ready in under half an hour or can be made in a slow cooker.</item>
+        <item>A Cajun-inspired rice pot recipe with spicy Spanish sausage, sweet peppers and tomatoes.</item>
+        <item>Pining for summer? This simply seasoned chicken fried with beautiful, ripe, cherry tomatoes in a creamy sauce is guaranteed to hit the spot. Add a dollop of pesto for an extra layer of nutty flavours.</item>
+        <item>The potatoes in this recipe take on the spicy flavours beautifully - our idea of the perfect veggie supper.</item>
+        <item>This is so good we\'d be surprised if this chicken fillet recipe doesn\'t become a firm favourite. Save it to your My Good Food collection and enjoy.</item>
+        <item>Come home to a warming bowlful of this filling, low-fat soup.</item>
+        <item>A healthy burger that\'s filling too. These are great for anyone who craves a big bite but doesn\'t want the calories.</item>
+        <item>A great one-pot rice dish that can still be served up a few days later, perfect for leftovers.</item>
+    </string-array>
 </resources>
