@@ -34,7 +34,15 @@
         android:text="#This description will confuse the saliva out of you."
         android:layout_alignBottom="@+id/imageView_recipe_thumbnail" />
 
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="35 min"
+        android:id="@+id/textView_recipe_time"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

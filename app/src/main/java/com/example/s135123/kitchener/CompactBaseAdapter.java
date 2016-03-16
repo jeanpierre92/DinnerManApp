@@ -32,17 +32,19 @@ public class CompactBaseAdapter extends BaseAdapter {
 
     ArrayList<SingleRow> list;
     Context context;
+    int listSize = 9;
 
     CompactBaseAdapter(Context c) {
         context = c;
         list = new ArrayList<SingleRow>();
 
+        // TODO: Fetch data from actual recipe
         Resources res = c.getResources();
         String[] titles = res.getStringArray(R.array.sample_recipe_titles);
         String[] descriptions = res.getStringArray(R.array.sample_recipe_descriptions);
         int[] images = {R.drawable.recipe_sample_chilli,R.drawable.recipe_sample_spiced_carrot_lentil_soup,R.drawable.recipe_sample_chicken_chorizo_jambalaya,R.drawable.recipe_sample_summer_in_winter_chicken,R.drawable.recipe_sample_spicy_root_lentil_casserole,R.drawable.recipe_sample_mustard_stuffed_chicken,R.drawable.recipe_sample_red_lentil_chickpea_chilli_soup,R.drawable.recipe_sample_falafel_burgers,R.drawable.recipe_sample_chicken_biryani};
 
-        for(int i = 0;i < 9; i++) {
+        for(int i = 0;i < listSize; i++) {
             list.add(new SingleRow(titles[i], descriptions[i],images[i]));
         }
     }
@@ -70,11 +72,13 @@ public class CompactBaseAdapter extends BaseAdapter {
 
         TextView title = (TextView) row.findViewById(R.id.textView_recipe_title);
         TextView description = (TextView) row.findViewById(R.id.textView_recipe_description);
+        TextView time =  (TextView) row.findViewById(R.id.textView_recipe_time);
         ImageView thumbnail = (ImageView) row.findViewById(R.id.imageView_recipe_thumbnail);
 
-
+        // TODO: unmake static
         SingleRow temp = list.get(position);
         title.setText(temp.title);
+        time.setText("29 min");
         description.setText(temp.description);
         thumbnail.setImageResource(temp.image);
 

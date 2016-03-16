@@ -13,7 +13,7 @@ import android.widget.ListView;
 /**
  * Created by s136693 on 5-3-2016.
  */
-public class Tab_Recommendations extends Fragment{
+public class Tab_Recommendations extends Fragment implements AdapterView.OnItemClickListener {
 
     ListView list;
 
@@ -27,4 +27,8 @@ public class Tab_Recommendations extends Fragment{
     }
 
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // TODO: Open new RecipeInfoActivity
+    }
 }
