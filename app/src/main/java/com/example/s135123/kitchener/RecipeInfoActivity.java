@@ -30,7 +30,6 @@ public class RecipeInfoActivity extends AppCompatActivity {
     TextView nutritionView;
     TextView servingsView;
     TextView ingredientsView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +92,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
             }
         }
         //servingsView.setText("5 servings\n5 minutes to prepare\n5 minutes to cook\nTotal time: 5");
+        //ArrayList<String> instructions =recipe.getInstructions();
     }
 
 }
