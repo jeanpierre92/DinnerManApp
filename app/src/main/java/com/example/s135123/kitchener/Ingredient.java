@@ -3,10 +3,12 @@ package com.example.s135123.kitchener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by s130604 on 5-3-2016.
  */
-public class Ingredient {
+public class Ingredient implements Serializable {
     /*
     example:
     {
@@ -30,20 +32,38 @@ public class Ingredient {
     String originalString;
 
     Ingredient(JSONObject o) {
-        amount = Double.parseDouble(getJsonInfo(o, "amount"));
-        unitLong = getJsonInfo(o, "unitLong");
-        unitShort = getJsonInfo(o, "unitShort");
-        aisle = getJsonInfo(o, "aisle");
-        name = getJsonInfo(o, "name");
-        originalString = getJsonInfo(o, "originalString");
-    }
-
-    public String getJsonInfo(JSONObject o, String info) {
         try {
-            return o.getJSONObject(info).toString();
-        } catch (Exception e) {
+            amount=o.getDouble("amount");
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        return "";
+        try {
+            unitLong = o.getString("unitLong");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            unitShort = o.getString("unitShort");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            aisle = o.getString("aisle");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            name = o.getString("name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            originalString = o.getString("originalString");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public String getOriginalString(){
+        return originalString;
     }
 }

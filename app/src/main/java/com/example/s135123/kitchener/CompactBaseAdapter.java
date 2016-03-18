@@ -1,6 +1,7 @@
 package com.example.s135123.kitchener;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,54 +10,35 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 import java.util.ArrayList;
 
 /**
  * Created by s136693 on 16-3-2016.
  */
 
-class SingleRow {
-    String title;
-    String description;
-    int image;
-
-    SingleRow(String title, String description, int image) {
-        this.title = title;
-        this.description = description;
-        this.image = image;
-    }
-
-}
 
 public class CompactBaseAdapter extends BaseAdapter {
 
-    ArrayList<SingleRow> list;
+    ArrayList<Recipe> recipes;
     Context context;
     int listSize = 9;
 
-    CompactBaseAdapter(Context c) {
+    CompactBaseAdapter(Context c, ArrayList<Recipe> recipes) {
         context = c;
-        list = new ArrayList<SingleRow>();
-
-        // TODO: Fetch data from actual recipe
-        Resources res = c.getResources();
-        String[] titles = res.getStringArray(R.array.sample_recipe_titles);
-        String[] descriptions = res.getStringArray(R.array.sample_recipe_descriptions);
-        int[] images = {R.drawable.recipe_sample_chilli,R.drawable.recipe_sample_spiced_carrot_lentil_soup,R.drawable.recipe_sample_chicken_chorizo_jambalaya,R.drawable.recipe_sample_summer_in_winter_chicken,R.drawable.recipe_sample_spicy_root_lentil_casserole,R.drawable.recipe_sample_mustard_stuffed_chicken,R.drawable.recipe_sample_red_lentil_chickpea_chilli_soup,R.drawable.recipe_sample_falafel_burgers,R.drawable.recipe_sample_chicken_biryani};
-
-        for(int i = 0;i < listSize; i++) {
-            list.add(new SingleRow(titles[i], descriptions[i],images[i]));
-        }
+        this.recipes = recipes;
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return recipes.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        return recipes.get(position);
     }
 
     @Override
@@ -69,19 +51,28 @@ public class CompactBaseAdapter extends BaseAdapter {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(R.layout.row_recommendations, parent, false);
-
         TextView title = (TextView) row.findViewById(R.id.textView_recipe_title);
         TextView description = (TextView) row.findViewById(R.id.textView_recipe_description);
-        TextView time =  (TextView) row.findViewById(R.id.textView_recipe_time);
+        TextView time = (TextView) row.findViewById(R.id.textView_recipe_time);
         ImageView thumbnail = (ImageView) row.findViewById(R.id.imageView_recipe_thumbnail);
 
-        // TODO: unmake static
-        SingleRow temp = list.get(position);
-        title.setText(temp.title);
-        time.setText("29 min");
-        description.setText(temp.description);
-        thumbnail.setImageResource(temp.image);
-
+        final Recipe recipe = recipes.get(position);
+        title.setText(recipe.getTitle());
+        time.setText(Integer.toString(recipe.getReadyInMinutes()));
+        description.setText("DESCRIPTION");
+        ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
+        if (!imageLoader.isInited()) {
+            imageLoader.init(ImageLoaderConfiguration.createDefault(context));
+        }
+        imageLoader.displayImage(recipe.getImage(), thumbnail);
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, RecipeInfoActivity.class);
+                i.putExtra("Recipe", recipe);
+                context.startActivity(i);
+            }
+        });
         return row;
     }
 }

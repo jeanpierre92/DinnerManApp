@@ -25,8 +25,8 @@ public class Recipe implements Serializable{
     String summary;
     ArrayList<String> instructions = new ArrayList<>();
     boolean cheap = false;
-    ArrayList<String> badges;   //properties of the recipe
-    ArrayList<Ingredient> ingredients;
+    ArrayList<String> badges = new ArrayList<>();   //properties of the recipe
+    ArrayList<Ingredient> ingredients = new ArrayList<>();
 
     int fat;
     int calories;
@@ -121,7 +121,8 @@ public class Recipe implements Serializable{
             }
             try {
                 for (int i = 0; i < ingredientsJsonArray.length(); i++) {
-                    ingredients.add(new Ingredient(ingredientsJsonArray.getJSONObject(i)));
+                    Ingredient ingredient = new Ingredient(ingredientsJsonArray.getJSONObject(i));
+                    ingredients.add(ingredient);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
