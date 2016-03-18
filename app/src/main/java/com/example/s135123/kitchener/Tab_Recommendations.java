@@ -10,7 +10,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by s136693 on 5-3-2016.
@@ -19,6 +24,7 @@ public class Tab_Recommendations extends Fragment implements AdapterView.OnItemC
 
     ListView list;
     ArrayList<Recipe> recipes = new ArrayList<>();
+    CompactBaseAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -37,7 +43,9 @@ public class Tab_Recommendations extends Fragment implements AdapterView.OnItemC
         recipes.add(new Recipe(recipeString5));
         recipes.add(new Recipe(recipeString6));
         list = (ListView) v.findViewById(R.id.listView_reccomendations);
-        list.setAdapter(new CompactBaseAdapter(getActivity(), recipes));
+        adapter = new CompactBaseAdapter(getActivity(), recipes);
+        list.setAdapter(adapter);
+
         return v;
     }
 

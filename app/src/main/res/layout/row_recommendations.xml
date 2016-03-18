@@ -18,28 +18,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView_recipe_title"
-        android:layout_toRightOf="@+id/imageView_recipe_thumbnail"
         android:layout_alignParentTop="true"
-        android:textSize="30sp"
+        android:textSize="24sp"
         android:text="#Title"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_toLeftOf="@+id/textView_recipe_time"
+        android:layout_toRightOf="@+id/imageView_recipe_thumbnail"
+        android:layout_toEndOf="@+id/imageView_recipe_thumbnail" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView_recipe_description"
         android:layout_below="@+id/textView_recipe_title"
-        android:layout_toRightOf="@+id/imageView_recipe_thumbnail"
         android:text="#This description will confuse the saliva out of you."
-        android:layout_alignBottom="@+id/imageView_recipe_thumbnail" />
+        android:layout_alignBottom="@+id/imageView_recipe_thumbnail"
+        android:layout_toLeftOf="@id/textView_recipe_time"
+        android:layout_toRightOf="@+id/imageView_recipe_thumbnail"
+        android:layout_toEndOf="@+id/imageView_recipe_thumbnail" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="35 min"
-        android:id="@+id/textView_recipe_time"
+        android:id="@id/textView_recipe_time"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
