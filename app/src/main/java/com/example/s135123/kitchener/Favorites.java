@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 
 
 /**
@@ -28,7 +29,16 @@ public class Favorites extends android.support.v4.app.Fragment {
         return inflater.inflate(R.layout.favorites_fragment, container, false);
     }
 
+    // Make server request
+    HashMap<String, String> apiParams = new HashMap<String, String>();
+    apiParams.put("the params you want to use");
 
+    new ServerRequest("GET", "http://appdev-gr1.win.tue.nl", apiParams) {
+        @Override public void OnStartingService() {
+            super.OnStartingService();
+            // What you want to do
+        }
+    }
 
     // List favorite meals
 
