@@ -9,6 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 /**
  * Created by s142451 on 16-3-2016.
@@ -22,8 +28,7 @@ public class Favorites extends android.support.v4.app.Fragment {
         return inflater.inflate(R.layout.favorites_fragment, container, false);
     }
 
-    // Setting up the async server requests
-    
+
 
     // List favorite meals
 
