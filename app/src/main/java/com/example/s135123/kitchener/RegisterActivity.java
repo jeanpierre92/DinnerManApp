@@ -57,7 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
         applicationContext=getApplicationContext();
         user=User.getInstance();
         if(user.getUsername()!=null && user.getPassword()!=null){
@@ -80,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.sign_in_button);
+        Button mEmailSignInButton = (Button) findViewById(R.id.register_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,6 +90,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+    }
+    public void onLoginClick(View v){
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
     }
 
 
@@ -125,7 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
+            mUsernameView.setError("Please set a username");
             focusView = mUsernameView;
             cancel = true;
         }

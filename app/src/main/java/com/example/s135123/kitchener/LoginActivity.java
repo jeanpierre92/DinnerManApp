@@ -89,6 +89,11 @@ public class LoginActivity extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
     }
 
+    public void onRegisterClick(View v){
+        Intent i = new Intent(this, RegisterActivity.class);
+        startActivity(i);
+    }
+
 
 
 
