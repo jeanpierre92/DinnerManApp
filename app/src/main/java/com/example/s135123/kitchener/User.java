@@ -1,5 +1,9 @@
 package com.example.s135123.kitchener;
 
+import android.content.SharedPreferences;
+
+import com.securepreferences.SecurePreferences;
+
 import java.util.ArrayList;
 
 /**
@@ -7,10 +11,10 @@ import java.util.ArrayList;
  */
 public class User {
     private static User user;
-    private String userName;
-    private ArrayList<Allergy> allergies;
+    private ArrayList<Allergy> allergies = new ArrayList<>();
     boolean gender; //male=true
-    private ArrayList<Recipe> favoriteRecipes;
+    private ArrayList<Recipe> favoriteRecipes = new ArrayList<>();
+    SharedPreferences prefs;
 
     public String getId() {
         return id;
@@ -27,45 +31,62 @@ public class User {
         dairy, egg, gluten, peanut, sesame, seafood, shellfish, soy, sulfite, tree, nut, wheat
     }
 
-    private User(){
-
+    private User() {
+        prefs = new SecurePreferences(RegisterActivity.applicationContext);
     }
-    public User getInstance(){
-        if(user==null){
+
+    public static User getInstance() {
+        if (user == null) {
             user = new User();
-            allergies = new ArrayList<>();
-            favoriteRecipes = new ArrayList<>();
         }
         return user;
     }
-    public void removeFromFavorites(Recipe recipe){
+
+    public void removeFromFavorites(Recipe recipe) {
         favoriteRecipes.remove(recipe);
     }
-    public void addToFavorites(Recipe recipe){
+
+    public void addToFavorites(Recipe recipe) {
         favoriteRecipes.add(recipe);
     }
-    public ArrayList<Recipe> getFavorites(){
+
+    public ArrayList<Recipe> getFavorites() {
         return favoriteRecipes;
     }
-    public void addAllergy(Allergy allergy){
+
+    public void addAllergy(Allergy allergy) {
         allergies.add(allergy);
     }
-    public void removeAllergy(Allergy allergy){
+
+    public void removeAllergy(Allergy allergy) {
         allergies.remove(allergy);
     }
-    public void setMale(){
-        gender=true;
+
+    public void setMale() {
+        gender = true;
     }
-    public void setFemale(){
-        gender=false;
+
+    public void setFemale() {
+        gender = false;
     }
-    public boolean getGender(){
+
+    public boolean getGender() {
         return gender;
     }
-    public void setUserName(String name){
-        userName=name;
+
+    public String getUsername() {
+        return prefs.getString("username", null);
     }
-    public String getUserName(){
-        return userName;
+
+    public void setUsername(String username) {
+        prefs.edit().putString("username", username).commit();
+    }
+
+    public String getPassword() {
+        return prefs.getString("password", null);
+    }
+
+    public void setPassword(String password) {
+        prefs.edit().putString("password", password).commit();
     }
 }

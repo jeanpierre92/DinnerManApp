@@ -1,5 +1,6 @@
 package com.example.s135123.kitchener;
 
+import android.content.Context;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -28,7 +29,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 //TODO: Merge with Arne's MainActivity.java
 public class MainActivity extends AppCompatActivity {
-
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles, numboftabs);
 
