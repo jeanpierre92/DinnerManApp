@@ -3,9 +3,12 @@ package com.example.s135123.kitchener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by s130604 on 5-3-2016.
@@ -25,8 +28,7 @@ public class Recipe implements Serializable{
     String summary;
     ArrayList<String> instructions = new ArrayList<>();
     boolean cheap = false;
-    ArrayList<String> badges = new ArrayList<>();   //properties of the recipe
-    ArrayList<Ingredient> ingredients = new ArrayList<>();
+    ArrayList<String> ingredients = new ArrayList<>();
 
     int fat;
     int calories;
@@ -78,21 +80,20 @@ public class Recipe implements Serializable{
 
             try {
                 summary = o.getString("summary");
+                summary = Jsoup.parse(summary).text();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            JSONArray instructionsJsonArray = null;
+            String instructionString = null;
             try {
-                instructionsJsonArray = o.getJSONArray("instructions");
+                instructionString = o.getString("instructions");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            try {
-                for (int i = 0; i < instructionsJsonArray.length(); i++) {
-                    instructions.add(instructionsJsonArray.getString(i));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            Pattern regex = Pattern.compile("<li>(.+?)</li>");
+            Matcher matcher = regex.matcher(instructionString);
+            while (matcher.find()) {
+                instructions.add(matcher.group(1));
             }
 
             try {
@@ -100,37 +101,25 @@ public class Recipe implements Serializable{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            JSONArray badgesJsonArray = null;
+            String ingredientString = "";
             try {
-                badgesJsonArray = o.getJSONArray("badges");
+                ingredientString = o.getString("ingredients");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            try {
-                for (int i = 0; i < badgesJsonArray.length(); i++) {
-                    badges.add(badgesJsonArray.getString(i));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            for(String ingredient:ingredientString.split("\n")){
+                ingredients.add(ingredient);
             }
-            JSONArray ingredientsJsonArray = null;
-            try {
-                ingredientsJsonArray = o.getJSONArray("ingredients");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                for (int i = 0; i < ingredientsJsonArray.length(); i++) {
-                    Ingredient ingredient = new Ingredient(ingredientsJsonArray.getJSONObject(i));
-                    ingredients.add(ingredient);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
             try {
                 fat = o.getInt("fat");
             } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String fatString="";
+            try{
+                fatString = o.getString("fat");
+                fat = Integer.parseInt(fatString.substring(0, fatString.length() - 1));
+            }catch(Exception e){
                 e.printStackTrace();
             }
             try {
@@ -143,9 +132,23 @@ public class Recipe implements Serializable{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            String proteinString="";
+            try{
+                proteinString = o.getString("protein");
+                protein = Integer.parseInt(proteinString.substring(0,proteinString.length()-1));
+            }catch(Exception e){
+                e.printStackTrace();
+            }
             try {
                 carbs = o.getInt("carbs");
             } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String carbsString="";
+            try{
+                carbsString = o.getString("carbs");
+                carbs = Integer.parseInt(carbsString.substring(0, carbsString.length() - 1));
+            }catch(Exception e){
                 e.printStackTrace();
             }
 
@@ -202,11 +205,7 @@ public class Recipe implements Serializable{
         return cheap;
     }
 
-    public ArrayList<String> getBadges() {
-        return badges;
-    }
-
-    public ArrayList<Ingredient> getIngredients() {
+    public ArrayList<String> getIngredients() {
         return ingredients;
     }
 

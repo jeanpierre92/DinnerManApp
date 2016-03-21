@@ -1,9 +1,14 @@
 package com.example.s135123.kitchener;
 
+import android.util.Log;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -17,48 +22,45 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 /**
  * Created by s135123 on 22-2-2016.
  */
-public class SendRequest implements Runnable {
-    String url;
-    String requestType;
+public class SendRequest  {
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
-    public void setRequestType(String requestType) {
-        this.requestType = requestType;
-    }
+    public static String sendGetRequest(String url){
+        InputStream inputStream = null;
+        String result = "";
+        try {
 
-    void getRequest(){
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(url, new AsyncHttpResponseHandler() {
+            // create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
 
-            @Override
-            public void onStart() {
-                // called before request is started
-            }
+            // make GET request to the given URL
+            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
 
-            }
+            // convert inputstream to string
+            if(inputStream != null)
+                result = convertInputStreamToString(inputStream);
+            else
+                result = "Did not work!";
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-            }
-
-            @Override
-            public void onRetry(int retryNo) {
-                // called when request is retried
-            }
-        });
-    }
-
-    @Override
-    public void run() {
-        if(requestType.equals("get")){
-            getRequest();
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
         }
+
+        return result;
+    }
+    // convert inputstream to String
+    private static String convertInputStreamToString(InputStream inputStream) throws IOException{
+        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+        String line = "";
+        String result = "";
+        while((line = bufferedReader.readLine()) != null)
+            result += line;
+
+        inputStream.close();
+        return result;
+
     }
 }

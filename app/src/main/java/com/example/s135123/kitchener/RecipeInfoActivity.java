@@ -15,9 +15,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.tbouron.shakedetector.library.ShakeDetector;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -77,22 +81,75 @@ public class RecipeInfoActivity extends AppCompatActivity {
         //titleView.setText("Title");
         titleView.setText(recipe.getTitle());
         nutritionView = (TextView) findViewById(R.id.nutrition);
-        nutritionView.setText("Calories: " + recipe.getCalories() + "g\nFat: " + recipe.getFat() + "g\nProtein: " + recipe.getProtein() + "g\nCarbs: " + recipe.getCarbs() + "g");
+        nutritionView.setText("Calories: " + recipe.getCalories() + "\nFat: " + recipe.getFat() + "g\nProtein: " + recipe.getProtein() + "g\nCarbs: " + recipe.getCarbs() + "g");
         //nutritionView.setText("Calories: 55g\nFat: 5g\nProtein: 5g\nCarbs: 5g");
         servingsView = (TextView) findViewById((R.id.servingsAndMinutes));
         servingsView.setText(recipe.getServings() + " servings\n" + recipe.getPreparationMinutes() + " minutes to prepare\n" +
                 recipe.getCookingMinutes() + " minutes to cook\nTotal time: " + recipe.getReadyInMinutes() + " minutes");
 
         ingredientsView = (TextView) findViewById(R.id.ingredients);
-        ArrayList<Ingredient> ingredients = recipe.getIngredients();
+        ArrayList<String> ingredients = recipe.getIngredients();
         for (int i = 0; i < ingredients.size(); i++) {
-            ingredientsView.append("• "+ingredients.get(i).getOriginalString());
+            ingredientsView.append("• "+ingredients.get(i));
             if (i != ingredients.size() - 1) {
                 ingredientsView.append("\n");
             }
         }
         //servingsView.setText("5 servings\n5 minutes to prepare\n5 minutes to cook\nTotal time: 5");
         //ArrayList<String> instructions =recipe.getInstructions();
+        ShakeDetector.create(this, new ShakeDetector.OnShakeListener() {
+            @Override
+            public void OnShake() {
+                System.out.println("SHAKEN");
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        User user = User.getInstance();
+                        //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
+                        String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
+                        JSONObject authTokenJson = null;
+                        try {
+                            authTokenJson = new JSONObject(SendRequest.sendGetRequest(authTokenUrl));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        String authToken = null;
+                        try {
+                            authToken = authTokenJson.getString("authToken");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        String recipeUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/test/" + authToken + "/random";
+                        String recipeResult = SendRequest.sendGetRequest(recipeUrl);
+                        Intent i = new Intent(RecipeInfoActivity.this, RecipeInfoActivity.class);
+                        Recipe recipe = new Recipe(recipeResult);
+                        i.putExtra("Recipe", recipe);
+                        RecipeInfoActivity.this.startActivity(i);
+                        System.out.println("INSHAKETHREAD");
+                        System.out.println(recipe.getImage());
+                    }
+                });
+                thread.start();
+            }
+        });
+    }
+    //shakeDetector stuff
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ShakeDetector.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ShakeDetector.stop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShakeDetector.destroy();
     }
 
 }
