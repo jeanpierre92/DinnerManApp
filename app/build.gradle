@@ -30,4 +30,5 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.scottyab:secure-preferences-lib:0.1.4'
     compile 'org.jsoup:jsoup:1.8.3'
+    compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
 }
