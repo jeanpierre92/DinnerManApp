@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -29,14 +31,30 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 /**
  * Created by s136693 on 5-3-2016.
  */
-public class Tab_Search extends Fragment {
+public class Tab_Search extends Fragment implements View.OnClickListener {
     ListView list;
     ArrayList<Recipe> recipes = new ArrayList<>();
     CompactBaseAdapter adapter;
 
+    SendRequest request;
+
+    //EditText views needed to hide them if an advanced search is necessary
+    EditText editTextSearch;
+    EditText editTextIncludeIngredients;
+    EditText editTextExcludeIngredients;
+    EditText editTextAllergens;
+    //TextView views needed to hide them if an advanced search is necessary
+    TextView textViewIncludeIngredients;
+    TextView textViewExcludeIngredients;
+    TextView textViewAllergens;
+
+    // Buttons needed to set onClickListener()
+    Button buttonSearch;
+    Button buttonAdvancedOptions;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.tab_recommendations,container,false);
+        View v =inflater.inflate(R.layout.tab_search,container,false);
         String recipeString1 = "{\"summary\":\"African Chicken & Sweet Potatoes could be just the gluten free and dairy free recipe you've been looking for. This recipe serves 6. One portion of this dish contains approximately 26g of protein, 32g of fat, and a total of 556 calories. For $1.36 per serving, this recipe covers 22% of your daily requirements of vitamins and minerals. Only a few people made this recipe, and 2 would say it hit the spot. This recipe is typical of African cuisine. It works well as a main course. From preparation to the plate, this recipe takes roughly 50 minutes. Head to the store and pick up pepper, canned tomatoes, creamy peanut butter, and a few other things to make it today. It is brought to you by Taste of Home. Taking all factors into account, this recipe earns a spoonacular score of 60%, which is solid. If you like this recipe, you might also like recipes such as African Groundnut Chicken and Sweet Potato Stew, African Sweet Potato Soup, and African Sweet Potato and Peanut Soup.\\n\",\"instructions\":[\"Preheat oven to 375°. \",\"Place chicken in a greased 13x9-in. baking dish; sprinkle with salt and pepper. \",\"Bake, uncovered, 30 minutes.\",\"Meanwhile, in a large skillet, heat oil over medium-high heat. \",\"Add sweet potatoes; cook and stir 10-12 minutes or until tender. In a small bowl, mix chutney and peanut butter; stir into sweet potatoes. \",\"Add tomatoes; heat through.\",\"Spoon potato mixture over chicken. \",\"Bake 10-15 minutes longer or until a thermometer inserted in chicken reads 180°.\"],\"cuisine\":\"american\",\"preparationMinutes\":10,\"fat\":32,\"image\":\"https://spoonacular.com/recipeImages/African-Chicken---Sweet-Potatoes-374273.jpg\",\"readyInMinutes\":50,\"cookingMinutes\":40,\"ingredients\":[{\"amount\":2,\"aisle\":\"Meat\",\"name\":\"bone-in chicken thighs\",\"unitShort\":\"lb\",\"originalString\":\"6 bone-in chicken thighs (about 2-1/4 pounds)\",\"unitLong\":\"pounds\"},{\"amount\":10,\"aisle\":\"Canned and Jarred\",\"name\":\"canned tomatoes\",\"unitShort\":\"oz\",\"originalString\":\"1 can (10 ounces) diced tomatoes and green chilies, undrained\",\"unitLong\":\"ounces\"},{\"amount\":2,\"aisle\":\"Oil, Vinegar, Salad Dressing\",\"name\":\"canola oil\",\"unitShort\":\"T\",\"originalString\":\"2 tablespoons canola oil\",\"unitLong\":\"tablespoons\"},{\"amount\":0.25,\"aisle\":\"Nut butters, Jams, and Honey\",\"name\":\"creamy peanut butter\",\"unitShort\":\"c\",\"originalString\":\"1/4 cup creamy peanut butter\",\"unitLong\":\"cups\"},{\"amount\":0.5,\"aisle\":\"Ethnic Foods\",\"name\":\"mango chutney\",\"unitShort\":\"c\",\"originalString\":\"1/2 cup mango chutney\",\"unitLong\":\"cups\"},{\"amount\":0.25,\"aisle\":\"Spices and Seasonings\",\"name\":\"pepper\",\"unitShort\":\"t\",\"originalString\":\"1/4 teaspoon pepper\",\"unitLong\":\"teaspoons\"},{\"amount\":0.5,\"aisle\":\"Spices and Seasonings\",\"name\":\"salt\",\"unitShort\":\"t\",\"originalString\":\"1/2 teaspoon salt\",\"unitLong\":\"teaspoons\"},{\"amount\":4,\"aisle\":\"Produce\",\"name\":\"sweet potatoes\",\"unitShort\":\"c\",\"originalString\":\"2 medium sweet potatoes, peeled and finely chopped (about 4 cups)\",\"unitLong\":\"cups\"}],\"id\":374273,\"badges\":[],\"servings\":6,\"title\":\"African Chicken & Sweet Potatoes\",\"protein\":26,\"calories\":556,\"vegetarian\":false,\"carbs\":43,\"cheap\":false},\n";
         String recipeString2 = "{\"summary\":\"If you want to add more gluten free and dairy free recipes to your recipe box, West African Peanut Chicken might be a recipe you should try. This recipe makes 4 servings with 608 calories, 58g of protein, and 36g of fat each. For $2.99 per serving, this recipe covers 36% of your daily requirements of vitamins and minerals. It works well as an African main course. This recipe from My Recipes has 8 fans. If you have peanut butter, green bell pepper, garlic, and a few other ingredients on hand, you can make it. To use up the salt you could follow this main course with the Salt River Bars as a dessert. From preparation to the plate, this recipe takes approximately 40 minutes. Overall, this recipe earns a tremendous spoonacular score of 85%. If you like this recipe, take a look at these similar recipes: West African Peanut-Chicken Stew, West African Peanut Soup, and West African Peanut Stew.\\n\",\"instructions\":[\"Heat oil over high heat for 3 to 4 minutes in a deep pot or large heavy skillet. \",\"Add chicken pieces, half at a time, and fry on both sides until nicely browned. Once all chicken pieces are cooked, set aside in a covered bowl to keep warm.  \",\"Add onions and garlic in same pot; cook until onions are soft and begin to brown, stirring occasionally. \",\"Add pureed tomatoes and 1 cup water; reduce heat to medium, bring to a simmer, and let simmer for a few minutes.  Return chicken to pot. Stir in peanut butter. \",\"Mixture will look clumpy for a minute, but will mix in nicely once it heats up. \",\"Add cayenne pepper, black pepper, and salt. Simmer over low heat 10 to 15 minutes.  Stir in diced green pepper and tomatoes; simmer for 3 to 4 more minutes.\"],\"cuisine\":\"american\",\"preparationMinutes\":0,\"fat\":36,\"image\":\"https://spoonacular.com/recipeImages/West-African-Peanut-Chicken-239068.jpg\",\"readyInMinutes\":40,\"cookingMinutes\":0,\"ingredients\":[{\"amount\":0.5,\"aisle\":\"Spices and Seasonings\",\"name\":\"black pepper\",\"unitShort\":\"t\",\"originalString\":\"1/2 teaspoon black pepper\",\"unitLong\":\"teaspoons\"},{\"amount\":3,\"aisle\":\"Baking\",\"name\":\"food dye\",\"unitShort\":\"\",\"originalString\":\"3 medium-size onions, minced or pureed in food processor\",\"unitLong\":\"\"},{\"amount\":2,\"aisle\":\"Produce\",\"name\":\"garlic\",\"unitShort\":\"cloves\",\"originalString\":\"2 cloves garlic, minced\",\"unitLong\":\"cloves\"},{\"amount\":1,\"aisle\":\"Produce\",\"name\":\"green bell pepper\",\"unitShort\":\"\",\"originalString\":\"1 green bell pepper, seeded and diced\",\"unitLong\":\"\"},{\"amount\":0.5,\"aisle\":\"Nut butters, Jams, and Honey\",\"name\":\"peanut butter\",\"unitShort\":\"c\",\"originalString\":\"1/2 cup peanut butter\",\"unitLong\":\"cups\"},{\"amount\":0.25,\"aisle\":\"Oil, Vinegar, Salad Dressing\",\"name\":\"peanut oil\",\"unitShort\":\"c\",\"originalString\":\"1/4 cup peanut oil (or any cooking oil)\",\"unitLong\":\"cups\"},{\"amount\":1,\"aisle\":\"Spices and Seasonings\",\"name\":\"salt\",\"unitShort\":\"T\",\"originalString\":\"1 tablespoon salt\",\"unitLong\":\"tablespoon\"},{\"amount\":2,\"aisle\":\"Meat\",\"name\":\"skinless boneless chicken breasts\",\"unitShort\":\"lb\",\"originalString\":\"2 pounds boneless, skinless chicken breasts or thighs, cut into bite-size pieces\",\"unitLong\":\"pounds\"},{\"amount\":2,\"aisle\":\"Produce\",\"name\":\"tomatoes\",\"unitShort\":\"\",\"originalString\":\"2 ripe tomatoes, diced\",\"unitLong\":\"\"},{\"amount\":3,\"aisle\":\"Produce\",\"name\":\"tomatoes\",\"unitShort\":\"c\",\"originalString\":\"3 cups pureed tomatoes (or 2 cups tomato sauce and 1 cup water)\",\"unitLong\":\"cups\"},{\"amount\":1,\"aisle\":\"Beverages\",\"name\":\"water\",\"unitShort\":\"c\",\"originalString\":\"1 cup water\",\"unitLong\":\"cup\"}],\"id\":239068,\"badges\":[],\"servings\":4,\"title\":\"West African Peanut Chicken\",\"protein\":58,\"calories\":608,\"vegetarian\":false,\"carbs\":15,\"cheap\":false},\n";
         String recipeString3 = "{\"summary\":\"African Tilapia might be just the main course you are searching for. This gluten free, dairy free, and pescatarian recipe serves 4 and costs $4.52 per serving. One portion of this dish contains about 46g of protein, 10g of fat, and a total of 289 calories. Only a few people really liked this African dish. This recipe is liked by 1 foodies and cooks. From preparation to the plate, this recipe takes roughly 45 minutes. Head to the store and pick up bell pepper, red pepper flakes, vinegar, and a few other things to make it today. It is brought to you by Food.com. Overall, this recipe earns a tremendous spoonacular score of 81%. If you like this recipe, take a look at these similar recipes: Tilapian in Mushroom Sauce (Tilapian en Salsa de Champiñones), Paris Village Tilapia Filet \\u2013 Located in Las Vegas the Paris makes a special Tilapia Filet, and African Curry.\\n\",\"instructions\":[],\"cuisine\":\"american\",\"preparationMinutes\":35,\"fat\":10,\"image\":\"https://spoonacular.com/recipeImages/african-tilapia-2-88823.jpg\",\"readyInMinutes\":45,\"cookingMinutes\":10,\"ingredients\":[{\"amount\":1,\"aisle\":\"Produce\",\"name\":\"bell pepper\",\"unitShort\":\"\",\"originalString\":\"1 bell pepper, chopped\",\"unitLong\":\"\"},{\"amount\":1,\"aisle\":\"Produce\",\"name\":\"juice of lemon\",\"unitShort\":\"\",\"originalString\":\"1 lemon, juice of\",\"unitLong\":\"\"},{\"amount\":1,\"aisle\":\"Produce\",\"name\":\"onion\",\"unitShort\":\"\",\"originalString\":\"1 small onion, chopped\",\"unitLong\":\"\"},{\"amount\":2,\"aisle\":\"Spices and Seasonings\",\"name\":\"red pepper flakes\",\"unitShort\":\"t\",\"originalString\":\"2 teaspoons cayenne or red pepper flakes\",\"unitLong\":\"teaspoons\"},{\"amount\":1,\"aisle\":\"Spices and Seasonings\",\"name\":\"salt\",\"unitShort\":\"t\",\"originalString\":\"1 teaspoon salt\",\"unitLong\":\"teaspoon\"},{\"amount\":2,\"aisle\":\"Seafood\",\"name\":\"tilapia fillets\",\"unitShort\":\"lb\",\"originalString\":\"2 lbs tilapia fillets\",\"unitLong\":\"pounds\"},{\"amount\":1,\"aisle\":\"Oil, Vinegar, Salad Dressing\",\"name\":\"vegetable oil\",\"unitShort\":\"c\",\"originalString\":\"1 cup vegetable oil\",\"unitLong\":\"cup\"},{\"amount\":1,\"aisle\":\"Oil, Vinegar, Salad Dressing\",\"name\":\"vinegar\",\"unitShort\":\"T\",\"originalString\":\"1 tablespoon vinegar\",\"unitLong\":\"tablespoon\"}],\"id\":88823,\"badges\":[],\"servings\":4,\"title\":\"African Tilapia\",\"protein\":46,\"calories\":289,\"vegetarian\":false,\"carbs\":5,\"cheap\":false},\n";
@@ -61,102 +79,85 @@ public class Tab_Search extends Fragment {
         list = (ListView) v.findViewById(R.id.listView_reccomendations);
         adapter = new CompactBaseAdapter(getActivity(), recipes);
         list.setAdapter(adapter);
+
+        // EditText views found and hidden as default
+        editTextSearch = (EditText) v.findViewById(R.id.editTextSearch);
+        editTextIncludeIngredients = (EditText) v.findViewById(R.id.editTextIncludeIngredients);
+        editTextExcludeIngredients = (EditText) v.findViewById(R.id.editTextExcludeIngredients);
+        editTextAllergens = (EditText) v.findViewById(R.id.editTextAllergens);
+        editTextIncludeIngredients.setVisibility(View.GONE);
+        editTextExcludeIngredients.setVisibility(View.GONE);
+        editTextAllergens.setVisibility(View.GONE);
+
+        // TextView views found and hidden as default
+        textViewIncludeIngredients = (TextView) v.findViewById(R.id.textViewIncludeIngredients);
+        textViewExcludeIngredients = (TextView) v.findViewById(R.id.textViewExcludeIngredients);
+        textViewAllergens = (TextView) v.findViewById(R.id.textViewAllergens);
+        textViewIncludeIngredients.setVisibility(View.GONE);
+        textViewExcludeIngredients.setVisibility(View.GONE);
+        textViewAllergens.setVisibility(View.GONE);
+
+        buttonSearch = (Button) v.findViewById(R.id.buttonSearch);
+        buttonSearch.setOnClickListener(this);
+        buttonAdvancedOptions = (Button) v.findViewById(R.id.buttonToggleAdvancedOptions);
+        buttonAdvancedOptions.setOnClickListener(this);
+
         return v;
     }
 
-    String sendGetRequest(String url){
-        InputStream inputStream = null;
-        String result = "";
-        try {
+    @Override
+    public void onClick(View v) {
 
-            // create HttpClient
-            HttpClient httpclient = new DefaultHttpClient();
+        switch (v.getId()) {
+            case R.id.buttonSearch:
 
-            // make GET request to the given URL
-            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
-
-            // receive response as inputStream
-            inputStream = httpResponse.getEntity().getContent();
-
-            // convert inputstream to string
-            if(inputStream != null)
-                result = convertInputStreamToString(inputStream);
-            else
-                result = "Did not work!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
+                search(editTextSearch.getText().toString(),
+                        editTextIncludeIngredients.getText().toString(),
+                        editTextExcludeIngredients.getText().toString(),
+                        editTextAllergens.getText().toString());
+                break;
+            case R.id.buttonToggleAdvancedOptions:
+                toggleAdvancedOptions();
+                break;
+            default:
+                break;
         }
-
-        return result;
-    }
-    // convert inputstream to String
-    private static String convertInputStreamToString(InputStream inputStream) throws IOException{
-        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
-        String line = "";
-        String result = "";
-        while((line = bufferedReader.readLine()) != null)
-            result += line;
-
-        inputStream.close();
-        return result;
 
     }
 
-    private void sendPostRequest() {
+    // TODO: Implement search
+    // Sends a search query to the server and returns an ArrayList to display in the ListView results
+    public void search(String query, String includeIngredients, String excludeIngredients, String allergens) {
 
-        final String USER_AGENT = "Mozilla/5.0";
-        String url = "https://platform.fatsecret.com/rest/server.api";
+        SendRequest request = new SendRequest();
 
-        URL obj = null;
-        HttpsURLConnection con = null;
-        try {
-            obj = new URL(url);
-            con = (HttpsURLConnection) obj.openConnection();
-            con.setRequestMethod("POST");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        results.setAdapter(new searchAdapter(request.getTitles(),
+//                request.getDescriptions(),
+//                request.getTimes(),
+//                request.getImages(),
+//                request.getRatings()); // TODO: Replace with correct baseAdapter and getters
 
-        con.setRequestProperty("User-Agent", USER_AGENT);
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-
-        String urlParameters = "a=foo&oauth_consumer_key=demo&oauth_nonce=abc&oauth_signature_method=HMAC-SHA1&oauth_timestamp=12345678&oauth_version=1.0&z=bar";
-
-        int responseCode = 0;
-        // Send post request
-        con.setDoOutput(true);
-        try {
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.flush();
-            wr.close();
-
-            responseCode = con.getResponseCode();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("\nSending 'POST' request to URL : " + url);
-        System.out.println("Post parameters : " + urlParameters);
-        System.out.println("Response Code : " + responseCode);
-
-        StringBuffer response = new StringBuffer();
-        try {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //print result
-        System.out.println(response.toString());
     }
+
+    // Toggles the advanced options views (
+    public void toggleAdvancedOptions() {
+        if(editTextIncludeIngredients.getVisibility() == View.VISIBLE) {
+            editTextIncludeIngredients.setVisibility(View.GONE);
+            editTextExcludeIngredients.setVisibility(View.GONE);
+            editTextAllergens.setVisibility(View.GONE);
+
+            textViewIncludeIngredients.setVisibility(View.GONE);
+            textViewExcludeIngredients.setVisibility(View.GONE);
+            textViewAllergens.setVisibility(View.GONE);
+        } else {
+            textViewIncludeIngredients.setVisibility(View.VISIBLE);
+            textViewExcludeIngredients.setVisibility(View.VISIBLE);
+            textViewAllergens.setVisibility(View.VISIBLE);
+
+            editTextIncludeIngredients.setVisibility(View.VISIBLE);
+            editTextExcludeIngredients.setVisibility(View.VISIBLE);
+            editTextAllergens.setVisibility(View.VISIBLE);
+        }
+    }
+
 }
