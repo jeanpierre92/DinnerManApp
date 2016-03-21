@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by s136693 on 5-3-2016.
  */
-<<<<<<< HEAD
+
 public class Tab_Schedule extends android.support.v4.app.Fragment {
     ListView list;
     ArrayList<Recipe> recipes = new ArrayList<>();

@@ -20,7 +20,7 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by s136693 on 5-3-2016.
  */
-<<<<<<< HEAD
+
 public class Tab_Recommendations extends android.support.v4.app.Fragment implements AdapterView.OnItemClickListener {
 
     ListView list;
