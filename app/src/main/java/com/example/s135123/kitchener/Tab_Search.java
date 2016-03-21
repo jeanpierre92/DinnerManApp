@@ -33,7 +33,6 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
  */
 
 public class Tab_Search extends android.support.v4.app.Fragment implements View.OnClickListener {
-    feature/navigationDrawer
     ArrayList<Recipe> recipes = new ArrayList<>();
     ListView list;
     CompactBaseAdapter adapter;
