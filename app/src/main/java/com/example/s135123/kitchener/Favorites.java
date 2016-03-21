@@ -27,16 +27,17 @@ public class Favorites extends android.support.v4.app.Fragment {
     private TextView textView;
     HashMap<String, String> apiParams = new HashMap<String, String>();
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.favorites_fragment, container, false);
     }
 
+
     // Make server request
-    public Favorites() {
-        apiParams.put("abc", "123");
-    }
+    apiParams.put("abc", "123");
+
 
     new CallWebService("GET", "http://appdev-gr1.win.tue.nl", apiParams) {
         @Override
@@ -48,6 +49,7 @@ public class Favorites extends android.support.v4.app.Fragment {
         @Override
         public void OnGettingResult(JSONObject jsonObject) throws JSONException, MethodNotDefinedException {
             // Json object in return from webservice
+            super.OnGettingResult(jsonObject);
         }
     }
 
