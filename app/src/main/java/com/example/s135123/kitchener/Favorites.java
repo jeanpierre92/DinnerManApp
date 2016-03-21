@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,6 +25,7 @@ import java.util.HashMap;
  */
 public class Favorites extends android.support.v4.app.Fragment {
     private TextView textView;
+    HashMap<String, String> apiParams = new HashMap<String, String>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,13 +34,20 @@ public class Favorites extends android.support.v4.app.Fragment {
     }
 
     // Make server request
-    HashMap<String, String> apiParams = new HashMap<String, String>();
-    apiParams.put("the params you want to use");
+    public Favorites() {
+        apiParams.put("abc", "123");
+    }
 
-    new ServerRequest("GET", "http://appdev-gr1.win.tue.nl", apiParams) {
-        @Override public void OnStartingService() {
+    new CallWebService("GET", "http://appdev-gr1.win.tue.nl", apiParams) {
+        @Override
+        public void OnStartingService() {
             super.OnStartingService();
             // What you want to do
+        }
+
+        @Override
+        public void OnGettingResult(JSONObject jsonObject) throws JSONException, MethodNotDefinedException {
+            // Json object in return from webservice
         }
     }
 
