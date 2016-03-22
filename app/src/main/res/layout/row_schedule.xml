@@ -50,8 +50,7 @@
         android:text="#This description will confuse the saliva out of you."
         android:layout_below="@id/title_container_schedule"
         android:layout_toRightOf="@+id/imageView_recipe_thumbnail"
-        android:layout_toLeftOf="@+id/rerollImageView"
-        android:layout_alignBottom="@+id/imageView_recipe_thumbnail" />
+        android:layout_toLeftOf="@+id/rerollImageView" />
 
     <TextView
         android:layout_width="60dp"

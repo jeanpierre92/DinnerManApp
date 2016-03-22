@@ -1,8 +1,11 @@
 package com.example.s135123.kitchener;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.tbouron.shakedetector.library.ShakeDetector;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -101,37 +105,22 @@ public class RecipeInfoActivity extends AppCompatActivity {
             @Override
             public void OnShake() {
                 System.out.println("SHAKEN");
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        User user = User.getInstance();
-                        //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
-                        String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
-                        JSONObject authTokenJson = null;
-                        try {
-                            authTokenJson = new JSONObject(SendRequest.sendGetRequest(authTokenUrl));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        String authToken = null;
-                        try {
-                            authToken = authTokenJson.getString("authToken");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        String recipeUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/test/" + authToken + "/random";
-                        String recipeResult = SendRequest.sendGetRequest(recipeUrl);
-                        Intent i = new Intent(RecipeInfoActivity.this, RecipeInfoActivity.class);
-                        Recipe recipe = new Recipe(recipeResult);
-                        i.putExtra("Recipe", recipe);
-                        RecipeInfoActivity.this.startActivity(i);
-                        System.out.println("INSHAKETHREAD");
-                        System.out.println(recipe.getImage());
-                    }
-                });
-                thread.start();
+                Thread thread = new RandomRecipeThread(RecipeInfoActivity.this);
+                if(isNetworkAvailable()) {
+                    thread.start();
+                }
+                else{
+                    Toast toast = Toast.makeText(getApplicationContext(), "No network available to random a recipe", Toast.LENGTH_LONG);
+                    toast.show();
+                }
             }
         });
+    }// Method to check if there is a network available
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
     //shakeDetector stuff
     @Override

@@ -36,10 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView_recipe_description"
-        android:layout_below="@+id/title_container"
         android:text="#This description will confuse the saliva out of you."
-        android:layout_alignBottom="@+id/imageView_recipe_thumbnail"
-        android:layout_toLeftOf="@id/textView_recipe_time"
+        android:maxLines="3"
+        android:layout_below="@+id/title_container"
         android:layout_toRightOf="@+id/imageView_recipe_thumbnail"
         android:layout_toEndOf="@+id/imageView_recipe_thumbnail" />
 

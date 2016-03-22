@@ -208,8 +208,9 @@ public class LoginActivity extends AppCompatActivity {
             // TODO: attempt authentication against a network service.
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + mUsername + "/" + mPassword;
             JSONObject authTokenJson=null;
+            SendRequest sendRequest = new SendRequest();
             try {
-                authTokenJson = new JSONObject(SendRequest.sendGetRequest(authTokenUrl));
+                authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
