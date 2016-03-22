@@ -30,6 +30,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -201,6 +205,23 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+            String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + mUsername + "/" + mPassword;
+            JSONObject authTokenJson=null;
+            try {
+                authTokenJson = new JSONObject(SendRequest.sendGetRequest(authTokenUrl));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            int status=0;
+            try {
+                status=authTokenJson.getInt("status");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            System.out.println("status: "+status);
+            if(status==400){
+                return false;
+            }
             return true;
         }
 
