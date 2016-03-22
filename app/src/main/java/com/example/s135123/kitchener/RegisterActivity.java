@@ -63,6 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
         if(user.getUsername()!=null && user.getPassword()!=null){
             //user is already logged in, continue to main activity
             Intent i = new Intent(this, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
         // Set up the login form.
