@@ -28,19 +28,29 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <com.example.s135123.kitchener.SlidingTabLayout
-        android:id="@+id/tabs"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="2dp"
-        android:background="@color/colorPrimary"/>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        ></android.support.v4.view.ViewPager>
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+
+        <com.example.s135123.kitchener.SlidingTabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="2dp"
+            android:background="@color/colorPrimary"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            ></android.support.v4.view.ViewPager>
+
+    </LinearLayout>
 
     <!-- The navigation drawer that comes from the left -->
     <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
