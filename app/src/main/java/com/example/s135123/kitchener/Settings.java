@@ -45,17 +45,9 @@ public class Settings extends android.support.v4.app.Fragment {
         User user = User.getInstance();
         public void onClick(View v) {
             if (shakeActive.isChecked()) {
-                if (user.getShakeEnabled()) {
-                    // do nothing, already correct
-                } else {
-                    user.setShakeEnabled(true);
-                }
+                user.setShakeEnabled(true);
             } else {
-                if (!user.getShakeEnabled()) {
-                    // do nothing
-                } else {
-                    user.setShakeEnabled(false);
-                }
+                user.setShakeEnabled(false);
             }
         }
     };
