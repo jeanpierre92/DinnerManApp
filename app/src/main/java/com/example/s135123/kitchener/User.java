@@ -13,6 +13,7 @@ public class User {
     private static User user;
     private ArrayList<Allergy> allergies = new ArrayList<>();
     boolean gender; //male=true
+    boolean shakeEnabled = true;
     private ArrayList<Recipe> favoriteRecipes = new ArrayList<>();
     SharedPreferences prefs;
 
@@ -40,6 +41,14 @@ public class User {
             user = new User();
         }
         return user;
+    }
+
+    public void setShakeEnabled(boolean shakeEnabled) {
+        this.shakeEnabled = shakeEnabled;
+    }
+
+    public boolean getShakeEnabled() {
+        return shakeEnabled;
     }
 
     public void removeFromFavorites(Recipe recipe) {

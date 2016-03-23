@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+    <CheckBox
+        android:id="@+id/shakeActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable shake for new recipe"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
 
-        <CheckBox android:id="@+id/measure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:title="Imperial System"
-            android:defaultValue="true"
-            android:summary="deselecting this option will change units to metric system"
-            android:key="Measurements" />
 
 </LinearLayout>
