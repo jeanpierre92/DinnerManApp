@@ -43,6 +43,9 @@ public class Recipe implements Serializable{
 
     String cuisine;
 
+    //constructor for gson.fromjson to use
+    public Recipe(){}
+
     //these are all json strings
     public Recipe(String json) {
         JSONObject o = null;
