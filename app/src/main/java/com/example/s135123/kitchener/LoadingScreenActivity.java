@@ -71,11 +71,12 @@ public class LoadingScreenActivity extends Activity
 			 */
             User user = User.getInstance();
             if(user.getUsername()==null && user.getPassword()==null) {
-                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(i);
             }
             else{
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             }
             /*try

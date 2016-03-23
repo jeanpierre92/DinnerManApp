@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -63,7 +67,6 @@ public class ScheduleAdapter extends BaseAdapter {
         TextView dayNumber = (TextView) row.findViewById(R.id.dayNumber);
         ImageView thumbnail = (ImageView) row.findViewById(R.id.imageView_recipe_thumbnail);
         ImageView rerollImageView = (ImageView) row.findViewById(R.id.rerollImageView);
-
         final Recipe recipe = recipes.get(position);
         title.setText(recipe.getTitle());
         time.setText(Integer.toString(recipe.getReadyInMinutes()) + " min");

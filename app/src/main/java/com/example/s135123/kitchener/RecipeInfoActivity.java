@@ -96,8 +96,26 @@ public class RecipeInfoActivity extends AppCompatActivity {
         nutritionView.setText("Calories: " + recipe.getCalories() + "\nFat: " + recipe.getFat() + "g\nProtein: " + recipe.getProtein() + "g\nCarbs: " + recipe.getCarbs() + "g");
         //nutritionView.setText("Calories: 55g\nFat: 5g\nProtein: 5g\nCarbs: 5g");
         servingsView = (TextView) findViewById((R.id.servingsAndMinutes));
-        servingsView.setText(recipe.getServings() + " servings\n" + recipe.getPreparationMinutes() + " minutes to prepare\n" +
-                recipe.getCookingMinutes() + " minutes to cook\nTotal time: " + recipe.getReadyInMinutes() + " minutes");
+        String servingsString=recipe.getServings() + " servings";
+        if(recipe.getPreparationMinutes()<0){
+            servingsString+="Time to prepare: unknown\n";
+        }
+        else{
+            servingsString+="Time to prepare:" + recipe.getPreparationMinutes() + " minutes\n";
+        }
+        if(recipe.getCookingMinutes()<0){
+            servingsString+="Time to cook: unknown\n";
+        }
+        else{
+            servingsString+="Time to cook:" + recipe.getCookingMinutes() + " minutes\n";
+        }
+        if(recipe.getReadyInMinutes()<0){
+            servingsString+="Total time: unknown";
+        }
+        else{
+            servingsString+="Total time: " + recipe.getReadyInMinutes() + " minutes";
+        }
+        servingsView.setText(servingsString);
 
         ingredientsView = (TextView) findViewById(R.id.ingredients);
         ArrayList<String> ingredients = recipe.getIngredients();

@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -45,6 +46,17 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         list = (ListView) v.findViewById(R.id.listView_schedule);
         adapter = new ScheduleAdapter(getActivity(), recipes);
         list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (isNetworkAvailable()) {
+                    new RerollTask().execute(position);
+                }else {
+                    Toast toast = Toast.makeText(getActivity(), "No network available to retrieve a new recipe", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }
+        });
 
         //load a schedule if there is one
         prefs = getActivity().getPreferences(getContext().MODE_PRIVATE);
@@ -152,6 +164,53 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             adapter.notifyDataSetChanged();
             //save the new schedule
             prefsEditor.commit();
+        }
+    }public class RerollTask extends AsyncTask<Integer, Void, String> {
+        int position;
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            User user = User.getInstance();
+            //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
+            String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
+            JSONObject authTokenJson = null;
+            SendRequest sendRequest = new SendRequest();
+            try {
+                authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String authToken = null;
+            try {
+                authToken = authTokenJson.getString("authToken");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String cuisines = "";
+            position = params[0];
+            if(position>0&&position<recipes.size()){
+                cuisines=recipes.get(position-1).getCuisine()+","+recipes.get(position+1).getCuisine();
+            }
+            else if(position>0){
+                cuisines=recipes.get(position-1).getCuisine();
+            }
+            else if(position<recipes.size()){
+                cuisines=recipes.get(position+1).getCuisine();
+            }
+            String recommendUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/"+user.getUsername()+"/"+authToken+"/schedule/reroll/"+cuisines;
+            String recipe = sendRequest.sendGetRequest(recommendUrl);
+            return recipe;
+        }
+
+        @Override
+        protected void onPostExecute(final String recipe) {
+            recipes.set(position,new Recipe(recipe));
+            SharedPreferences.Editor prefsEditor = prefs.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(recipe);
+            prefsEditor.putString("recipe"+position, json);
+            prefsEditor.commit();
+            adapter.notifyDataSetChanged();
         }
     }
 }

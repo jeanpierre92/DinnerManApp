@@ -117,8 +117,9 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
                     e.printStackTrace();
                 }
             }
-
+            adapter.notifyDataSetChanged();
         }
+
     }
 
 }
