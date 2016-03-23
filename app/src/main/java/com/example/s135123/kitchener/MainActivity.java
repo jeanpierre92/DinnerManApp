@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
     CharSequence Titles[]={"Schedule","Recommendations", "Search"};
-    int numboftabs =3;
+    int numboftabs = 3;
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
     private Toolbar toolbar;
@@ -186,8 +186,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_fourth_fragment:
                 fragmentClass = Settings.class;
+                break;
             default:
                 fragmentClass = Tab_Schedule.class;
+                break;
         }
 
         try {
