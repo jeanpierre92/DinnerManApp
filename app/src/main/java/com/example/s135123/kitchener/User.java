@@ -33,7 +33,7 @@ public class User {
     }
 
     private User() {
-        prefs = new SecurePreferences(RegisterActivity.applicationContext);
+        prefs = new SecurePreferences(LoadingScreenActivity.applicationContext);
     }
 
     public static User getInstance() {

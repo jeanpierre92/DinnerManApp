@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -43,7 +44,8 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
             RecommendRecipeTask task = new RecommendRecipeTask();
             task.execute((Void) null);
         } else {
-            //TODO: show no internet
+            Toast toast = Toast.makeText(getActivity(), "No network available to retrieve recommendations", Toast.LENGTH_LONG);
+            toast.show();
         }
         list = (ListView) v.findViewById(R.id.listView_reccomendations);
         adapter = new CompactBaseAdapter(getActivity(), recipes);
