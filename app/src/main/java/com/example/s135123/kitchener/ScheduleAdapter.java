@@ -68,7 +68,7 @@ public class ScheduleAdapter extends BaseAdapter {
         title.setText(recipe.getTitle());
         time.setText(Integer.toString(recipe.getReadyInMinutes()) + " min");
         description.setText(recipe.getSummary());
-        dayNumber.setText("Day " + Integer.toString(position));
+        dayNumber.setText("Day " + Integer.toString(position+1));
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
         if (!imageLoader.isInited()) {
             imageLoader.init(ImageLoaderConfiguration.createDefault(context));

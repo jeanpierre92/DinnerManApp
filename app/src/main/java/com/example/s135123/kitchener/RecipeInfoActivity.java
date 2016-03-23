@@ -38,6 +38,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
     TextView nutritionView;
     TextView servingsView;
     TextView ingredientsView;
+    TextView cuisineView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +85,13 @@ public class RecipeInfoActivity extends AppCompatActivity {
         titleView = (TextView) findViewById(R.id.title);
         //titleView.setText("Title");
         titleView.setText(recipe.getTitle());
+        cuisineView = (TextView) findViewById(R.id.cuisine_textview);
+        if(recipe.getCuisine().matches("[aeiou].*$")){
+            cuisineView.setText("An "+recipe.getCuisine()+" recipe");
+        }
+        else{
+            cuisineView.setText("A "+recipe.getCuisine()+" recipe");
+        }
         nutritionView = (TextView) findViewById(R.id.nutrition);
         nutritionView.setText("Calories: " + recipe.getCalories() + "\nFat: " + recipe.getFat() + "g\nProtein: " + recipe.getProtein() + "g\nCarbs: " + recipe.getCarbs() + "g");
         //nutritionView.setText("Calories: 55g\nFat: 5g\nProtein: 5g\nCarbs: 5g");

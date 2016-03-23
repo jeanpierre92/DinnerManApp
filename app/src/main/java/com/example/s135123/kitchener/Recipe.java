@@ -25,6 +25,10 @@ public class Recipe implements Serializable{
     int cookingMinutes;
     int preparationMinutes;
 
+    public String getCuisine() {
+        return cuisine;
+    }
+
     String summary;
     ArrayList<String> instructions = new ArrayList<>();
     boolean cheap = false;
@@ -36,6 +40,8 @@ public class Recipe implements Serializable{
     int carbs;
 
     int servings; //number of servings I assume
+
+    String cuisine;
 
     //these are all json strings
     public Recipe(String json) {
@@ -53,6 +59,11 @@ public class Recipe implements Serializable{
             }
             try {
                 title = o.getString("title");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                cuisine = o.getString("cuisine");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
