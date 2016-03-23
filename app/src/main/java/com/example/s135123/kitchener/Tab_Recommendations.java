@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -90,13 +91,33 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
                 e.printStackTrace();
             }
             String recommendUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken + "/recommendation";
-            String recipe = sendRequest.sendGetRequest(recommendUrl);
-            return recipe;
+            String result = sendRequest.sendGetRequest(recommendUrl);
+            return result;
         }
 
         @Override
-        protected void onPostExecute(final String recipe) {
-            recipes.add(new Recipe(recipe));
+        protected void onPostExecute(final String result) {
+            JSONObject resultJson =null;
+            try {
+                resultJson = new JSONObject (result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JSONArray recipeArray = null;
+            try {
+                recipeArray = resultJson.getJSONArray("recipes");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            for(int i = 0; i<recipeArray.length(); i++){
+                try {
+                    Recipe recipe = new Recipe(recipeArray.get(i).toString());
+                    recipes.add(recipe);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
     }
 
