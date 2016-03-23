@@ -165,6 +165,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_fourth_fragment:
                 fragmentClass = Settings.class;
+                break;
+            case R.id.nav_fifth_fragment:
+                User user =User.getInstance();
+                user.setPassword(null);
+                user.setUsername(null);
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
             default:
                 fragmentClass = Tab_Schedule.class;
         }

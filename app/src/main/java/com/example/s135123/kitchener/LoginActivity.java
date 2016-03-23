@@ -234,6 +234,7 @@ public class LoginActivity extends AppCompatActivity {
                 user.setUsername(mUsername);
                 user.setPassword(mPassword);
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

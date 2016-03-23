@@ -1,10 +1,14 @@
 package com.example.s135123.kitchener;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -12,8 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -57,7 +64,7 @@ public class ScheduleAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView( final int position, View convertView, final ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(R.layout.row_schedule, parent, false);
@@ -67,6 +74,12 @@ public class ScheduleAdapter extends BaseAdapter {
         TextView dayNumber = (TextView) row.findViewById(R.id.dayNumber);
         ImageView thumbnail = (ImageView) row.findViewById(R.id.imageView_recipe_thumbnail);
         ImageView rerollImageView = (ImageView) row.findViewById(R.id.rerollImageView);
+        rerollImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListView) parent).performItemClick(v, position, 0);
+            }
+        });
         final Recipe recipe = recipes.get(position);
         title.setText(recipe.getTitle());
         time.setText(Integer.toString(recipe.getReadyInMinutes()) + " min");
@@ -81,20 +94,7 @@ public class ScheduleAdapter extends BaseAdapter {
                 .cacheOnDisk(true)
                 .build();
         imageLoader.displayImage(recipe.getImage(), thumbnail, options);
-        row.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(context, RecipeInfoActivity.class);
-                i.putExtra("Recipe", recipe);
-                context.startActivity(i);
-            }
-        });
-        rerollImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: reroll
-            }
-        });
         return row;
     }
+
 }
