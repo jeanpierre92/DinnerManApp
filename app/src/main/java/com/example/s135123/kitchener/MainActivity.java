@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        User user = User.getInstance();
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -92,20 +92,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
-        ShakeDetector.create(this, new ShakeDetector.OnShakeListener() {
-            @Override
-            public void OnShake() {
-                System.out.println("SHAKEN");
-                Thread thread = new RandomRecipeThread(MainActivity.this);
-                if(isNetworkAvailable()) {
-                    thread.start();
+        if(user.getShakeEnabled()) {
+            ShakeDetector.create(this, new ShakeDetector.OnShakeListener() {
+                @Override
+                public void OnShake() {
+                    System.out.println("SHAKEN");
+                    Thread thread = new RandomRecipeThread(MainActivity.this);
+                    if (isNetworkAvailable()) {
+                        thread.start();
+                    } else {
+                        Toast toast = Toast.makeText(getApplicationContext(), "No network available to random a recipe", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
                 }
-                else{
-                    Toast toast = Toast.makeText(getApplicationContext(), "No network available to random a recipe", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            }
-        });
+            });
+        }
     }
 
 

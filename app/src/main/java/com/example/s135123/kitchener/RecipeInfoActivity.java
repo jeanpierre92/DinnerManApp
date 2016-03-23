@@ -43,6 +43,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_info);
+        User user = User.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
@@ -109,20 +110,21 @@ public class RecipeInfoActivity extends AppCompatActivity {
         }
         //servingsView.setText("5 servings\n5 minutes to prepare\n5 minutes to cook\nTotal time: 5");
         //ArrayList<String> instructions =recipe.getInstructions();
-        ShakeDetector.create(this, new ShakeDetector.OnShakeListener() {
-            @Override
-            public void OnShake() {
-                System.out.println("SHAKEN");
-                Thread thread = new RandomRecipeThread(RecipeInfoActivity.this);
-                if(isNetworkAvailable()) {
-                    thread.start();
+        if(user.getShakeEnabled()) {
+            ShakeDetector.create(this, new ShakeDetector.OnShakeListener() {
+                @Override
+                public void OnShake() {
+                    System.out.println("SHAKEN");
+                    Thread thread = new RandomRecipeThread(RecipeInfoActivity.this);
+                    if (isNetworkAvailable()) {
+                        thread.start();
+                    } else {
+                        Toast toast = Toast.makeText(getApplicationContext(), "No network available to random a recipe", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
                 }
-                else{
-                    Toast toast = Toast.makeText(getApplicationContext(), "No network available to random a recipe", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            }
-        });
+            });
+        }
     }// Method to check if there is a network available
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
