@@ -6,6 +6,7 @@ import android.app.Activity;
  * Created by s135123 on 22-3-2016.
  */
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,11 +20,13 @@ public class LoadingScreenActivity extends Activity
     //creates a ViewSwitcher object, to switch between Views
     private ViewSwitcher viewSwitcher;
 
+    public static Context applicationContext;   //used for shared preferences
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        applicationContext=getApplicationContext();
 
         //Initialize a LoadViewTask object and call the execute() method
         new LoadViewTask().execute();
@@ -66,7 +69,16 @@ public class LoadingScreenActivity extends Activity
 			 * is where the code that is going to be executed on a background
 			 * thread must be placed.
 			 */
-            try
+            User user = User.getInstance();
+            if(user.getUsername()==null && user.getPassword()==null) {
+                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(i);
+            }
+            else{
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+            }
+            /*try
             {
                 //Get the current thread's token
                 synchronized (this)
@@ -89,7 +101,7 @@ public class LoadingScreenActivity extends Activity
             catch (InterruptedException e)
             {
                 e.printStackTrace();
-            }
+            }*/
             return null;
         }
 
@@ -114,8 +126,7 @@ public class LoadingScreenActivity extends Activity
             //viewSwitcher.addView(ViewSwitcher.inflate(LoadingScreenActivity.this, R.layout.activity_main, null));
             //Switch the Views
             //viewSwitcher.showNext();
-            Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
-            startActivity(i);
+
         }
     }
 

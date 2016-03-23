@@ -45,7 +45,6 @@ public class RegisterActivity extends AppCompatActivity {
      */
     private UserLoginTask mAuthTask = null;
 
-    public static Context applicationContext;   //used for shared preferences
 
     // UI references.
     private AutoCompleteTextView mUsernameView;
@@ -58,7 +57,6 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        applicationContext=getApplicationContext();
         user=User.getInstance();
         if(user.getUsername()!=null && user.getPassword()!=null){
             //user is already logged in, continue to main activity
