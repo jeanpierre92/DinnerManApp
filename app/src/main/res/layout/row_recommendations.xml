@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:layout_width="96dp"
@@ -14,6 +14,12 @@
         android:src="@drawable/recipe_sample_chilli"
         android:padding="4dp"/>
 
+    <LinearLayout
+        android:id="@+id/title_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="60dp"
+        android:layout_toRightOf="@id/imageView_recipe_thumbnail">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,27 +30,28 @@
         android:layout_toLeftOf="@+id/textView_recipe_time"
         android:layout_toRightOf="@+id/imageView_recipe_thumbnail"
         android:layout_toEndOf="@+id/imageView_recipe_thumbnail" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView_recipe_description"
-        android:layout_below="@+id/textView_recipe_title"
         android:text="#This description will confuse the saliva out of you."
-        android:layout_alignBottom="@+id/imageView_recipe_thumbnail"
-        android:layout_toLeftOf="@id/textView_recipe_time"
+        android:maxLines="3"
+        android:layout_below="@+id/title_container"
         android:layout_toRightOf="@+id/imageView_recipe_thumbnail"
         android:layout_toEndOf="@+id/imageView_recipe_thumbnail" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="35 min"
         android:id="@id/textView_recipe_time"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:gravity="right"/>
 
 
 </RelativeLayout>

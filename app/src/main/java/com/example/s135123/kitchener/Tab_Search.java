@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.yahoo.mobile.client.android.util.rangeseekbar.RangeSeekBar;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -48,6 +50,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
     TextView textViewIncludeIngredients;
     TextView textViewExcludeIngredients;
     TextView textViewAllergens;
+    RangeSeekBar calSeekBar;
 
     // Buttons needed to set onClickListener()
     Button buttonSearch;
@@ -90,10 +93,14 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
         textViewExcludeIngredients.setVisibility(View.GONE);
         textViewAllergens.setVisibility(View.GONE);
 
+
         buttonSearch = (Button) v.findViewById(R.id.buttonSearch);
         buttonSearch.setOnClickListener(this);
         buttonAdvancedOptions = (Button) v.findViewById(R.id.buttonToggleAdvancedOptions);
         buttonAdvancedOptions.setOnClickListener(this);
+
+        calSeekBar = (RangeSeekBar) v.findViewById(R.id.cal_seek_bar);
+        calSeekBar.setVisibility(View.GONE);
 
         return v;
     }
@@ -103,11 +110,12 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
 
         switch (v.getId()) {
             case R.id.buttonSearch:
-
                 search(editTextSearch.getText().toString(),
                         editTextIncludeIngredients.getText().toString(),
                         editTextExcludeIngredients.getText().toString(),
-                        editTextAllergens.getText().toString());
+                        editTextAllergens.getText().toString(),
+                        (int) calSeekBar.getSelectedMinValue(),
+                        (int) calSeekBar.getSelectedMaxValue());
                 break;
             case R.id.buttonToggleAdvancedOptions:
                 toggleAdvancedOptions();
@@ -120,7 +128,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
 
     // TODO: Implement search
     // Sends a search query to the server and returns an ArrayList to display in the ListView results
-    public void search(String query, String includeIngredients, String excludeIngredients, String allergens) {
+    public void search(String query, String includeIngredients, String excludeIngredients, String allergens, int minCal, int maxCal) {
 
         SendRequest request = new SendRequest();
 
@@ -142,6 +150,8 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
             textViewIncludeIngredients.setVisibility(View.GONE);
             textViewExcludeIngredients.setVisibility(View.GONE);
             textViewAllergens.setVisibility(View.GONE);
+
+            calSeekBar.setVisibility(View.GONE);
         } else {
             textViewIncludeIngredients.setVisibility(View.VISIBLE);
             textViewExcludeIngredients.setVisibility(View.VISIBLE);
@@ -150,6 +160,8 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
             editTextIncludeIngredients.setVisibility(View.VISIBLE);
             editTextExcludeIngredients.setVisibility(View.VISIBLE);
             editTextAllergens.setVisibility(View.VISIBLE);
+
+            calSeekBar.setVisibility(View.VISIBLE);
         }
     }
 
