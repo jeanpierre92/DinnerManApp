@@ -96,35 +96,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void OnShake() {
                 System.out.println("SHAKEN");
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        User user = User.getInstance();
-                        //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
-                        String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
-                        JSONObject authTokenJson=null;
-                        try {
-                            authTokenJson = new JSONObject(SendRequest.sendGetRequest(authTokenUrl));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        String authToken = null;
-                        try {
-                            authToken = authTokenJson.getString("authToken");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        String recipeUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/test/" + authToken + "/random";
-                        String recipeResult = SendRequest.sendGetRequest(recipeUrl);
-                        Intent i = new Intent(MainActivity.this, RecipeInfoActivity.class);
-                        Recipe recipe =new Recipe(recipeResult);
-                        i.putExtra("Recipe", recipe);
-                        MainActivity.this.startActivity(i);
-                        System.out.println("INSHAKETHREAD");
-                        System.out.println(recipe.getImage());
-                    }
-                });
-                thread.start();
+                Thread thread = new RandomRecipeThread(MainActivity.this);
+                if(isNetworkAvailable()) {
+                    thread.start();
+                }
+                else{
+                    Toast toast = Toast.makeText(getApplicationContext(), "No network available to random a recipe", Toast.LENGTH_LONG);
+                    toast.show();
+                }
             }
         });
     }

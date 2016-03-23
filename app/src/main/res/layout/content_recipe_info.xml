@@ -38,10 +38,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:id="@+id/cuisine_textview"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Medium Text"
             android:id="@+id/nutrition"
-            android:layout_below="@id/title"
+            android:layout_below="@id/cuisine_textview"
             android:paddingTop="16dp"
             android:layout_alignParentLeft="true" />
         <TextView
@@ -50,7 +55,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Medium Text"
             android:id="@+id/servingsAndMinutes"
-            android:layout_below="@id/title"
+            android:layout_below="@id/cuisine_textview"
             android:layout_toRightOf="@+id/nutrition"
             android:layout_alignParentRight="true"
             android:paddingTop="16dp"

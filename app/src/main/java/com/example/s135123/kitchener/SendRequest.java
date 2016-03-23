@@ -25,7 +25,7 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 public class SendRequest  {
 
 
-    public static String sendGetRequest(String url){
+    public String sendGetRequest(String url){
         InputStream inputStream = null;
         String result = "";
         try {
@@ -46,13 +46,13 @@ public class SendRequest  {
                 result = "Did not work!";
 
         } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
+            e.printStackTrace();
         }
 
         return result;
     }
     // convert inputstream to String
-    private static String convertInputStreamToString(InputStream inputStream) throws IOException{
+    private String convertInputStreamToString(InputStream inputStream) throws IOException{
         BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
         String line = "";
         String result = "";
