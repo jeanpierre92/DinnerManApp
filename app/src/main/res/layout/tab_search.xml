@@ -3,8 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    xmlns:rsb="http://schemas.android.com/apk/res-auto">
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,13 +14,17 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:hint="Search recipes..." />
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/advanced_options_layout"
+    android:layout_below="@+id/editTextSearch">
 
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editTextIncludeIngredients"
-        android:layout_below="@+id/editTextSearch"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/textViewIncludeIngredients"
@@ -88,24 +91,119 @@
         android:layout_alignBaseline="@+id/editTextAllergens"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-    <com.yahoo.mobile.client.android.util.rangeseekbar.RangeSeekBar
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Calories"
+        android:id="@+id/textViewCal"
+        android:password="false"
+        android:padding="2dp"
+        android:paddingTop="8dp"
+        android:layout_alignBaseline="@+id/cal_seek_bar"
+        android:layout_alignBottom="@+id/cal_seek_bar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <org.florescu.android.rangeseekbar.RangeSeekBar
         android:id="@+id/cal_seek_bar"
         android:layout_below="@id/editTextAllergens"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:absoluteMinValue="0"
-        app:absoluteMaxValue="2500"
-        app:singleThumb="false"
-        />
+        rsb:absoluteMinValue="0"
+        rsb:absoluteMaxValue="2500"
+        rsb:singleThumb="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/editTextAllergens"
+        android:layout_alignStart="@+id/editTextAllergens"
+        rsb:showLabels="false"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Fat"
+        android:id="@+id/textViewFat"
+        android:password="false"
+        android:padding="2dp"
+        android:paddingTop="8dp"
+        android:layout_alignBaseline="@+id/fat_seek_bar"
+        android:layout_alignBottom="@+id/fat_seek_bar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <org.florescu.android.rangeseekbar.RangeSeekBar
+        android:id="@+id/fat_seek_bar"
+        android:layout_below="@id/textViewCal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        rsb:absoluteMinValue="0"
+        rsb:absoluteMaxValue="100"
+        rsb:singleThumb="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/editTextAllergens"
+        android:layout_alignStart="@+id/editTextAllergens"
+        rsb:showLabels="false"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Protein"
+        android:id="@+id/textViewProtein"
+        android:password="false"
+        android:padding="2dp"
+        android:paddingTop="8dp"
+        android:layout_alignBaseline="@+id/protein_seek_bar"
+        android:layout_alignBottom="@+id/protein_seek_bar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <org.florescu.android.rangeseekbar.RangeSeekBar
+        android:id="@+id/protein_seek_bar"
+        android:layout_below="@id/textViewFat"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        rsb:absoluteMinValue="0"
+        rsb:absoluteMaxValue="100"
+        rsb:singleThumb="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/editTextAllergens"
+        android:layout_alignStart="@+id/editTextAllergens"
+        rsb:showLabels="false"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Carbs"
+        android:id="@+id/textViewCarbs"
+        android:password="false"
+        android:padding="2dp"
+        android:paddingTop="8dp"
+        android:layout_alignBaseline="@+id/carbs_seek_bar"
+        android:layout_alignBottom="@+id/carbs_seek_bar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <org.florescu.android.rangeseekbar.RangeSeekBar
+        android:id="@+id/carbs_seek_bar"
+        android:layout_below="@id/textViewProtein"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        rsb:absoluteMinValue="0"
+        rsb:absoluteMaxValue="100"
+        rsb:singleThumb="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/editTextAllergens"
+        android:layout_alignStart="@+id/editTextAllergens"
+        rsb:showLabels="false"/>
 
-
+</RelativeLayout>
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
         android:id="@+id/buttonSearch"
-        android:layout_below="@+id/cal_seek_bar"
+        android:layout_below="@+id/advanced_options_layout"
         android:layout_toRightOf="@+id/buttonToggleAdvancedOptions"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -116,7 +214,7 @@
         android:layout_height="wrap_content"
         android:text="Advanced options"
         android:id="@+id/buttonToggleAdvancedOptions"
-        android:layout_below="@+id/cal_seek_bar"
+        android:layout_below="@+id/advanced_options_layout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

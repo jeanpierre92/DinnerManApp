@@ -11,9 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.yahoo.mobile.client.android.util.rangeseekbar.RangeSeekBar;
+
+import org.florescu.android.rangeseekbar.RangeSeekBar;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -50,7 +52,15 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
     TextView textViewIncludeIngredients;
     TextView textViewExcludeIngredients;
     TextView textViewAllergens;
+    TextView textViewCal;
+    TextView textViewCarbs;
+    TextView textViewProtein;
+    TextView textViewFat;
     RangeSeekBar calSeekBar;
+    RangeSeekBar proteinSeekBar;
+    RangeSeekBar fatSeekBar;
+    RangeSeekBar carbsSeekBar;
+    RelativeLayout advancedOptionsLayout;
 
     // Buttons needed to set onClickListener()
     Button buttonSearch;
@@ -81,17 +91,15 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
         editTextIncludeIngredients = (EditText) v.findViewById(R.id.editTextIncludeIngredients);
         editTextExcludeIngredients = (EditText) v.findViewById(R.id.editTextExcludeIngredients);
         editTextAllergens = (EditText) v.findViewById(R.id.editTextAllergens);
-        editTextIncludeIngredients.setVisibility(View.GONE);
-        editTextExcludeIngredients.setVisibility(View.GONE);
-        editTextAllergens.setVisibility(View.GONE);
 
         // TextView views found and hidden as default
         textViewIncludeIngredients = (TextView) v.findViewById(R.id.textViewIncludeIngredients);
         textViewExcludeIngredients = (TextView) v.findViewById(R.id.textViewExcludeIngredients);
+        textViewCal = (TextView) v.findViewById(R.id.textViewCal);
+        textViewCarbs = (TextView) v.findViewById(R.id.textViewCarbs);
+        textViewFat = (TextView) v.findViewById(R.id.textViewFat);
+        textViewProtein = (TextView) v.findViewById(R.id.textViewProtein);
         textViewAllergens = (TextView) v.findViewById(R.id.textViewAllergens);
-        textViewIncludeIngredients.setVisibility(View.GONE);
-        textViewExcludeIngredients.setVisibility(View.GONE);
-        textViewAllergens.setVisibility(View.GONE);
 
 
         buttonSearch = (Button) v.findViewById(R.id.buttonSearch);
@@ -100,7 +108,12 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
         buttonAdvancedOptions.setOnClickListener(this);
 
         calSeekBar = (RangeSeekBar) v.findViewById(R.id.cal_seek_bar);
-        calSeekBar.setVisibility(View.GONE);
+        fatSeekBar = (RangeSeekBar) v.findViewById(R.id.fat_seek_bar);
+        carbsSeekBar = (RangeSeekBar) v.findViewById(R.id.carbs_seek_bar);
+        proteinSeekBar = (RangeSeekBar) v.findViewById(R.id.protein_seek_bar);
+
+        advancedOptionsLayout = (RelativeLayout) v.findViewById(R.id.advanced_options_layout);
+        advancedOptionsLayout.setVisibility(View.GONE);
 
         return v;
     }
@@ -142,26 +155,11 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
 
     // Toggles the advanced options views (
     public void toggleAdvancedOptions() {
-        if(editTextIncludeIngredients.getVisibility() == View.VISIBLE) {
-            editTextIncludeIngredients.setVisibility(View.GONE);
-            editTextExcludeIngredients.setVisibility(View.GONE);
-            editTextAllergens.setVisibility(View.GONE);
+        if(advancedOptionsLayout.getVisibility() == View.VISIBLE) {
+            advancedOptionsLayout.setVisibility(View.GONE);
 
-            textViewIncludeIngredients.setVisibility(View.GONE);
-            textViewExcludeIngredients.setVisibility(View.GONE);
-            textViewAllergens.setVisibility(View.GONE);
-
-            calSeekBar.setVisibility(View.GONE);
         } else {
-            textViewIncludeIngredients.setVisibility(View.VISIBLE);
-            textViewExcludeIngredients.setVisibility(View.VISIBLE);
-            textViewAllergens.setVisibility(View.VISIBLE);
-
-            editTextIncludeIngredients.setVisibility(View.VISIBLE);
-            editTextExcludeIngredients.setVisibility(View.VISIBLE);
-            editTextAllergens.setVisibility(View.VISIBLE);
-
-            calSeekBar.setVisibility(View.VISIBLE);
+            advancedOptionsLayout.setVisibility(View.VISIBLE);
         }
     }
 

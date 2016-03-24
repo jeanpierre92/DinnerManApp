@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -36,24 +38,38 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
     ListView list;
     ArrayList<Recipe> recipes = new ArrayList<>();
     CompactBaseAdapter adapter;
+    TextView noInternetText;
+    RelativeLayout recommendationLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_recommendations, container, false);
         User user = User.getInstance();
-        if (isNetworkAvailable()) {
-            RecommendRecipeTask task = new RecommendRecipeTask();
-            task.execute((Void) null);
-        } else {
-            Toast toast = Toast.makeText(getActivity(), "No network available to retrieve recommendations", Toast.LENGTH_LONG);
-            toast.show();
-        }
+        noInternetText = (TextView) v.findViewById(R.id.text_rec_no_internet);
+        recommendationLayout = (RelativeLayout) v.findViewById(R.id.recommendation_layout);
+        recommendationLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadRecipes();
+            }
+        });
+        loadRecipes();
         list = (ListView) v.findViewById(R.id.listView_reccomendations);
         adapter = new CompactBaseAdapter(getActivity(), recipes);
         list.setAdapter(adapter);
 
         return v;
         // return inflater.inflate(R.layout.tab_recommendations, container, false);
+    }
+    private void loadRecipes(){
+        if (isNetworkAvailable()) {
+            RecommendRecipeTask task = new RecommendRecipeTask();
+            noInternetText.setVisibility(View.GONE);
+            task.execute((Void) null);
+
+        } else {
+            noInternetText.setVisibility(View.VISIBLE);
+        }
     }
 
 

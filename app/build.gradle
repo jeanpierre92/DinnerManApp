@@ -32,4 +32,6 @@ dependencies {
     compile 'org.jsoup:jsoup:1.8.3'
     compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
     compile 'com.google.code.gson:gson:2.5'
+    compile 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
+
 }

@@ -39,6 +39,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
     TextView servingsView;
     TextView ingredientsView;
     TextView cuisineView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,52 +76,56 @@ public class RecipeInfoActivity extends AppCompatActivity {
         /*ArrayList<String> instructions = new ArrayList<>();
         instructions.add("first instruction");
         instructions.add("second instruction");*/
+        int num = 1;
         for (int i = 0; i < instructions.size(); i++) {
-            int num = i + 1;
-            instructionsView.append(num + ". " + instructions.get(i));
-            if (i != instructions.size() - 1) {
-                instructionsView.append("\n");
+            String instruction = instructions.get(i);
+            if(instruction.length()>1) {
+                instructionsView.append(num + ". " + instruction);
+                if (i != instructions.size() - 1) {
+                    instructionsView.append("\n");
+                }
+                num++;
             }
         }
         titleView = (TextView) findViewById(R.id.title);
         //titleView.setText("Title");
         titleView.setText(recipe.getTitle());
         cuisineView = (TextView) findViewById(R.id.cuisine_textview);
-        if(recipe.getCuisine().matches("[aeiou].*$")){
-            cuisineView.setText("An "+recipe.getCuisine()+" recipe");
-        }
-        else{
-            cuisineView.setText("A "+recipe.getCuisine()+" recipe");
+        if (recipe.getCuisine().matches("[aeiou].*$")) {
+            cuisineView.setText("An " + recipe.getCuisine() + " recipe");
+        } else {
+            cuisineView.setText("A " + recipe.getCuisine() + " recipe");
         }
         nutritionView = (TextView) findViewById(R.id.nutrition);
         nutritionView.setText("Calories: " + recipe.getCalories() + "\nFat: " + recipe.getFat() + "g\nProtein: " + recipe.getProtein() + "g\nCarbs: " + recipe.getCarbs() + "g");
         //nutritionView.setText("Calories: 55g\nFat: 5g\nProtein: 5g\nCarbs: 5g");
         servingsView = (TextView) findViewById((R.id.servingsAndMinutes));
-        String servingsString=recipe.getServings() + " servings";
-        if(recipe.getPreparationMinutes()<0){
-            servingsString+="Time to prepare: unknown\n";
+        String servingsString = recipe.getServings() + " serving";
+        if(recipe.getServings()>1){
+            servingsString+="s";
         }
-        else{
-            servingsString+="Time to prepare:" + recipe.getPreparationMinutes() + " minutes\n";
+        servingsString+="\n";
+        if (recipe.getPreparationMinutes() < 0) {
+            servingsString += "Time to prepare: unknown\n";
+        } else {
+            servingsString += "Time to prepare: " + recipe.getPreparationMinutes() + " minutes\n";
         }
-        if(recipe.getCookingMinutes()<0){
-            servingsString+="Time to cook: unknown\n";
+        if (recipe.getCookingMinutes() < 0) {
+            servingsString += "Time to cook: unknown\n";
+        } else {
+            servingsString += "Time to cook: " + recipe.getCookingMinutes() + " minutes\n";
         }
-        else{
-            servingsString+="Time to cook:" + recipe.getCookingMinutes() + " minutes\n";
-        }
-        if(recipe.getReadyInMinutes()<0){
-            servingsString+="Total time: unknown";
-        }
-        else{
-            servingsString+="Total time: " + recipe.getReadyInMinutes() + " minutes";
+        if (recipe.getReadyInMinutes() < 0) {
+            servingsString += "Total time: unknown";
+        } else {
+            servingsString += "Total time: " + recipe.getReadyInMinutes() + " minutes";
         }
         servingsView.setText(servingsString);
 
         ingredientsView = (TextView) findViewById(R.id.ingredients);
         ArrayList<String> ingredients = recipe.getIngredients();
         for (int i = 0; i < ingredients.size(); i++) {
-            ingredientsView.append("• "+ingredients.get(i));
+            ingredientsView.append("• " + ingredients.get(i));
             if (i != ingredients.size() - 1) {
                 ingredientsView.append("\n");
             }
@@ -132,22 +137,23 @@ public class RecipeInfoActivity extends AppCompatActivity {
             public void OnShake() {
                 System.out.println("SHAKEN");
                 Thread thread = new RandomRecipeThread(RecipeInfoActivity.this);
-                if(isNetworkAvailable()) {
+                if (isNetworkAvailable()) {
                     thread.start();
-                }
-                else{
+                } else {
                     Toast toast = Toast.makeText(getApplicationContext(), "No network available to random a recipe", Toast.LENGTH_LONG);
                     toast.show();
                 }
             }
         });
     }// Method to check if there is a network available
+
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
+
     //shakeDetector stuff
     @Override
     protected void onResume() {

@@ -207,13 +207,13 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             }
             String cuisines = "reroll,";
             position = params[0];
-            if(position>0&&position<recipes.size()){
+            if(position>0&&position<recipes.size()-1){
                 cuisines+=recipes.get(position-1).getCuisine()+","+recipes.get(position+1).getCuisine();
             }
             else if(position>0){
                 cuisines+=recipes.get(position-1).getCuisine();
             }
-            else if(position<recipes.size()){
+            else if(position<recipes.size()-1){
                 cuisines+=recipes.get(position+1).getCuisine();
             }
             String rerollUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/"+user.getUsername()+"/"+authToken+"/schedule/reroll/"+cuisines;
