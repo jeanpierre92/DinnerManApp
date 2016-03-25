@@ -13,11 +13,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.client.ClientProtocolException;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.ByteArrayEntity;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.util.EntityUtils;
 
 /**
  * Created by s135123 on 22-2-2016.
@@ -40,11 +44,15 @@ public class SendRequest  {
             inputStream = httpResponse.getEntity().getContent();
 
             // convert inputstream to string
-            if(inputStream != null)
+            if(inputStream != null) {
                 result = convertInputStreamToString(inputStream);
-            else
-                result = "Did not work!";
+            }
 
+            /*HttpPost post = new HttpPost("http://appdev-gr1.win.tue.nl:8008/api/user/test/lfbHKQLmh0o5khy2/addFavorites");
+            HttpEntity entity = new ByteArrayEntity("adsfdfs".getBytes("UTF-8"));
+            post.setEntity(entity);
+            HttpResponse response = httpclient.execute(post);
+            System.out.println(EntityUtils.toString(response.getEntity()));*/
         } catch (Exception e) {
             e.printStackTrace();
         }

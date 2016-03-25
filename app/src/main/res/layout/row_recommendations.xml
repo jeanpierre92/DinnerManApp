@@ -18,7 +18,7 @@
         android:id="@+id/title_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingRight="60dp"
+        android:paddingRight="55dp"
         android:layout_toRightOf="@id/imageView_recipe_thumbnail">
     <TextView
         android:layout_width="wrap_content"
@@ -40,10 +40,12 @@
         android:maxLines="3"
         android:layout_below="@+id/title_container"
         android:layout_toRightOf="@+id/imageView_recipe_thumbnail"
-        android:layout_toEndOf="@+id/imageView_recipe_thumbnail" />
+        android:layout_toEndOf="@+id/imageView_recipe_thumbnail"
+        android:paddingRight="40dp"
+        android:ellipsize="end" />
 
     <TextView
-        android:layout_width="60dp"
+        android:layout_width="55dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="35 min"
@@ -52,6 +54,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:gravity="right"/>
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/favoritesImageViewRec"
+        android:src="@drawable/favorites_empty"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/textView_recipe_description"
+        android:clickable="true"/>
 
 
 </RelativeLayout>

@@ -68,6 +68,7 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
             task.execute((Void) null);
 
         } else {
+            noInternetText.setText("No network available to retrieve recipes. Tap to retry");
             noInternetText.setVisibility(View.VISIBLE);
         }
     }
@@ -100,6 +101,10 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            if(authTokenJson==null){
+                //something went wrong
+                return "";
+            }
             String authToken = null;
             try {
                 authToken = authTokenJson.getString("authToken");
@@ -113,27 +118,33 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
 
         @Override
         protected void onPostExecute(final String result) {
-            JSONObject resultJson =null;
-            try {
-                resultJson = new JSONObject (result);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if(result.equals("")){
+                noInternetText.setText("Unable to reach the server. Tap to retry");
+                noInternetText.setVisibility(View.VISIBLE);
             }
-            JSONArray recipeArray = null;
-            try {
-                recipeArray = resultJson.getJSONArray("recipes");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            for(int i = 0; i<recipeArray.length(); i++){
+            else {
+                JSONObject resultJson = null;
                 try {
-                    Recipe recipe = new Recipe(recipeArray.get(i).toString());
-                    recipes.add(recipe);
+                    resultJson = new JSONObject(result);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                JSONArray recipeArray = null;
+                try {
+                    recipeArray = resultJson.getJSONArray("recipes");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < recipeArray.length(); i++) {
+                    try {
+                        Recipe recipe = new Recipe(recipeArray.get(i).toString());
+                        recipes.add(recipe);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                adapter.notifyDataSetChanged();
             }
-            adapter.notifyDataSetChanged();
         }
 
     }

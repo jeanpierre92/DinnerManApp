@@ -141,6 +141,10 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            if(authTokenJson==null){
+                //something went wrong
+                return "";
+            }
             String authToken = null;
             try {
                 authToken = authTokenJson.getString("authToken");
@@ -154,34 +158,40 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
 
         @Override
         protected void onPostExecute(final String result) {
-            JSONObject resultJson =null;
-            try {
-                resultJson = new JSONObject (result);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if(result.equals("")){
+                Toast toast = Toast.makeText(getActivity(), "Unable to reach the server to retrieve a schedule", Toast.LENGTH_LONG);
+                toast.show();
             }
-            JSONArray recipeArray = null;
-            try {
-                recipeArray = resultJson.getJSONArray("schedule");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            SharedPreferences.Editor prefsEditor = prefs.edit();
-            Gson gson = new Gson();
-            for(int i = 0; i<recipeArray.length(); i++){
+            else {
+                JSONObject resultJson = null;
                 try {
-                    Recipe recipe = new Recipe(recipeArray.get(i).toString());
-                    recipes.add(recipe);
-                    String json = gson.toJson(recipe);
-                    System.out.println("json in schedule: "+json);
-                    prefsEditor.putString("recipe"+i, json);
+                    resultJson = new JSONObject(result);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                JSONArray recipeArray = null;
+                try {
+                    recipeArray = resultJson.getJSONArray("schedule");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                SharedPreferences.Editor prefsEditor = prefs.edit();
+                Gson gson = new Gson();
+                for (int i = 0; i < recipeArray.length(); i++) {
+                    try {
+                        Recipe recipe = new Recipe(recipeArray.get(i).toString());
+                        recipes.add(recipe);
+                        String json = gson.toJson(recipe);
+                        System.out.println("json in schedule: " + json);
+                        prefsEditor.putString("recipe" + i, json);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                //save the new schedule
+                prefsEditor.commit();
             }
-            adapter.notifyDataSetChanged();
-            //save the new schedule
-            prefsEditor.commit();
         }
     }
     public class RerollTask extends AsyncTask<Integer, Void, String> {

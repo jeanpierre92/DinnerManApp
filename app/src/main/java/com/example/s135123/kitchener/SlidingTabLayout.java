@@ -1,8 +1,6 @@
 package com.example.s135123.kitchener;
 
-/**
- * Created by s136693 on 5-3-2016.
- */
+
 
 import android.content.Context;
 import android.graphics.Typeface;
