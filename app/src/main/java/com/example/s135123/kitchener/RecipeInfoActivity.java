@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -19,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.tbouron.shakedetector.library.ShakeDetector;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -40,12 +41,19 @@ public class RecipeInfoActivity extends AppCompatActivity {
     TextView ingredientsView;
     TextView cuisineView;
 
+    private SensorManager sensorManager;
+    private ShakeDetector shakeDetector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_info);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        shakeDetector = new ShakeDetector(this);
+
         recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
         if (!imageLoader.isInited()) {
@@ -131,21 +139,6 @@ public class RecipeInfoActivity extends AppCompatActivity {
                 ingredientsView.append("\n");
             }
         }
-        //servingsView.setText("5 servings\n5 minutes to prepare\n5 minutes to cook\nTotal time: 5");
-        //ArrayList<String> instructions =recipe.getInstructions();
-        ShakeDetector.create(this, new ShakeDetector.OnShakeListener() {
-            @Override
-            public void OnShake() {
-                System.out.println("SHAKEN");
-                Thread thread = new RandomRecipeThread(RecipeInfoActivity.this);
-                if (isNetworkAvailable()) {
-                    thread.start();
-                } else {
-                    Toast toast = Toast.makeText(getApplicationContext(), "No network available to random a recipe", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            }
-        });
     }// Method to check if there is a network available
 
     private Boolean isNetworkAvailable() {
@@ -154,24 +147,17 @@ public class RecipeInfoActivity extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
-
-    //shakeDetector stuff
     @Override
-    protected void onResume() {
+    public void onPause(){
+        super.onPause();
+        sensorManager.unregisterListener(shakeDetector);
+    }
+    @Override
+    public void onResume(){
         super.onResume();
-        ShakeDetector.start();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        ShakeDetector.stop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ShakeDetector.destroy();
+        sensorManager.registerListener(shakeDetector,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 }

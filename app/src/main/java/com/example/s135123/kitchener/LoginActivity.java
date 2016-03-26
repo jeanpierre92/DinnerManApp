@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        user=User.getInstance();
+        user = User.getInstance();
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
 
@@ -95,12 +96,10 @@ public class LoginActivity extends AppCompatActivity {
         registerText.setVisibility(View.GONE);
     }
 
-    public void onRegisterClick(View v){
+    public void onRegisterClick(View v) {
         Intent i = new Intent(this, RegisterActivity.class);
         startActivity(i);
     }
-
-
 
 
     /**
@@ -145,18 +144,18 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            if(isNetworkAvailable()) {
+            if (isNetworkAvailable()) {
                 showProgress(true);
                 mAuthTask = new UserLoginTask(username, password);
                 mAuthTask.execute((Void) null);
-            }
-            else{
+            } else {
                 Toast toast = Toast.makeText(this, "Login not possible: no internet connection available", Toast.LENGTH_LONG);
                 toast.show();
 
             }
         }
     }
+
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -201,13 +200,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, String> {
 
         private final String mUsername;
         private final String mPassword;
@@ -218,43 +215,77 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + mUsername + "/" + mPassword;
-            JSONObject authTokenJson=null;
+            JSONObject authTokenJson = null;
             SendRequest sendRequest = new SendRequest();
             try {
                 authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            int status=0;
+            if (authTokenJson == null) {
+                return "noInternet";
+            }
+            System.out.println(authTokenJson.toString());
+            String authToken = null;
             try {
-                status=authTokenJson.getInt("status");
+                authToken = authTokenJson.getString("authToken");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            System.out.println("status: "+status);
-            if(status==400){
-                return false;
+            int status = 0;
+            try {
+                status = authTokenJson.getInt("status");
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            return true;
+            System.out.println("status: " + status);
+            if (status == 400) {
+                return "failed";
+            }
+            user.setUsername(mUsername);
+            user.setPassword(mPassword);
+            String profileUrl = "http://appdev-gr1.win.tue.nl:8008/api/user/"+user.getUsername()+"/"+authToken+"/profile";
+            String profileString = sendRequest.sendGetRequest(profileUrl);
+            JSONObject profile = null;
+            try {
+                profile = new JSONObject(profileString);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JSONArray favoritesJsonArray = null;
+            try {
+                favoritesJsonArray = profile.getJSONArray("favorites");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            for(int i = 0; i < favoritesJsonArray.length(); i++){
+                try {
+                    user.addToFavorites(Integer.parseInt(favoritesJsonArray.get(i).toString()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return "success";
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final String result) {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
-                user.setUsername(mUsername);
-                user.setPassword(mPassword);
+            if (result.equals("success")) {
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
-            } else {
+            } else if (result.equals("failed")) {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
+            } else if (result.equals("noInternet")) {
+                Toast toast = Toast.makeText(LoginActivity.this, "Unable to reach the server to authenticate", Toast.LENGTH_LONG);
+                toast.show();
             }
         }
 

@@ -13,7 +13,7 @@ public class User {
     private static User user;
     private ArrayList<Allergy> allergies = new ArrayList<>();
     boolean gender; //male=true
-    private ArrayList<Recipe> favoriteRecipes = new ArrayList<>();
+    private ArrayList<Integer> favoriteRecipes = new ArrayList<>();
     SharedPreferences prefs;
 
     public String getId() {
@@ -42,15 +42,15 @@ public class User {
         return user;
     }
 
-    public void removeFromFavorites(Recipe recipe) {
-        favoriteRecipes.remove(recipe);
+    public void removeFromFavorites(int id) {
+        favoriteRecipes.remove((Integer) id);
     }
 
-    public void addToFavorites(Recipe recipe) {
-        favoriteRecipes.add(recipe);
+    public void addToFavorites(int id) {
+        favoriteRecipes.add(id);
     }
 
-    public ArrayList<Recipe> getFavorites() {
+    public ArrayList<Integer> getFavorites() {
         return favoriteRecipes;
     }
 

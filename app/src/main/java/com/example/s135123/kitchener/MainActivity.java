@@ -2,6 +2,10 @@ package com.example.s135123.kitchener;
 
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -24,7 +28,6 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.github.tbouron.shakedetector.library.ShakeDetector;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
     private Toolbar toolbar;
+    private SensorManager sensorManager;
+    private ShakeDetector shakeDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,20 +96,8 @@ public class MainActivity extends AppCompatActivity {
         });
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
-        ShakeDetector.create(this, new ShakeDetector.OnShakeListener() {
-            @Override
-            public void OnShake() {
-                System.out.println("SHAKEN");
-                Thread thread = new RandomRecipeThread(MainActivity.this);
-                if(isNetworkAvailable()) {
-                    thread.start();
-                }
-                else{
-                    Toast toast = Toast.makeText(getApplicationContext(), "No network available to random a recipe", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            }
-        });
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        shakeDetector = new ShakeDetector(this);
     }
 
 
@@ -194,30 +187,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //shakeDetector stuff
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ShakeDetector.start();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        ShakeDetector.stop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ShakeDetector.destroy();
-    }
-
     // Method to check if there is a network available
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+    @Override
+    public void onPause(){
+        super.onPause();
+        sensorManager.unregisterListener(shakeDetector);
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        sensorManager.registerListener(shakeDetector,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
     }
 }

@@ -35,6 +35,7 @@ public class RandomRecipeThread extends Thread {
         String recipeUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/test/" + authToken + "/random";
         String recipeResult = sendRequest.sendGetRequest(recipeUrl);
         Intent i = new Intent(activity, RecipeInfoActivity.class);
+        i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
         Recipe recipe =new Recipe(recipeResult);
         i.putExtra("Recipe", recipe);
         activity.startActivity(i);

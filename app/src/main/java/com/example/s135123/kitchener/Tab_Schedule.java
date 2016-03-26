@@ -40,34 +40,12 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
     Button generateButton;
     int days = 2;//number of days to generate a schedule for
     SharedPreferences prefs;
+    User user = User.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_schedule, container, false);
         list = (ListView) v.findViewById(R.id.listView_schedule);
-        adapter = new ScheduleAdapter(getActivity(), recipes);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                long viewId = view.getId();
-                if (viewId == R.id.rerollImageView) {
-                    System.out.println("started rerolling");
-                    if (isNetworkAvailable()) {
-                        new RerollTask().execute(position);
-                        System.out.println("started rerolling");
-                    } else {
-                        Toast toast = Toast.makeText(getContext(), "No network available to retrieve a new recipe", Toast.LENGTH_LONG);
-                        toast.show();
-                    }
-                } else {
-                    Intent i = new Intent(getContext(), RecipeInfoActivity.class);
-                    i.putExtra("Recipe", recipes.get(position));
-                    getContext().startActivity(i);
-                }
-            }
-        });
-
         //load a schedule if there is one
         prefs = getActivity().getPreferences(getContext().MODE_PRIVATE);
         Gson gson = new Gson();
@@ -81,6 +59,40 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             }
 
         }
+        adapter = new ScheduleAdapter(getActivity(), recipes);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long viewId = view.getId();
+                if (viewId == R.id.rerollImageView) {
+                    System.out.println("started rerolling");
+                    if (isNetworkAvailable()) {
+                        new RerollTask(position).execute();
+                        System.out.println("started rerolling");
+                    } else {
+                        Toast toast = Toast.makeText(getContext(), "No network available to retrieve a new recipe", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                } else if (viewId == R.id.favoritesImageView) {
+                    System.out.println("started favoriting");
+                    if (isNetworkAvailable()) {
+                        boolean addTofavorite = !user.getFavorites().contains(recipes.get(position).getId());
+                        new FavoritesTask(position).execute(addTofavorite);
+                    } else {
+                        Toast toast = Toast.makeText(getContext(), "No network available to retrieve a new recipe", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+
+                } else {
+                    Intent i = new Intent(getContext(), RecipeInfoActivity.class);
+                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    i.putExtra("Recipe", recipes.get(position));
+                    getContext().startActivity(i);
+                }
+            }
+        });
+
         generateButton = (Button) v.findViewById(R.id.gen_schedule_button);
         generateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +128,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+        seekBar.setProgress(recipes.size());
         return v;
         // return inflater.inflate(R.layout.tab_schedule, container, false);
 
@@ -132,7 +145,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
 
         @Override
         protected String doInBackground(Void... params) {
-            User user = User.getInstance();
             //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
             JSONObject authTokenJson = null;
@@ -189,18 +201,21 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             if (result.equals("")) {
                 Toast toast = Toast.makeText(getActivity(), "Unable to reach the server to retrieve a schedule", Toast.LENGTH_LONG);
                 toast.show();
-            }
-            else {
+            } else {
                 adapter.notifyDataSetChanged();
             }
         }
     }
 
-    public class RerollTask extends AsyncTask<Integer, Void, String> {
+    public class RerollTask extends AsyncTask<Void, Void, String> {
         int position;
 
+        public RerollTask(int pos) {
+            position = pos;
+        }
+
         @Override
-        protected String doInBackground(Integer... params) {
+        protected String doInBackground(Void... params) {
             User user = User.getInstance();
             //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
@@ -211,7 +226,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(authTokenJson==null){
+            if (authTokenJson == null) {
                 //something went wrong
                 return "failed";
             }
@@ -222,7 +237,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
                 e.printStackTrace();
             }
             String cuisines = "";
-            position = params[0];
             if (position > 0 && position < recipes.size() - 1) {
                 cuisines += recipes.get(position - 1).getCuisine() + ",reroll," + recipes.get(position + 1).getCuisine();
             } else if (position > 0) {
@@ -244,11 +258,76 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
 
         @Override
         protected void onPostExecute(final String result) {
-            if(result.equals("failed")){
+            if (result.equals("failed")) {
                 Toast toast = Toast.makeText(getActivity(), "Unable to reach the server to retrieve a schedule", Toast.LENGTH_LONG);
                 toast.show();
+            } else {
+                adapter.notifyDataSetChanged();
             }
-            else {
+        }
+    }
+
+    public class FavoritesTask extends AsyncTask<Boolean, Void, String> {
+        int position;
+
+        public FavoritesTask(int pos) {
+            position = pos;
+        }
+
+        @Override
+        protected String doInBackground(Boolean... params) {
+            User user = User.getInstance();
+            //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
+            String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
+            JSONObject authTokenJson = null;
+            SendRequest sendRequest = new SendRequest();
+            try {
+                authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (authTokenJson == null) {
+                //something went wrong
+                return "failed";
+            }
+            String authToken = null;
+            try {
+                authToken = authTokenJson.getString("authToken");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (params[0]) {
+                //add to favorites
+                String addToFavoritesUrl = "http://appdev-gr1.win.tue.nl:8008/api/user/" + user.getUsername() + "/" + authToken + "/addFavorites";
+                int statusCode = sendRequest.sendPostRequest(addToFavoritesUrl, Integer.toString(recipes.get(position).getId()));
+                if (statusCode != 200) {
+                    return "failed";
+                } else {
+                    int recipeId = recipes.get(position).getId();
+                    if (!user.getFavorites().contains(recipeId)) {
+                        user.addToFavorites(recipeId);
+                    }
+                }
+            } else {
+                //remove from favorites
+                String addToFavoritesUrl = "http://appdev-gr1.win.tue.nl:8008/api/user/" + user.getUsername() + "/" + authToken + "/deleteFavorites";
+                int statusCode = sendRequest.sendDeleteRequest(addToFavoritesUrl, Integer.toString(recipes.get(position).getId()));
+                if (statusCode != 200) {
+                    return "failed";
+                } else {
+                    int recipeId = recipes.get(position).getId();
+                    user.removeFromFavorites(recipeId);
+                }
+            }
+            return "success";
+        }
+
+        @Override
+        protected void onPostExecute(final String result) {
+            if (result.equals("failed")) {
+                Toast toast = Toast.makeText(getActivity(), "Unable to reach the server to modify favorites", Toast.LENGTH_LONG);
+                toast.show();
+            } else {
                 adapter.notifyDataSetChanged();
             }
         }

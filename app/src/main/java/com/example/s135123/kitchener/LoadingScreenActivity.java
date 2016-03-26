@@ -13,7 +13,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoadingScreenActivity extends Activity
 {
@@ -64,45 +69,65 @@ public class LoadingScreenActivity extends Activity
         @Override
         protected Void doInBackground(Void... params)
         {
-			/* This is just a code that delays the thread execution 4 times,
-			 * during 850 milliseconds and updates the current progress. This
-			 * is where the code that is going to be executed on a background
-			 * thread must be placed.
-			 */
             User user = User.getInstance();
             if(user.getUsername()==null && user.getPassword()==null) {
                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             }
             else{
+                String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
+                JSONObject authTokenJson = null;
+                SendRequest sendRequest = new SendRequest();
+                try {
+                    authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                publishProgress(25);
+                if(authTokenJson==null){
+                    //internet connection was lost while authenticating, go to login
+                    Toast toast = Toast.makeText(LoadingScreenActivity.this, "Unable to reach the server to authenticate", Toast.LENGTH_LONG);
+                    toast.show();
+                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                    return null;
+                }
+                String authToken = null;
+                try {
+                    authToken = authTokenJson.getString("authToken");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String profileUrl = "http://appdev-gr1.win.tue.nl:8008/api/user/"+user.getUsername()+"/"+authToken+"/profile";
+                String profileString = sendRequest.sendGetRequest(profileUrl);
+                publishProgress(50);
+                JSONObject profile = null;
+                try {
+                    profile = new JSONObject(profileString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                JSONArray favoritesJsonArray = null;
+                try {
+                    favoritesJsonArray = profile.getJSONArray("favorites");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                int length = favoritesJsonArray.length();
+                for(int i = 0; i < length; i++){
+                    publishProgress(50+50*i/length);
+                    try {
+                        user.addToFavorites(Integer.parseInt(favoritesJsonArray.get(i).toString()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             }
-            /*try
-            {
-                //Get the current thread's token
-                synchronized (this)
-                {
-                    //Initialize an integer (that will act as a counter) to zero
-                    int counter = 0;
-                    //While the counter is smaller than four
-                    while(counter <= 12)
-                    {
-                        //Wait 850 milliseconds
-                        this.wait(850);
-                        //Increment the counter
-                        counter++;
-                        //Set the current progress.
-                        //This value is going to be passed to the onProgressUpdate() method.
-                        publishProgress(counter*25);
-                    }
-                }
-            }
-            catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }*/
             return null;
         }
 
@@ -122,11 +147,6 @@ public class LoadingScreenActivity extends Activity
         @Override
         protected void onPostExecute(Void result)
         {
-			/* Initialize the application's main interface from the 'main.xml' layout xml file.
-	         * Add the initialized View to the viewSwitcher.*/
-            //viewSwitcher.addView(ViewSwitcher.inflate(LoadingScreenActivity.this, R.layout.activity_main, null));
-            //Switch the Views
-            //viewSwitcher.showNext();
 
         }
     }

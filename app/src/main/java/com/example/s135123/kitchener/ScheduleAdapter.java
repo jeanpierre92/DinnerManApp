@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -67,20 +68,38 @@ public class ScheduleAdapter extends BaseAdapter {
     public View getView( final int position, View convertView, final ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View row = inflater.inflate(R.layout.row_schedule, parent, false);
-        TextView title = (TextView) row.findViewById(R.id.textView_recipe_title);
-        TextView description = (TextView) row.findViewById(R.id.textView_recipe_description);
-        TextView time = (TextView) row.findViewById(R.id.textView_recipe_time);
-        TextView dayNumber = (TextView) row.findViewById(R.id.dayNumber);
-        ImageView thumbnail = (ImageView) row.findViewById(R.id.imageView_recipe_thumbnail);
-        ImageView rerollImageView = (ImageView) row.findViewById(R.id.rerollImageView);
+        if(convertView==null) {
+            convertView = inflater.inflate(R.layout.row_schedule, parent, false);
+        }
+        TextView title = (TextView) convertView.findViewById(R.id.textView_recipe_title);
+        TextView description = (TextView) convertView.findViewById(R.id.textView_recipe_description);
+        TextView time = (TextView) convertView.findViewById(R.id.textView_recipe_time);
+        TextView dayNumber = (TextView) convertView.findViewById(R.id.dayNumber);
+        ImageView thumbnail = (ImageView) convertView.findViewById(R.id.imageView_recipe_thumbnail);
+        ImageView rerollImageView = (ImageView) convertView.findViewById(R.id.rerollImageView);
+        ImageView favoritesImageView = (ImageView) convertView.findViewById(R.id.favoritesImageView);
+        User user = User.getInstance();
+
         rerollImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((ListView) parent).performItemClick(v, position, 0);
             }
         });
+        favoritesImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListView) parent).performItemClick(v, position, 1);
+            }
+        });
         final Recipe recipe = recipes.get(position);
+
+        if(user.getFavorites().contains(recipe.getId())){
+            favoritesImageView.setImageResource(R.drawable.favorites_full);
+        }
+        else{
+            favoritesImageView.setImageResource(R.drawable.favorites_empty);
+        }
         title.setText(recipe.getTitle());
         time.setText(Integer.toString(recipe.getReadyInMinutes()) + " min");
         description.setText(recipe.getSummary());
@@ -95,7 +114,7 @@ public class ScheduleAdapter extends BaseAdapter {
                 .cacheOnDisk(true)
                 .build();
         imageLoader.displayImage(recipe.getImage(), thumbnail, options);
-        return row;
+        return convertView;
     }
 
 }

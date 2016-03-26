@@ -51,11 +51,13 @@ public class CompactBaseAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View row = inflater.inflate(R.layout.row_recommendations, parent, false);
-        TextView title = (TextView) row.findViewById(R.id.textView_recipe_title);
-        TextView description = (TextView) row.findViewById(R.id.textView_recipe_description);
-        TextView time = (TextView) row.findViewById(R.id.textView_recipe_time);
-        ImageView thumbnail = (ImageView) row.findViewById(R.id.imageView_recipe_thumbnail);
+        if(convertView==null) {
+            convertView = inflater.inflate(R.layout.row_recommendations, parent, false);
+        }
+        TextView title = (TextView) convertView.findViewById(R.id.textView_recipe_title);
+        TextView description = (TextView) convertView.findViewById(R.id.textView_recipe_description);
+        TextView time = (TextView) convertView.findViewById(R.id.textView_recipe_time);
+        ImageView thumbnail = (ImageView) convertView.findViewById(R.id.imageView_recipe_thumbnail);
 
         final Recipe recipe = recipes.get(position);
         title.setText(recipe.getTitle());
@@ -71,14 +73,15 @@ public class CompactBaseAdapter extends BaseAdapter {
                 .cacheOnDisk(true)
                 .build();
         imageLoader.displayImage(recipe.getImage(), thumbnail, options);
-        row.setOnClickListener(new View.OnClickListener() {
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, RecipeInfoActivity.class);
+                i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 i.putExtra("Recipe", recipe);
                 context.startActivity(i);
             }
         });
-        return row;
+        return convertView;
     }
 }
