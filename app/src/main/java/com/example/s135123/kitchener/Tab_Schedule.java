@@ -38,12 +38,12 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
     ScheduleAdapter adapter;
     SeekBar seekBar;
     Button generateButton;
-    int days=2;//number of days to generate a schedule for
+    int days = 2;//number of days to generate a schedule for
     SharedPreferences prefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.tab_schedule,container,false);
+        View v = inflater.inflate(R.layout.tab_schedule, container, false);
         list = (ListView) v.findViewById(R.id.listView_schedule);
         adapter = new ScheduleAdapter(getActivity(), recipes);
         list.setAdapter(adapter);
@@ -51,17 +51,16 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 long viewId = view.getId();
-                if(viewId==R.id.rerollImageView){
+                if (viewId == R.id.rerollImageView) {
                     System.out.println("started rerolling");
                     if (isNetworkAvailable()) {
                         new RerollTask().execute(position);
                         System.out.println("started rerolling");
-                    }else {
+                    } else {
                         Toast toast = Toast.makeText(getContext(), "No network available to retrieve a new recipe", Toast.LENGTH_LONG);
                         toast.show();
                     }
-                }
-                else{
+                } else {
                     Intent i = new Intent(getContext(), RecipeInfoActivity.class);
                     i.putExtra("Recipe", recipes.get(position));
                     getContext().startActivity(i);
@@ -72,10 +71,10 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         //load a schedule if there is one
         prefs = getActivity().getPreferences(getContext().MODE_PRIVATE);
         Gson gson = new Gson();
-        for(int i =0; i<7; i++){
-            String json = prefs.getString("recipe"+i, null);
-            System.out.println(json+"josn");
-            if(json!=null) {
+        for (int i = 0; i < 7; i++) {
+            String json = prefs.getString("recipe" + i, null);
+            System.out.println(json + "josn");
+            if (json != null) {
                 System.out.println("not null");
                 Recipe recipe = gson.fromJson(json, Recipe.class);
                 recipes.add(recipe);
@@ -88,17 +87,17 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 System.out.println(recipes.size());
                 if (isNetworkAvailable()) {
-                    if(recipes!=null) {
+                    if (recipes != null) {
                         recipes.clear();
                     }
-                    for(int i = 0; i<7; i++){
+                    for (int i = 0; i < 7; i++) {
                         SharedPreferences.Editor prefsEditor = prefs.edit();
-                        prefsEditor.putString("recipe"+i, null);
+                        prefsEditor.putString("recipe" + i, null);
                         prefsEditor.commit();
 
                     }
                     new ScheduleTask().execute((Void) null);
-                }else {
+                } else {
                     Toast toast = Toast.makeText(getActivity(), "No network available to retrieve a schedule", Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -121,12 +120,14 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         // return inflater.inflate(R.layout.tab_schedule, container, false);
 
     }
+
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
+
     public class ScheduleTask extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -141,7 +142,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(authTokenJson==null){
+            if (authTokenJson == null) {
                 //something went wrong
                 return "";
             }
@@ -151,49 +152,50 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            String recommendUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/"+user.getUsername()+"/"+authToken+"/schedule/"+days;
+            String recommendUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken + "/schedule/" + days;
             String result = sendRequest.sendGetRequest(recommendUrl);
+            JSONObject resultJson = null;
+            try {
+                resultJson = new JSONObject(result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JSONArray recipeArray = null;
+            try {
+                recipeArray = resultJson.getJSONArray("schedule");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            SharedPreferences.Editor prefsEditor = prefs.edit();
+            Gson gson = new Gson();
+            for (int i = 0; i < recipeArray.length(); i++) {
+                try {
+                    Recipe recipe = new Recipe(recipeArray.get(i).toString());
+                    recipes.add(recipe);
+                    String json = gson.toJson(recipe);
+                    System.out.println("json in schedule: " + json);
+                    prefsEditor.putString("recipe" + i, json);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            //save the new schedule
+            prefsEditor.commit();
             return result;
         }
 
         @Override
         protected void onPostExecute(final String result) {
-            if(result.equals("")){
+            if (result.equals("")) {
                 Toast toast = Toast.makeText(getActivity(), "Unable to reach the server to retrieve a schedule", Toast.LENGTH_LONG);
                 toast.show();
             }
             else {
-                JSONObject resultJson = null;
-                try {
-                    resultJson = new JSONObject(result);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                JSONArray recipeArray = null;
-                try {
-                    recipeArray = resultJson.getJSONArray("schedule");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                SharedPreferences.Editor prefsEditor = prefs.edit();
-                Gson gson = new Gson();
-                for (int i = 0; i < recipeArray.length(); i++) {
-                    try {
-                        Recipe recipe = new Recipe(recipeArray.get(i).toString());
-                        recipes.add(recipe);
-                        String json = gson.toJson(recipe);
-                        System.out.println("json in schedule: " + json);
-                        prefsEditor.putString("recipe" + i, json);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
                 adapter.notifyDataSetChanged();
-                //save the new schedule
-                prefsEditor.commit();
             }
         }
     }
+
     public class RerollTask extends AsyncTask<Integer, Void, String> {
         int position;
 
@@ -209,39 +211,46 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            if(authTokenJson==null){
+                //something went wrong
+                return "failed";
+            }
             String authToken = null;
             try {
                 authToken = authTokenJson.getString("authToken");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            String cuisines = "reroll,";
+            String cuisines = "";
             position = params[0];
-            if(position>0&&position<recipes.size()-1){
-                cuisines+=recipes.get(position-1).getCuisine()+","+recipes.get(position+1).getCuisine();
+            if (position > 0 && position < recipes.size() - 1) {
+                cuisines += recipes.get(position - 1).getCuisine() + ",reroll," + recipes.get(position + 1).getCuisine();
+            } else if (position > 0) {
+                cuisines += recipes.get(position - 1).getCuisine() + ",reroll";
+            } else if (position < recipes.size() - 1) {
+                cuisines += "reroll," + recipes.get(position + 1).getCuisine();
             }
-            else if(position>0){
-                cuisines+=recipes.get(position-1).getCuisine();
-            }
-            else if(position<recipes.size()-1){
-                cuisines+=recipes.get(position+1).getCuisine();
-            }
-            String rerollUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/"+user.getUsername()+"/"+authToken+"/schedule/reroll/"+cuisines;
-            String recipe = sendRequest.sendGetRequest(rerollUrl);
-            System.out.println(rerollUrl);
-            return recipe;
-        }
-
-        @Override
-        protected void onPostExecute(final String recipeString) {
+            String rerollUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken + "/schedule/reroll/" + cuisines;
+            String recipeString = sendRequest.sendGetRequest(rerollUrl);
             Recipe recipe = new Recipe(recipeString);
-            recipes.set(position,recipe);
+            recipes.set(position, recipe);
             SharedPreferences.Editor prefsEditor = prefs.edit();
             Gson gson = new Gson();
             String json = gson.toJson(recipe);
-            prefsEditor.putString("recipe"+position, json);
+            prefsEditor.putString("recipe" + position, json);
             prefsEditor.commit();
-            adapter.notifyDataSetChanged();
+            return "success";
+        }
+
+        @Override
+        protected void onPostExecute(final String result) {
+            if(result.equals("failed")){
+                Toast toast = Toast.makeText(getActivity(), "Unable to reach the server to retrieve a schedule", Toast.LENGTH_LONG);
+                toast.show();
+            }
+            else {
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 }

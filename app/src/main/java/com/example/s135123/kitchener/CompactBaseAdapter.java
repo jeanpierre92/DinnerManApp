@@ -63,6 +63,7 @@ public class CompactBaseAdapter extends BaseAdapter {
         description.setText(recipe.getSummary());
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
         if (!imageLoader.isInited()) {
+            System.out.println("inited image laoder");
             imageLoader.init(ImageLoaderConfiguration.createDefault(context));
         }
         DisplayImageOptions options = new DisplayImageOptions.Builder()

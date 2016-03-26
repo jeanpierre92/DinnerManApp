@@ -87,6 +87,7 @@ public class ScheduleAdapter extends BaseAdapter {
         dayNumber.setText("Day " + Integer.toString(position+1));
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
         if (!imageLoader.isInited()) {
+            System.out.println("inited image laoder");
             imageLoader.init(ImageLoaderConfiguration.createDefault(context));
         }
         DisplayImageOptions options = new DisplayImageOptions.Builder()

@@ -75,23 +75,6 @@ public class Recipe implements Serializable{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            try {
-                readyInMinutes = o.getInt("readyInMinutes");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                cookingMinutes = o.getInt("cookingMinutes");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                preparationMinutes = o.getInt("preparationMinutes");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
             try {
                 summary = o.getString("summary");
                 summary = Jsoup.parse(summary).text();
@@ -109,12 +92,6 @@ public class Recipe implements Serializable{
             while (matcher.find()) {
                 instructions.add(matcher.group(1));
             }
-
-            try {
-                cheap = o.getBoolean("cheap");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             String ingredientString = "";
             try {
                 ingredientString = o.getString("ingredients");
@@ -124,26 +101,11 @@ public class Recipe implements Serializable{
             for(String ingredient:ingredientString.split("\n")){
                 ingredients.add(ingredient);
             }
-            try {
-                fat = o.getInt("fat");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             String fatString="";
             try{
                 fatString = o.getString("fat");
                 fat = Integer.parseInt(fatString.substring(0, fatString.length() - 1));
             }catch(Exception e){
-                e.printStackTrace();
-            }
-            try {
-                calories = o.getInt("calories");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                protein = o.getInt("protein");
-            } catch (JSONException e) {
                 e.printStackTrace();
             }
             String proteinString="";
@@ -153,21 +115,37 @@ public class Recipe implements Serializable{
             }catch(Exception e){
                 e.printStackTrace();
             }
-            try {
-                carbs = o.getInt("carbs");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             String carbsString="";
             try{
                 carbsString = o.getString("carbs");
+                System.out.println(carbsString);
                 carbs = Integer.parseInt(carbsString.substring(0, carbsString.length() - 1));
             }catch(Exception e){
+                e.printStackTrace();
+            }
+            try {
+                calories = o.getInt("calories");
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             try {
                 servings = o.getInt("servings");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                readyInMinutes = o.getInt("readyInMinutes");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                cookingMinutes = o.getInt("cookingMinutes");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                preparationMinutes = o.getInt("preparationMinutes");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

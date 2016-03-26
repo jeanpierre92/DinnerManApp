@@ -103,7 +103,7 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
             }
             if(authTokenJson==null){
                 //something went wrong
-                return "";
+                return "failed";
             }
             String authToken = null;
             try {
@@ -113,36 +113,40 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
             }
             String recommendUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken + "/recommendation";
             String result = sendRequest.sendGetRequest(recommendUrl);
-            return result;
+            JSONObject resultJson = null;
+            try {
+                resultJson = new JSONObject(result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JSONArray recipeArray = null;
+            ArrayList<Recipe> recipeResults = new ArrayList<>();
+            try {
+                recipeArray = resultJson.getJSONArray("recipes");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < recipeArray.length(); i++) {
+                try {
+                    Recipe recipe = new Recipe(recipeArray.get(i).toString());
+                    recipeResults.add(recipe);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            for(Recipe recipe:recipeResults){
+                recipes.add(recipe);
+            }
+            return "success";
         }
 
         @Override
         protected void onPostExecute(final String result) {
-            if(result.equals("")){
+            if(result.equals("failed")){
                 noInternetText.setText("Unable to reach the server. Tap to retry");
                 noInternetText.setVisibility(View.VISIBLE);
             }
             else {
-                JSONObject resultJson = null;
-                try {
-                    resultJson = new JSONObject(result);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                JSONArray recipeArray = null;
-                try {
-                    recipeArray = resultJson.getJSONArray("recipes");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                for (int i = 0; i < recipeArray.length(); i++) {
-                    try {
-                        Recipe recipe = new Recipe(recipeArray.get(i).toString());
-                        recipes.add(recipe);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
                 adapter.notifyDataSetChanged();
             }
         }

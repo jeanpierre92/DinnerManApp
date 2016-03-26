@@ -49,6 +49,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
         recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
         if (!imageLoader.isInited()) {
+            System.out.println("inited image laoder");
             imageLoader.init(ImageLoaderConfiguration.createDefault(this));
         }
         imageView = (ImageView) findViewById(R.id.imageView);
