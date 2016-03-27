@@ -46,6 +46,8 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_schedule, container, false);
         list = (ListView) v.findViewById(R.id.listView_schedule);
+        View header = inflater.inflate(R.layout.schedule_header, null);
+        list.addHeaderView(header, null, false);
         //load a schedule if there is one
         prefs = getActivity().getPreferences(getContext().MODE_PRIVATE);
         Gson gson = new Gson();
@@ -77,10 +79,11 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
                 } else if (viewId == R.id.favoritesImageView) {
                     System.out.println("started favoriting");
                     if (isNetworkAvailable()) {
-                        boolean addTofavorite = !user.getFavorites().contains(recipes.get(position).getId());
-                        new FavoritesTask(position).execute(addTofavorite);
+                        int recipeId = recipes.get(position).getId();
+                        boolean addTofavorite = !user.getFavorites().contains(recipeId);
+                        new FavoritesTask(position, getActivity(), recipeId, adapter).execute(addTofavorite);
                     } else {
-                        Toast toast = Toast.makeText(getContext(), "No network available to retrieve a new recipe", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getContext(), "Unable to reach the server to modify favorites", Toast.LENGTH_LONG);
                         toast.show();
                     }
 
@@ -267,69 +270,5 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         }
     }
 
-    public class FavoritesTask extends AsyncTask<Boolean, Void, String> {
-        int position;
 
-        public FavoritesTask(int pos) {
-            position = pos;
-        }
-
-        @Override
-        protected String doInBackground(Boolean... params) {
-            User user = User.getInstance();
-            //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
-            String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
-            JSONObject authTokenJson = null;
-            SendRequest sendRequest = new SendRequest();
-            try {
-                authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (authTokenJson == null) {
-                //something went wrong
-                return "failed";
-            }
-            String authToken = null;
-            try {
-                authToken = authTokenJson.getString("authToken");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (params[0]) {
-                //add to favorites
-                String addToFavoritesUrl = "http://appdev-gr1.win.tue.nl:8008/api/user/" + user.getUsername() + "/" + authToken + "/addFavorites";
-                int statusCode = sendRequest.sendPostRequest(addToFavoritesUrl, Integer.toString(recipes.get(position).getId()));
-                if (statusCode != 200) {
-                    return "failed";
-                } else {
-                    int recipeId = recipes.get(position).getId();
-                    if (!user.getFavorites().contains(recipeId)) {
-                        user.addToFavorites(recipeId);
-                    }
-                }
-            } else {
-                //remove from favorites
-                String addToFavoritesUrl = "http://appdev-gr1.win.tue.nl:8008/api/user/" + user.getUsername() + "/" + authToken + "/deleteFavorites";
-                int statusCode = sendRequest.sendDeleteRequest(addToFavoritesUrl, Integer.toString(recipes.get(position).getId()));
-                if (statusCode != 200) {
-                    return "failed";
-                } else {
-                    int recipeId = recipes.get(position).getId();
-                    user.removeFromFavorites(recipeId);
-                }
-            }
-            return "success";
-        }
-
-        @Override
-        protected void onPostExecute(final String result) {
-            if (result.equals("failed")) {
-                Toast toast = Toast.makeText(getActivity(), "Unable to reach the server to modify favorites", Toast.LENGTH_LONG);
-                toast.show();
-            } else {
-                adapter.notifyDataSetChanged();
-            }
-        }
-    }
 }

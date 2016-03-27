@@ -83,6 +83,8 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
         recipes.add(new Recipe(recipeString5));
         recipes.add(new Recipe(recipeString6));
         list = (ListView) v.findViewById(R.id.listView_reccomendations);
+        View header = inflater.inflate(R.layout.search_header, null);
+        list.addHeaderView(header, null, false);
         adapter = new CompactBaseAdapter(getActivity(), recipes);
         list.setAdapter(adapter);
 

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:rsb="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextSearch"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Search recipes..." />
+    <RelativeLayout
+        android:id="@+id/advanced_options_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextSearch">
+
+
+        <EditText
+            android:id="@+id/editTextIncludeIngredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/editTextExcludeIngredients"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/editTextExcludeIngredients"
+            android:layout_toEndOf="@+id/textViewIncludeIngredients"
+            android:hint="Carrot, onion..." />
+
+        <TextView
+            android:id="@+id/textViewIncludeIngredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/editTextIncludeIngredients"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="2dp"
+            android:text="Include ingredients"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+        <EditText
+            android:id="@+id/editTextExcludeIngredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/editTextIncludeIngredients"
+            android:layout_toEndOf="@+id/textViewExcludeIngredients"
+            android:layout_toRightOf="@+id/textViewExcludeIngredients"
+            android:hint="Salmon, cheese..." />
+
+        <TextView
+            android:id="@+id/textViewExcludeIngredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/editTextExcludeIngredients"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="2dp"
+            android:text="Exclude ingredients"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+        <EditText
+            android:id="@+id/editTextAllergens"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/editTextExcludeIngredients"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/editTextExcludeIngredients"
+            android:layout_below="@+id/editTextExcludeIngredients"
+            android:layout_toEndOf="@+id/editTextExcludeIngredients"
+            android:layout_toRightOf="@+id/editTextExcludeIngredients"
+            android:hint="Lactose, peanuts..." />
+
+        <TextView
+            android:id="@+id/textViewAllergens"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/editTextAllergens"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="2dp"
+            android:paddingTop="8dp"
+            android:password="false"
+            android:text="Allergens"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textViewCal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/cal_seek_bar"
+            android:layout_alignBottom="@+id/cal_seek_bar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="2dp"
+            android:paddingTop="8dp"
+            android:password="false"
+            android:text="Calories"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <org.florescu.android.rangeseekbar.RangeSeekBar
+            android:id="@+id/cal_seek_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignLeft="@+id/editTextAllergens"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/editTextAllergens"
+            android:layout_below="@id/editTextAllergens"
+            rsb:absoluteMaxValue="2500"
+            rsb:absoluteMinValue="0"
+            rsb:showLabels="false"
+            rsb:singleThumb="false" />
+
+        <TextView
+            android:id="@+id/textViewFat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/fat_seek_bar"
+            android:layout_alignBottom="@+id/fat_seek_bar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="2dp"
+            android:paddingTop="8dp"
+            android:password="false"
+            android:text="Fat"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <org.florescu.android.rangeseekbar.RangeSeekBar
+            android:id="@+id/fat_seek_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignLeft="@+id/editTextAllergens"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/editTextAllergens"
+            android:layout_below="@id/textViewCal"
+            rsb:absoluteMaxValue="200"
+            rsb:absoluteMinValue="0"
+            rsb:showLabels="false"
+            rsb:singleThumb="false" />
+
+        <TextView
+            android:id="@+id/textViewProtein"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/protein_seek_bar"
+            android:layout_alignBottom="@+id/protein_seek_bar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="2dp"
+            android:paddingTop="8dp"
+            android:password="false"
+            android:text="Protein"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <org.florescu.android.rangeseekbar.RangeSeekBar
+            android:id="@+id/protein_seek_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignLeft="@+id/editTextAllergens"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/editTextAllergens"
+            android:layout_below="@id/textViewFat"
+            rsb:absoluteMaxValue="200"
+            rsb:absoluteMinValue="0"
+            rsb:showLabels="false"
+            rsb:singleThumb="false" />
+
+        <TextView
+            android:id="@+id/textViewCarbs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/carbs_seek_bar"
+            android:layout_alignBottom="@+id/carbs_seek_bar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="2dp"
+            android:paddingTop="8dp"
+            android:password="false"
+            android:text="Carbs"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <org.florescu.android.rangeseekbar.RangeSeekBar
+            android:id="@+id/carbs_seek_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignLeft="@+id/editTextAllergens"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/editTextAllergens"
+            android:layout_below="@id/textViewProtein"
+            rsb:absoluteMaxValue="200"
+            rsb:absoluteMinValue="0"
+            rsb:showLabels="false"
+            rsb:singleThumb="false" />
+
+    </RelativeLayout>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:id="@+id/buttonSearch"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/advanced_options_layout"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/buttonToggleAdvancedOptions"
+        android:layout_width="wrap_content"
+        android:text="Search" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:id="@+id/buttonToggleAdvancedOptions"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/advanced_options_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Advanced options" />
+</RelativeLayout>
