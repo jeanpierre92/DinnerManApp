@@ -52,7 +52,7 @@ public class Favorites extends AppCompatActivity {
         noInternetTextFav = (TextView) findViewById(R.id.text_fav_no_internet);
         loadRecipes();
         list = (ListView) findViewById(R.id.listView_favorites);
-        adapter = new CompactBaseAdapter(this, recipes);
+        adapter = new CompactBaseAdapter(this, recipes, false);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

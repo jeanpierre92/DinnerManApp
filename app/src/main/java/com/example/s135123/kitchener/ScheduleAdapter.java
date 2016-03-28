@@ -92,6 +92,12 @@ public class ScheduleAdapter extends BaseAdapter {
                 ((ListView) parent).performItemClick(v, position, 1);
             }
         });
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListView) parent).performItemClick(v, position, 2);
+            }
+        });
         final Recipe recipe = recipes.get(position);
 
         if(user.getFavorites().contains(recipe.getId())){

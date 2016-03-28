@@ -33,18 +33,18 @@ import cz.msebera.android.httpclient.Header;
  * Created by s136693 on 5-3-2016.
  */
 
-public class Tab_Recommendations extends android.support.v4.app.Fragment implements AdapterView.OnItemClickListener {
+public class Tab_Recommendations extends android.support.v4.app.Fragment {
 
     ListView list;
     ArrayList<Recipe> recipes = new ArrayList<>();
     CompactBaseAdapter adapter;
     TextView noInternetText;
     RelativeLayout recommendationLayout;
+    final User user = User.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_recommendations, container, false);
-        User user = User.getInstance();
         noInternetText = (TextView) v.findViewById(R.id.text_rec_no_internet);
         recommendationLayout = (RelativeLayout) v.findViewById(R.id.recommendation_layout);
         recommendationLayout.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +55,29 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
         });
         loadRecipes();
         list = (ListView) v.findViewById(R.id.listView_reccomendations);
-        adapter = new CompactBaseAdapter(getActivity(), recipes);
+        adapter = new CompactBaseAdapter(getActivity(), recipes, true);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long viewId = view.getId();
+                if (viewId == R.id.favoritesImageViewRec) {
+                    System.out.println("started favoriting");
+                    if (isNetworkAvailable()) {
+                        int recipeId = recipes.get(position).getId();
+                        boolean addTofavorite = !user.getFavorites().contains(recipeId);
+                        new FavoritesTask(position, getActivity(), recipeId, adapter).execute(addTofavorite);
+                    } else {
+                        Toast toast = Toast.makeText(getContext(), "Unable to reach the server to modify favorites", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                } else {
+                    Intent i = new Intent(getContext(), RecipeInfoActivity.class);
+                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    i.putExtra("Recipe", recipes.get(position));
+                    getContext().startActivity(i);
+                }
+            }
+        });
         list.setAdapter(adapter);
 
         return v;
@@ -73,12 +95,6 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
         }
     }
 
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO: Open new RecipeInfoActivity
-
-    }// Method to check if there is a network available
 
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -137,6 +153,25 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment impleme
             for(Recipe recipe:recipeResults){
                 recipes.add(recipe);
             }
+            //sort by cuisine
+            ArrayList<Recipe> sortedRecipes = new ArrayList<>(recipes);
+            String cuisine="";
+            recipes.clear();
+            for(Recipe r:sortedRecipes){
+                if(!recipes.contains(r)){
+                    recipes.add(r);
+                    cuisine=r.getCuisine();
+                    for(Recipe r2:sortedRecipes){
+                        if(!recipes.contains(r2) && r2.getCuisine().equals(cuisine)){
+                            recipes.add(r2);
+                        }
+                    }
+                }
+            }
+            for(Recipe test:recipes){
+                System.out.println(test.getCuisine());
+            }
+            System.out.println("numRecipes: "+recipes.size()+", numSortedRecipes: "+sortedRecipes.size());
             return "success";
         }
 

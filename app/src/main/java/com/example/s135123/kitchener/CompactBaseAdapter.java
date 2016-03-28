@@ -30,11 +30,12 @@ public class CompactBaseAdapter extends BaseAdapter {
 
     ArrayList<Recipe> recipes;
     Activity activity;
-    int listSize = 9;
+    boolean showCuisine;
 
-    CompactBaseAdapter(Activity a, ArrayList<Recipe> recipes) {
+    CompactBaseAdapter(Activity a, ArrayList<Recipe> recipes, boolean showCuisine) {
         activity = a;
         this.recipes = recipes;
+        this.showCuisine = showCuisine;
     }
 
     @Override
@@ -62,6 +63,7 @@ public class CompactBaseAdapter extends BaseAdapter {
         TextView title = (TextView) convertView.findViewById(R.id.textView_recipe_title);
         TextView description = (TextView) convertView.findViewById(R.id.textView_recipe_description);
         TextView time = (TextView) convertView.findViewById(R.id.textView_recipe_time);
+        TextView cuisineTitle = (TextView) convertView.findViewById(R.id.cuisine_title);
         ImageView thumbnail = (ImageView) convertView.findViewById(R.id.imageView_recipe_thumbnail);
         ImageView favoritesImage = (ImageView) convertView.findViewById(R.id.favoritesImageViewRec);
         final Recipe recipe = recipes.get(position);
@@ -79,19 +81,27 @@ public class CompactBaseAdapter extends BaseAdapter {
                 ((ListView) parent).performItemClick(v, position, 1);
             }
         });
-        /*favoritesImage.setOnClickListener(new View.OnClickListener() {
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isNetworkAvailable()) {
-                    int recipeId = recipes.get(position).getId();
-                    boolean addTofavorite = !user.getFavorites().contains(recipeId);
-                    new FavoritesTask(position, activity, recipeId, CompactBaseAdapter.this).execute(addTofavorite);
-                } else {
-                    Toast toast = Toast.makeText(activity, "Unable to reach the server to modify favorites", Toast.LENGTH_LONG);
-                    toast.show();
+                ((ListView) parent).performItemClick(v, position, 2);
+            }
+        });
+        cuisineTitle.setText(recipe.getCuisine()+" recipes");
+        if(showCuisine){
+            cuisineTitle.setVisibility(View.VISIBLE);
+            for(Recipe r:recipes){
+                if(r==recipe){
+                    break;
+                }
+                if(r.getCuisine().equals(recipe.getCuisine())){
+                    cuisineTitle.setVisibility(View.GONE);
+                    break;
                 }
             }
-        });*/
+        }else{
+            cuisineTitle.setVisibility(View.GONE);
+        }
         title.setText(recipe.getTitle());
         time.setText(Integer.toString(recipe.getReadyInMinutes())+" min");
         description.setText(recipe.getSummary());
@@ -105,15 +115,6 @@ public class CompactBaseAdapter extends BaseAdapter {
                 .cacheOnDisk(true)
                 .build();
         imageLoader.displayImage(recipe.getImage(), thumbnail, options);
-        /*convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(activity, RecipeInfoActivity.class);
-                i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                i.putExtra("Recipe", recipe);
-                activity.startActivity(i);
-            }
-        });*/
         return convertView;
     }
     private Boolean isNetworkAvailable() {

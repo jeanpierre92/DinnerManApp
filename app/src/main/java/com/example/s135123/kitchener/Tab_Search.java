@@ -107,7 +107,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                 }
             }
         });
-        adapter = new CompactBaseAdapter(getActivity(), recipes);
+        adapter = new CompactBaseAdapter(getActivity(), recipes, false);
         list.setAdapter(adapter);
 
         // EditText views found and hidden as default
@@ -240,8 +240,15 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            String recommendUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken + "/combo/" + includeIngredients+"/"+minCal+"/"+maxCal+"/"+minFat+"/"+maxFat+"/"+minProtein+"/"+maxProtein+"/"+minCarbs+"/"+maxCarbs;
-            String result = sendRequest.sendGetRequest(recommendUrl);
+            String searchUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken;
+            if(includeIngredients.equals("")){
+                searchUrl+="/nutrition/";
+            }
+            else{
+                searchUrl+="/combo/" + includeIngredients+"/";
+            }
+            searchUrl += minCal+"/"+maxCal+"/"+minFat+"/"+maxFat+"/"+minProtein+"/"+maxProtein+"/"+minCarbs+"/"+maxCarbs;
+            String result = sendRequest.sendGetRequest(searchUrl);
             System.out.println(result);
             JSONObject resultJson = null;
             try {
