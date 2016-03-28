@@ -86,12 +86,6 @@ public class LoadingScreenActivity extends Activity
                 }
                 publishProgress(25);
                 if(authTokenJson==null){
-                    //internet connection was lost while authenticating, go to login
-                    Toast toast = Toast.makeText(LoadingScreenActivity.this, "Unable to reach the server to authenticate", Toast.LENGTH_LONG);
-                    toast.show();
-                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
                     return null;
                 }
                 String authToken = null;
@@ -147,7 +141,14 @@ public class LoadingScreenActivity extends Activity
         @Override
         protected void onPostExecute(Void result)
         {
-
+            if(result==null){
+                //internet connection was lost while authenticating, go to login
+                Toast toast = Toast.makeText(LoadingScreenActivity.this, "Unable to reach the server to authenticate", Toast.LENGTH_LONG);
+                toast.show();
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            }
         }
     }
 

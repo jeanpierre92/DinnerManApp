@@ -164,7 +164,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                             (int) proteinSeekBar.getSelectedMinValue(),
                             (int) proteinSeekBar.getSelectedMaxValue()).execute((Void) null);
                 } else {
-                    Toast toast = Toast.makeText(getActivity(), "No network available to retrieve a schedule", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(getActivity(), "No network available to search for recipes", Toast.LENGTH_LONG);
                     toast.show();
                 }
                 break;
