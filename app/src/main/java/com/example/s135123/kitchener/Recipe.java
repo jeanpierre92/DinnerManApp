@@ -104,22 +104,21 @@ public class Recipe implements Serializable{
             String fatString="";
             try{
                 fatString = o.getString("fat");
-                fat = Integer.parseInt(fatString.substring(0, fatString.length() - 1));
+                fat = Integer.parseInt(fatString.replaceAll("[^\\d]", ""));
             }catch(Exception e){
                 e.printStackTrace();
             }
             String proteinString="";
             try{
                 proteinString = o.getString("protein");
-                protein = Integer.parseInt(proteinString.substring(0,proteinString.length()-1));
+                protein = Integer.parseInt(proteinString.replaceAll("[^\\d]", ""));
             }catch(Exception e){
                 e.printStackTrace();
             }
             String carbsString="";
             try{
                 carbsString = o.getString("carbs");
-                System.out.println(carbsString);
-                carbs = Integer.parseInt(carbsString.substring(0, carbsString.length() - 1));
+                carbs = Integer.parseInt(carbsString.replaceAll( "[^\\d]", ""));
             }catch(Exception e){
                 e.printStackTrace();
             }
