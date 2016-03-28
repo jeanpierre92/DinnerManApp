@@ -150,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
                 fragmentClass = Profile.class;
                 break;
             case R.id.nav_second_fragment:
-                fragmentClass = Favorites.class;
-                break;
+                Intent intentFavorites = new Intent(getApplicationContext(), Favorites.class);
+                startActivity(intentFavorites);
             case R.id.nav_third_fragment:
                 fragmentClass = Allergens.class;
                 break;
@@ -162,9 +162,9 @@ public class MainActivity extends AppCompatActivity {
                 User user =User.getInstance();
                 user.setPassword(null);
                 user.setUsername(null);
-                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
+                Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                intentLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentLogin);
             default:
                 fragmentClass = Tab_Schedule.class;
         }

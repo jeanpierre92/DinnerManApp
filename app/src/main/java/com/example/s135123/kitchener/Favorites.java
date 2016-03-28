@@ -1,15 +1,21 @@
 package com.example.s135123.kitchener;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +33,7 @@ import java.util.HashMap;
 /**
  * Created by s142451 on 16-3-2016.
  */
-public class Favorites extends android.support.v4.app.Fragment {
+public class Favorites extends AppCompatActivity {
     private TextView textView;
     ListView list;
     ArrayList<Recipe> recipes = new ArrayList<>();
@@ -37,17 +43,45 @@ public class Favorites extends android.support.v4.app.Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.favorites_fragment, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_favorites);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFavorites);
+        setSupportActionBar(toolbar);
         user = User.getInstance();
-        noInternetTextFav = (TextView) v.findViewById(R.id.text_fav_no_internet);
+        noInternetTextFav = (TextView) findViewById(R.id.text_fav_no_internet);
         loadRecipes();
-        list = (ListView) v.findViewById(R.id.listView_favorites);
-        adapter = new CompactBaseAdapter(getActivity(), recipes);
+        list = (ListView) findViewById(R.id.listView_favorites);
+        adapter = new CompactBaseAdapter(this, recipes);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long viewId = view.getId();
+                if (viewId == R.id.favoritesImageViewRec) {
+                    if (isNetworkAvailable()) {
+                        int recipeId = recipes.get(position).getId();
+                        boolean addTofavorite = !user.getFavorites().contains(recipeId);
+                        new FavoritesTask(position, Favorites.this, recipeId, adapter).execute(addTofavorite);
+                        if(!addTofavorite){
+                            recipes.remove(position);
+                            adapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Toast toast = Toast.makeText(Favorites.this, "Unable to reach the server to modify favorites", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+
+                } else {
+                    Intent i = new Intent(Favorites.this, RecipeInfoActivity.class);
+                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    i.putExtra("Recipe", recipes.get(position));
+                    Favorites.this.startActivity(i);
+                }
+            }
+        });
         list.setAdapter(adapter);
-        return v;
     }
+
     private void loadRecipes(){
         if (isNetworkAvailable()) {
             GetFavoritesTask task = new GetFavoritesTask();
@@ -61,7 +95,7 @@ public class Favorites extends android.support.v4.app.Fragment {
     }
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }

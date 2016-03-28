@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +53,7 @@ public class CompactBaseAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if(convertView==null) {
@@ -75,6 +76,12 @@ public class CompactBaseAdapter extends BaseAdapter {
         favoritesImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((ListView) parent).performItemClick(v, position, 1);
+            }
+        });
+        /*favoritesImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (isNetworkAvailable()) {
                     int recipeId = recipes.get(position).getId();
                     boolean addTofavorite = !user.getFavorites().contains(recipeId);
@@ -84,7 +91,7 @@ public class CompactBaseAdapter extends BaseAdapter {
                     toast.show();
                 }
             }
-        });
+        });*/
         title.setText(recipe.getTitle());
         time.setText(Integer.toString(recipe.getReadyInMinutes())+" min");
         description.setText(recipe.getSummary());
@@ -98,7 +105,7 @@ public class CompactBaseAdapter extends BaseAdapter {
                 .cacheOnDisk(true)
                 .build();
         imageLoader.displayImage(recipe.getImage(), thumbnail, options);
-        convertView.setOnClickListener(new View.OnClickListener() {
+        /*convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(activity, RecipeInfoActivity.class);
@@ -106,7 +113,7 @@ public class CompactBaseAdapter extends BaseAdapter {
                 i.putExtra("Recipe", recipe);
                 activity.startActivity(i);
             }
-        });
+        });*/
         return convertView;
     }
     private Boolean isNetworkAvailable() {
