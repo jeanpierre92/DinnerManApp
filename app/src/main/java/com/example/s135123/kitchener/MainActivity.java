@@ -159,8 +159,8 @@ public class MainActivity extends AppCompatActivity {
                 fragmentClass = Allergens.class;
                 break;
             case R.id.nav_fourth_fragment:
-                fragmentClass = Settings.class;
-                break;
+                Intent intentSettings = new Intent(getApplicationContext(), Settings.class);
+                startActivity(intentSettings);
             case R.id.nav_fifth_fragment:
                 User user =User.getInstance();
                 user.setPassword(null);

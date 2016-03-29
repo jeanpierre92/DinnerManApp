@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,31 +28,38 @@ import java.util.ArrayList;
 /**
  * Created by s142451 on 16-3-2016.
  */
-public class Settings extends android.support.v4.app.Fragment {
+public class Settings extends AppCompatActivity {
 
     CheckBox shakeActive;
+    User user;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.settings_fragment, container, false);
-        shakeActive = (CheckBox) v.findViewById(R.id.shakeActive);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.settings_fragment);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSettings);
+        setSupportActionBar(toolbar);
+        user = User.getInstance();
 
-        shakeActive.setOnClickListener(mShakeListener);
-
-        return v;
+        mShakeListener();
     }
 
-    private View.OnClickListener mShakeListener = new View.OnClickListener() {
-        User user = User.getInstance();
-        public void onClick(View v) {
-            if (shakeActive.isChecked()) {
-                user.setShakeEnabled(true);
-            } else {
-                user.setShakeEnabled(false);
+    public void mShakeListener() {
+        shakeActive = (CheckBox) findViewById(R.id.shakeActive);
+        shakeActive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (shakeActive.isChecked()) {
+                    user.setShakeEnabled(true);
+                } else {
+                    user.setShakeEnabled(false);
+                }
             }
-        }
+        });
     };
+
+
 
     // Change standard amount of days for schedule
 
