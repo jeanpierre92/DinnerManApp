@@ -61,12 +61,13 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private SensorManager sensorManager;
     private ShakeDetector shakeDetector;
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        User user = User.getInstance();
+
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -99,21 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         shakeDetector = new ShakeDetector(this);
-        if(user.getShakeEnabled()) {
-            ShakeDetector.create(this, new ShakeDetector.OnShakeListener() {
-                @Override
-                public void OnShake() {
-                    System.out.println("SHAKEN");
-                    Thread thread = new RandomRecipeThread(MainActivity.this);
-                    if (isNetworkAvailable()) {
-                        thread.start();
-                    } else {
-                        Toast toast = Toast.makeText(getApplicationContext(), "No network available to random a recipe", Toast.LENGTH_LONG);
-                        toast.show();
-                    }
-                }
-            });
-        }
+
     }
 
 
@@ -212,14 +199,18 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onPause(){
-        super.onPause();
-        sensorManager.unregisterListener(shakeDetector);
+        if (user.getShakeEnabled()) {
+            super.onPause();
+            sensorManager.unregisterListener(shakeDetector);
+        }
     }
     @Override
     public void onResume(){
-        super.onResume();
-        sensorManager.registerListener(shakeDetector,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL);
+        if (user.getShakeEnabled()) {
+            super.onResume();
+            sensorManager.registerListener(shakeDetector,
+                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 }
