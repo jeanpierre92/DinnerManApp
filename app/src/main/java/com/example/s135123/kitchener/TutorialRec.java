@@ -21,6 +21,7 @@ public class TutorialRec extends Activity {
 
     public void onClickGotIt(View v){
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("page",1);
         startActivity(i);
     }
 }

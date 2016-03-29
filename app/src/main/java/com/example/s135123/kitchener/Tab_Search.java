@@ -230,7 +230,6 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
 
         @Override
         protected String doInBackground(Void... params) {
-            includeIngredients+=",salt";
             System.out.println("mincal: "+minCal);
             //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
