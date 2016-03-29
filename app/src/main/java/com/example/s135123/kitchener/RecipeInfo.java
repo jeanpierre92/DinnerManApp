@@ -7,6 +7,7 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -28,11 +29,18 @@ public class RecipeInfo {
     TextView servingsView;
     TextView ingredientsView;
     TextView cuisineView;
+    TextView noContentText;
+    RelativeLayout recipeInfoContentLayout;
 
     public RecipeInfo(Activity activity) {
         this.activity = activity;
     }
+
     public void updateContents(Recipe recipe){
+        noContentText = (TextView) activity.findViewById(R.id.recipe_info_no_content);
+        noContentText.setVisibility(View.GONE);
+        recipeInfoContentLayout = (RelativeLayout) activity.findViewById(R.id.content_recipe_info_layout);
+        recipeInfoContentLayout.setVisibility(View.VISIBLE);
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
         if (!imageLoader.isInited()) {
             System.out.println("inited image laoder");
@@ -115,12 +123,14 @@ public class RecipeInfo {
 
         ingredientsView = (TextView) activity.findViewById(R.id.ingredients);
         ArrayList<String> ingredients = recipe.getIngredients();
+        String ingredientsString="";
         for (int i = 0; i < ingredients.size(); i++) {
-            ingredientsView.append("• " + ingredients.get(i));
+            ingredientsString+="• " + ingredients.get(i);
             if (i != ingredients.size() - 1) {
-                ingredientsView.append("\n");
+                ingredientsString+="\n";
             }
         }
+        ingredientsView.setText(ingredientsString);
 
         //servingsView.setText("5 servings\n5 minutes to prepare\n5 minutes to cook\nTotal time: 5");
         //ArrayList<String> instructions =recipe.getInstructions();
