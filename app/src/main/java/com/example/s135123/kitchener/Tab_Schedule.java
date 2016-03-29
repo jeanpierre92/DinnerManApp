@@ -98,7 +98,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
                         getContext().startActivity(i);
                     }
                     else{
-                        
+                        new RecipeInfo(getActivity()).updateContents(recipes.get(position));
                     }
                 }
             }

@@ -71,10 +71,15 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
                         toast.show();
                     }
                 } else {
-                    Intent i = new Intent(getContext(), RecipeInfoActivity.class);
-                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    i.putExtra("Recipe", recipes.get(position));
-                    getContext().startActivity(i);
+                    if(getResources().getBoolean(R.bool.isPhone)) {
+                        Intent i = new Intent(getContext(), RecipeInfoActivity.class);
+                        i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        i.putExtra("Recipe", recipes.get(position));
+                        getContext().startActivity(i);
+                    }
+                    else{
+                        new RecipeInfo(getActivity()).updateContents(recipes.get(position));
+                    }
                 }
             }
         });
