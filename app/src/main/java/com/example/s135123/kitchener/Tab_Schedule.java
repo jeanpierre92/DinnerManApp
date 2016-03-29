@@ -137,7 +137,17 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         // return inflater.inflate(R.layout.tab_schedule, container, false);
 
     }
-
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if(!user.getDidScheduleTutorial()) {
+                user.setDidScheduleTutorial(true);
+                Intent intentTutorial = new Intent(getActivity(), TutorialSchedule.class);
+                startActivity(intentTutorial);
+            }
+        }
+    }
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);

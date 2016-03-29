@@ -95,6 +95,17 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
         }
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if(!user.getDidRecTutorial()) {
+                user.setDidRecTutorial(true);
+                Intent i = new Intent(getActivity(), TutorialRec.class);
+                startActivity(i);
+            }
+        }
+    }
 
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager

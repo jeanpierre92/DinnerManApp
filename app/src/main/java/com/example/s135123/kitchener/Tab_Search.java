@@ -193,6 +193,17 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
             advancedOptionsLayout.setVisibility(View.VISIBLE);
         }
     }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if(!user.getDidSearchTutorial()) {
+                user.setDidSearchTutorial(true);
+                Intent i = new Intent(getActivity(), TutorialSearch.class);
+                startActivity(i);
+            }
+        }
+    }
 
     public class SearchTask extends AsyncTask<Void, Void, String> {
         String query;

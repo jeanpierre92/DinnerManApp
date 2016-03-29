@@ -67,10 +67,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        User user = User.getInstance();
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
 

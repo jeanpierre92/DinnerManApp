@@ -1,10 +1,13 @@
 package com.example.s135123.kitchener;
 
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 
 import com.securepreferences.SecurePreferences;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by s130604 on 16-3-2016.
@@ -15,6 +18,9 @@ public class User {
     boolean gender; //male=true
     private ArrayList<Integer> favoriteRecipes = new ArrayList<>();
     SharedPreferences prefs;
+    SharedPreferences sharedPreferences;
+    private boolean didScheduleTutorial;
+    private boolean didRecTutorial;
 
     public String getId() {
         return id;
@@ -33,6 +39,7 @@ public class User {
 
     private User() {
         prefs = new SecurePreferences(LoadingScreenActivity.applicationContext);
+
     }
 
     public static User getInstance() {
@@ -88,5 +95,38 @@ public class User {
 
     public void setPassword(String password) {
         prefs.edit().putString("password", password).commit();
+    }
+    public void setDidScheduleTutorial(boolean b) {
+        if(b) {
+            prefs.edit().putString("didScheduleTutorial", "true").commit();
+        }
+        else {
+            prefs.edit().putString("didScheduleTutorial", "false").commit();
+        }
+    }
+    public boolean getDidScheduleTutorial(){
+        return(prefs.getString("didScheduleTutorial", "false").equals("true"));
+    }
+    public void setDidRecTutorial(boolean b) {
+        if(b) {
+            prefs.edit().putString("didRecTutorial", "true").commit();
+        }
+        else {
+            prefs.edit().putString("didRecTutorial", "false").commit();
+        }
+    }
+    public boolean getDidRecTutorial(){
+        return(prefs.getString("didRecTutorial", "false").equals("true"));
+    }
+    public boolean getDidSearchTutorial(){
+        return(prefs.getString("didSearchTutorial", "false").equals("true"));
+    }
+    public void setDidSearchTutorial(boolean b) {
+        if(b) {
+            prefs.edit().putString("didSearchTutorial", "true").commit();
+        }
+        else {
+            prefs.edit().putString("didSearchTutorial", "false").commit();
+        }
     }
 }
