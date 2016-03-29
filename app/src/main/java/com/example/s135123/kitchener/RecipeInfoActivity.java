@@ -48,6 +48,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_info);
+        User user = User.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -139,6 +140,10 @@ public class RecipeInfoActivity extends AppCompatActivity {
                 ingredientsView.append("\n");
             }
         }
+
+        //servingsView.setText("5 servings\n5 minutes to prepare\n5 minutes to cook\nTotal time: 5");
+        //ArrayList<String> instructions =recipe.getInstructions();
+
     }// Method to check if there is a network available
 
     private Boolean isNetworkAvailable() {

@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private SensorManager sensorManager;
     private ShakeDetector shakeDetector;
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -95,8 +95,10 @@ public class MainActivity extends AppCompatActivity {
         });
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
+
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         shakeDetector = new ShakeDetector(this);
+
     }
 
 
@@ -195,14 +197,18 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onPause(){
-        super.onPause();
-        sensorManager.unregisterListener(shakeDetector);
+        if (user.getShakeEnabled()) {
+            super.onPause();
+            sensorManager.unregisterListener(shakeDetector);
+        }
     }
     @Override
     public void onResume(){
-        super.onResume();
-        sensorManager.registerListener(shakeDetector,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL);
+        if (user.getShakeEnabled()) {
+            super.onResume();
+            sensorManager.registerListener(shakeDetector,
+                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 }
