@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    LinearLayout linearMainLayout;
+    RelativeLayout relativeMainLayout;
     CharSequence Titles[]={"Schedule","Recommendations", "Search"};
     int numboftabs =3;
     private DrawerLayout mDrawer;
@@ -102,10 +103,10 @@ public class MainActivity extends AppCompatActivity {
         });
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
-        linearMainLayout = (LinearLayout) findViewById(R.id.linear_main_layout);
+        relativeMainLayout = (RelativeLayout) findViewById(R.id.relative_main_layout);
         boolean isPhone = getResources().getBoolean(R.bool.isPhone);
         if(isPhone){
-            ViewGroup.LayoutParams paramsLinear = linearMainLayout.getLayoutParams();
+            ViewGroup.LayoutParams paramsLinear = relativeMainLayout.getLayoutParams();
             paramsLinear.width= ViewGroup.LayoutParams.MATCH_PARENT;
             ViewGroup.LayoutParams paramsSlide = tabs.getLayoutParams();
             paramsSlide.width= ViewGroup.LayoutParams.MATCH_PARENT;
