@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -41,6 +42,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
     int days = 2;//number of days to generate a schedule for
     SharedPreferences prefs;
     User user = User.getInstance();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

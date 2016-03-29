@@ -1,5 +1,6 @@
 package com.example.s135123.kitchener;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -25,7 +26,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
+    LinearLayout linearMainLayout;
     CharSequence Titles[]={"Schedule","Recommendations", "Search"};
     int numboftabs =3;
     private DrawerLayout mDrawer;
@@ -73,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         User user = User.getInstance();
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
-
         // Setup drawer view
         setupDrawerContent(nvDrawer);
 
@@ -99,7 +102,16 @@ public class MainActivity extends AppCompatActivity {
         });
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
-
+        linearMainLayout = (LinearLayout) findViewById(R.id.linear_main_layout);
+        boolean isPhone = getResources().getBoolean(R.bool.isPhone);
+        if(isPhone){
+            ViewGroup.LayoutParams paramsLinear = linearMainLayout.getLayoutParams();
+            paramsLinear.width= ViewGroup.LayoutParams.MATCH_PARENT;
+            ViewGroup.LayoutParams paramsSlide = tabs.getLayoutParams();
+            paramsSlide.width= ViewGroup.LayoutParams.MATCH_PARENT;
+            ViewGroup.LayoutParams paramsPager = pager.getLayoutParams();
+            paramsPager.width= ViewGroup.LayoutParams.MATCH_PARENT;
+        }
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         shakeDetector = new ShakeDetector(this);
 

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class Favorites extends AppCompatActivity {
     ArrayList<Recipe> recipes = new ArrayList<>();
     CompactBaseAdapter adapter;
     TextView noInternetTextFav;
+    RelativeLayout favoritesLayout;
     User user;
 
 
@@ -48,11 +50,17 @@ public class Favorites extends AppCompatActivity {
         setContentView(R.layout.activity_favorites);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFavorites);
         setSupportActionBar(toolbar);
+        favoritesLayout = (RelativeLayout) findViewById(R.id.favorites_layout);
+        favoritesLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadRecipes();
+            }
+        });
         user = User.getInstance();
         noInternetTextFav = (TextView) findViewById(R.id.text_fav_no_internet);
         loadRecipes();
         list = (ListView) findViewById(R.id.listView_favorites);
-        adapter = new CompactBaseAdapter(this, recipes, false);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -79,6 +87,7 @@ public class Favorites extends AppCompatActivity {
                 }
             }
         });
+        adapter = new CompactBaseAdapter(this, recipes, false);
         list.setAdapter(adapter);
     }
 
