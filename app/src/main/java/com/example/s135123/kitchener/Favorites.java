@@ -80,15 +80,25 @@ public class Favorites extends AppCompatActivity {
                     }
 
                 } else {
-                    Intent i = new Intent(Favorites.this, RecipeInfoActivity.class);
-                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    i.putExtra("Recipe", recipes.get(position));
-                    Favorites.this.startActivity(i);
+                    if(getResources().getBoolean(R.bool.isPhone)) {
+                        Intent i = new Intent(Favorites.this, RecipeInfoActivity.class);
+                        i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        i.putExtra("Recipe", recipes.get(position));
+                        startActivity(i);
+                    }
+                    else{
+                        new RecipeInfo(Favorites.this).updateContents(recipes.get(position));
+                    }
                 }
             }
         });
         adapter = new CompactBaseAdapter(this, recipes, false);
         list.setAdapter(adapter);
+        boolean isPhone = getResources().getBoolean(R.bool.isPhone);
+        if(isPhone) {
+            ViewGroup.LayoutParams paramsLinear = favoritesLayout.getLayoutParams();
+            paramsLinear.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        }
     }
 
     private void loadRecipes(){

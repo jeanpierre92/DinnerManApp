@@ -46,10 +46,14 @@ public class RecipeInfo {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 android.view.ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+                int finalWidth = metrics.widthPixels;
+                if(!activity.getResources().getBoolean(R.bool.isPhone)){
+                    finalWidth -=  (int) activity.getResources().getDimension(R.dimen.list_width);;
+                }
                 int width = loadedImage.getWidth();
-                layoutParams.width = width;
+                layoutParams.width = finalWidth;
                 int height = loadedImage.getHeight();
-                layoutParams.height = metrics.widthPixels * height / width;
+                layoutParams.height =  finalWidth* height / width;
                 imageView.setLayoutParams(layoutParams);
             }
         });
