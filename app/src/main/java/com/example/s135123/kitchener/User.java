@@ -14,6 +14,7 @@ public class User {
     private ArrayList<Allergy> allergies = new ArrayList<>();
     boolean gender; //male=true
     private ArrayList<Integer> favoriteRecipes = new ArrayList<>();
+    boolean shakeEnabled = true;
     SharedPreferences prefs;
 
     public String getId() {
@@ -44,6 +45,13 @@ public class User {
 
     public void removeFromFavorites(int id) {
         favoriteRecipes.remove((Integer) id);
+    }
+    public void setShakeEnabled(boolean shakeEnabled) {
+        this.shakeEnabled = shakeEnabled;
+    }
+
+    public boolean getShakeEnabled() {
+        return shakeEnabled;
     }
 
     public void addToFavorites(int id) {
