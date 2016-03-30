@@ -25,14 +25,13 @@ public class Settings extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        user = User.getInstance();
         shakeActive = (CheckBox) findViewById(R.id.shakeActive);
-
-        shakeActive.setOnClickListener(mShakeListener);
+        mShakeListener();
 
     }
 
     public void mShakeListener() {
-        shakeActive = (CheckBox) findViewById(R.id.shakeActive);
         shakeActive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,6 +43,12 @@ public class Settings extends AppCompatActivity {
             }
         });
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
 
 
 
