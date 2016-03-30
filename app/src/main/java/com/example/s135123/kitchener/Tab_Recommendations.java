@@ -2,6 +2,7 @@ package com.example.s135123.kitchener;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,6 +42,7 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
     CompactBaseAdapter adapter;
     TextView noInternetText;
     RelativeLayout recommendationLayout;
+    ImageView questionMark;
     final User user = User.getInstance();
 
     @Override
@@ -84,7 +87,14 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
             }
         });
         list.setAdapter(adapter);
-
+        questionMark = (ImageView) v.findViewById(R.id.question_mark_rec);
+        questionMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), TutorialRec.class);
+                startActivity(i);
+            }
+        });
         return v;
         // return inflater.inflate(R.layout.tab_recommendations, container, false);
     }

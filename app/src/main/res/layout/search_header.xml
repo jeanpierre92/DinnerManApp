@@ -13,6 +13,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:hint="Search recipes..." />
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/question_mark_icon"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/question_mark_search"/>
     <RelativeLayout
         android:id="@+id/advanced_options_layout"
         android:layout_width="wrap_content"

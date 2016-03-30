@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -77,6 +78,8 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
     // Buttons needed to set onClickListener()
     Button buttonSearch;
     Button buttonAdvancedOptions;
+
+    ImageView questionMark;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -143,6 +146,14 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
 
         advancedOptionsLayout = (RelativeLayout) v.findViewById(R.id.advanced_options_layout);
         advancedOptionsLayout.setVisibility(View.GONE);
+        questionMark = (ImageView) v.findViewById(R.id.question_mark_search);
+        questionMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), TutorialSearch.class);
+                startActivity(i);
+            }
+        });
 
         return v;
     }

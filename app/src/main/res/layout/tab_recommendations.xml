@@ -4,12 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/recommendation_layout">
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/question_mark_icon"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/question_mark_rec"/>
 
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/listView_reccomendations"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/question_mark_rec"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

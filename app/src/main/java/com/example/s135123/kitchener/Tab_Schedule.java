@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
     int days = 2;//number of days to generate a schedule for
     SharedPreferences prefs;
     User user = User.getInstance();
-
+    ImageView questionMark;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -140,6 +141,14 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             }
         });
         seekBar.setProgress(recipes.size());
+        questionMark = (ImageView) v.findViewById(R.id.question_mark_schedule);
+        questionMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), TutorialSchedule.class);
+                startActivity(i);
+            }
+        });
         return v;
         // return inflater.inflate(R.layout.tab_schedule, container, false);
 
