@@ -40,6 +40,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
     TextView servingsView;
     TextView ingredientsView;
     TextView cuisineView;
+    User user = User.getInstance();
 
     private SensorManager sensorManager;
     private ShakeDetector shakeDetector;
@@ -48,7 +49,6 @@ public class RecipeInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_info);
-        User user = User.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -149,17 +149,22 @@ public class RecipeInfoActivity extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
+
     @Override
     public void onPause(){
         super.onPause();
-        sensorManager.unregisterListener(shakeDetector);
+        if (user.getShakeEnabled()) {
+            sensorManager.unregisterListener(shakeDetector);
+        }
     }
     @Override
     public void onResume(){
         super.onResume();
-        sensorManager.registerListener(shakeDetector,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL);
+        if (user.getShakeEnabled()) {
+            sensorManager.registerListener(shakeDetector,
+                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
 }

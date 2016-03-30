@@ -3,6 +3,8 @@ package com.example.s135123.kitchener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -42,6 +44,8 @@ public class Favorites extends AppCompatActivity {
     TextView noInternetTextFav;
     RelativeLayout favoritesLayout;
     User user;
+    private SensorManager sensorManager;
+    private ShakeDetector shakeDetector;
 
 
     @Override
@@ -99,6 +103,8 @@ public class Favorites extends AppCompatActivity {
             ViewGroup.LayoutParams paramsLinear = favoritesLayout.getLayoutParams();
             paramsLinear.width = ViewGroup.LayoutParams.MATCH_PARENT;
         }
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        shakeDetector = new ShakeDetector(this);
     }
 
     private void loadRecipes(){
@@ -174,6 +180,22 @@ public class Favorites extends AppCompatActivity {
             }
         }
 
+    }
+    @Override
+    public void onPause(){
+        super.onPause();
+        if (user.getShakeEnabled()) {
+            sensorManager.unregisterListener(shakeDetector);
+        }
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (user.getShakeEnabled()) {
+            sensorManager.registerListener(shakeDetector,
+                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
 }

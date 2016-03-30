@@ -1,6 +1,8 @@
 package com.example.s135123.kitchener;
 
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v4.app.Fragment;
@@ -30,6 +32,9 @@ import java.util.ArrayList;
 public class Settings extends AppCompatActivity {
 
     CheckBox shakeActive;
+    User user = User.getInstance();
+    private SensorManager sensorManager;
+    private ShakeDetector shakeDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +43,14 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         shakeActive = (CheckBox) findViewById(R.id.shakeActive);
-
+        shakeActive.setChecked(user.getShakeEnabled());
         shakeActive.setOnClickListener(mShakeListener);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        shakeDetector = new ShakeDetector(this);
 
     }
 
     private View.OnClickListener mShakeListener = new View.OnClickListener() {
-        User user = User.getInstance();
         public void onClick(View v) {
             if (shakeActive.isChecked()) {
                 user.setShakeEnabled(true);
@@ -54,6 +60,22 @@ public class Settings extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        if (user.getShakeEnabled()) {
+            sensorManager.unregisterListener(shakeDetector);
+        }
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (user.getShakeEnabled()) {
+            sensorManager.registerListener(shakeDetector,
+                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
     // Change standard amount of days for schedule
 
     // Remove all favorites

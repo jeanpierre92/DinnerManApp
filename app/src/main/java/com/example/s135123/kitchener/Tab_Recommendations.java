@@ -119,6 +119,13 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        if(adapter!=null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
     public class RecommendRecipeTask extends AsyncTask<Void, Void, String> {
 
         @Override

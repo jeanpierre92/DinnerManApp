@@ -148,6 +148,14 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        if(adapter!=null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public void onClick(View v) {
 
         switch (v.getId()) {

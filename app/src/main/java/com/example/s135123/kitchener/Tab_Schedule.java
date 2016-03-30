@@ -155,6 +155,14 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             }
         }
     }
+    @Override
+    public void onStart(){
+        super.onStart();
+        if(adapter!=null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);

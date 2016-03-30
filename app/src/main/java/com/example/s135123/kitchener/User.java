@@ -53,12 +53,18 @@ public class User {
     public void removeFromFavorites(int id) {
         favoriteRecipes.remove((Integer) id);
     }
+
     public void setShakeEnabled(boolean shakeEnabled) {
-        this.shakeEnabled = shakeEnabled;
+        if(shakeEnabled) {
+            prefs.edit().putString("shakeEnabled", "true").commit();
+        }
+        else {
+            prefs.edit().putString("shakeEnabled", "false").commit();
+        }
     }
 
     public boolean getShakeEnabled() {
-        return shakeEnabled;
+        return(prefs.getString("shakeEnabled", "false").equals("true"));
     }
 
     public void addToFavorites(int id) {
