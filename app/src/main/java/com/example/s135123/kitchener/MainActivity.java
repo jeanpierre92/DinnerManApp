@@ -150,18 +150,22 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_first_fragment:
                 Intent intentProfile = new Intent(getApplicationContext(), Profile.class);
                 startActivity(intentProfile);
+                mDrawer.closeDrawers();
                 break;
             case R.id.nav_second_fragment:
                 Intent intentFavorites = new Intent(getApplicationContext(), Favorites.class);
                 startActivity(intentFavorites);
+                mDrawer.closeDrawers();
                 break;
             case R.id.nav_third_fragment:
                 Intent intentAllergens = new Intent(getApplicationContext(), Allergens.class);
                 startActivity(intentAllergens);
+                mDrawer.closeDrawers();
                 break;
             case R.id.nav_fourth_fragment:
                 Intent intentSettings = new Intent(getApplicationContext(), Settings.class);
                 startActivity(intentSettings);
+                mDrawer.closeDrawers();
                 break;
             case R.id.nav_fifth_fragment:
                 User user =User.getInstance();
@@ -170,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
                 intentLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentLogin);
+                mDrawer.closeDrawers();
                 break;
             default:
                 fragmentClass = Tab_Schedule.class;
