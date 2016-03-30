@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,19 +27,20 @@ import java.util.ArrayList;
 /**
  * Created by s142451 on 16-3-2016.
  */
-public class Settings extends android.support.v4.app.Fragment {
+public class Settings extends AppCompatActivity {
 
     CheckBox shakeActive;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.settings_fragment, container, false);
-        shakeActive = (CheckBox) v.findViewById(R.id.shakeActive);
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+        shakeActive = (CheckBox) findViewById(R.id.shakeActive);
 
         shakeActive.setOnClickListener(mShakeListener);
 
-        return v;
     }
 
     private View.OnClickListener mShakeListener = new View.OnClickListener() {

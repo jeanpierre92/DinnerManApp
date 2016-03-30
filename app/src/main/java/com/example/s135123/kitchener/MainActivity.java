@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("clicked hamburger");
-                    mDrawer.openDrawer(Gravity.LEFT);
+                mDrawer.openDrawer(Gravity.LEFT);
             }
         });
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         // position
         Fragment fragment = null;
 
-        Class fragmentClass;
+        Class fragmentClass=null;
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
                 fragmentClass = Profile.class;
@@ -181,11 +181,14 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_second_fragment:
                 Intent intentFavorites = new Intent(getApplicationContext(), Favorites.class);
                 startActivity(intentFavorites);
+                break;
             case R.id.nav_third_fragment:
-                fragmentClass = Allergens.class;
+                Intent intentAllergens = new Intent(getApplicationContext(), Allergens.class);
+                startActivity(intentAllergens);
                 break;
             case R.id.nav_fourth_fragment:
-                fragmentClass = Settings.class;
+                Intent intentSettings = new Intent(getApplicationContext(), Settings.class);
+                startActivity(intentSettings);
                 break;
             case R.id.nav_fifth_fragment:
                 User user =User.getInstance();
@@ -203,11 +206,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
+        if(fragment!=null&&fragmentClass!=null) {
+            // Insert the fragment by replacing any existing fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
         // Highlight the selected item, update the title, and close the drawer
         // Highlight the selected item has been done by NavigationView
         // menuItem.setChecked(true);

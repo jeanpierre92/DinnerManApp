@@ -32,7 +32,7 @@ public class LoadingScreenActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         applicationContext=getApplicationContext();
-
+        User user = User.getInstance();
         //Initialize a LoadViewTask object and call the execute() method
         new LoadViewTask().execute();
     }

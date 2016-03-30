@@ -1,6 +1,7 @@
 package com.example.s135123.kitchener;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +9,13 @@ import android.view.ViewGroup;
 /**
  * Created by s142451 on 16-3-2016.
  */
-public class Allergens extends android.support.v4.app.Fragment {
+public class Allergens extends AppCompatActivity {
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected void  onCreate(Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.allergens_fragment, container, false);
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_allergens);
     }
 
     // List allergens
