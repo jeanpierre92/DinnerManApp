@@ -38,7 +38,7 @@ public class LoadingScreenActivity extends Activity
     }
 
     //To use the AsyncTask, it must be subclassed
-    private class LoadViewTask extends AsyncTask<Void, Integer, Void>
+    private class LoadViewTask extends AsyncTask<Void, Integer, Boolean>
     {
         //A TextView object and a ProgressBar object
         private TextView tv_progress;
@@ -67,13 +67,15 @@ public class LoadingScreenActivity extends Activity
 
         //The code to be executed in a background thread.
         @Override
-        protected Void doInBackground(Void... params)
+        protected Boolean doInBackground(Void... params)
         {
             User user = User.getInstance();
             if(user.getUsername()==null && user.getPassword()==null) {
+                System.out.println("allebei null");
                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
+                return true;
             }
             else{
                 String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
@@ -86,7 +88,8 @@ public class LoadingScreenActivity extends Activity
                 }
                 publishProgress(25);
                 if(authTokenJson==null){
-                    return null;
+                    System.out.println("could not authenticate");
+                    return false;
                 }
                 String authToken = null;
                 try {
@@ -121,8 +124,9 @@ public class LoadingScreenActivity extends Activity
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
+                return true;
             }
-            return null;
+            //return false;
         }
 
         //Update the TextView and the progress at progress bar
@@ -139,9 +143,9 @@ public class LoadingScreenActivity extends Activity
 
         //After executing the code in the thread
         @Override
-        protected void onPostExecute(Void result)
+        protected void onPostExecute(Boolean result)
         {
-            if(result==null){
+            if(!result){
                 //internet connection was lost while authenticating, go to login
                 Toast toast = Toast.makeText(LoadingScreenActivity.this, "Unable to reach the server to authenticate", Toast.LENGTH_LONG);
                 toast.show();

@@ -5,5 +5,5 @@
         <attr name="absoluteMaxValue" format="integer|float"/>
         <attr name="singleThumb" format="boolean"/>
     </declare-styleable>
-
+    <bool name="isPhone">true</bool>
 </resources>

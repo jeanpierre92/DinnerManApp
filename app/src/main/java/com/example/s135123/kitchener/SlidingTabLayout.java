@@ -161,6 +161,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 outValue, true);
         textView.setBackgroundResource(outValue.resourceId);
         textView.setAllCaps(true);
+        //textView.setEllipsize("marquee");
+        textView.setLines(1);
 
         int padding = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
         textView.setPadding(padding, padding, padding, padding);

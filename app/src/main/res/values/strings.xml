@@ -39,4 +39,6 @@
     <string name="error_field_required">This field is required</string>
     <string name="title_activity_favorites">Favorites</string>
     <string name="title_activity_allergens">Allergens</string>
+    <string name="title_activity_tutorial_schedule">TutorialSchedule</string>
+
 </resources>

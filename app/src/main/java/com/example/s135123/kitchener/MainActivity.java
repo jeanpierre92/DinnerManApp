@@ -1,11 +1,13 @@
 package com.example.s135123.kitchener;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -22,10 +24,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -53,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
+    RelativeLayout relativeMainLayout;
     CharSequence Titles[]={"Schedule","Recommendations", "Search"};
     int numboftabs =3;
     private DrawerLayout mDrawer;
@@ -60,32 +68,42 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private SensorManager sensorManager;
     private ShakeDetector shakeDetector;
+    ImageView hamburger;
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        User user = User.getInstance();
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
-
         // Setup drawer view
         setupDrawerContent(nvDrawer);
-
+        hamburger = (ImageView) findViewById(R.id.hamburger_icon);
+        hamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("clicked hamburger");
+                    mDrawer.openDrawer(Gravity.LEFT);
+            }
+        });
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, numboftabs);
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
-
+        if(getIntent().getSerializableExtra("page")!=null) {
+            int page = (Integer) getIntent().getSerializableExtra("page");
+            pager.setCurrentItem(page);
+        }
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        tabs.setDistributeEvenly(false); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
         // Setting Custom Color for the Scroll bar indicator of the Tab View
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
@@ -95,8 +113,19 @@ public class MainActivity extends AppCompatActivity {
         });
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
+        relativeMainLayout = (RelativeLayout) findViewById(R.id.relative_main_layout);
+        boolean isPhone = getResources().getBoolean(R.bool.isPhone);
+        if(isPhone){
+            ViewGroup.LayoutParams paramsLinear = relativeMainLayout.getLayoutParams();
+            paramsLinear.width= ViewGroup.LayoutParams.MATCH_PARENT;
+            ViewGroup.LayoutParams paramsSlide = tabs.getLayoutParams();
+            paramsSlide.width= ViewGroup.LayoutParams.MATCH_PARENT;
+            ViewGroup.LayoutParams paramsPager = pager.getLayoutParams();
+            paramsPager.width= ViewGroup.LayoutParams.MATCH_PARENT;
+        }
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         shakeDetector = new ShakeDetector(this);
+
     }
 
 
@@ -195,14 +224,18 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onPause(){
-        super.onPause();
-        sensorManager.unregisterListener(shakeDetector);
+        if (user.getShakeEnabled()) {
+            super.onPause();
+            sensorManager.unregisterListener(shakeDetector);
+        }
     }
     @Override
     public void onResume(){
-        super.onResume();
-        sensorManager.registerListener(shakeDetector,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL);
+        if (user.getShakeEnabled()) {
+            super.onResume();
+            sensorManager.registerListener(shakeDetector,
+                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 }
