@@ -94,7 +94,6 @@ public class Favorites extends AppCompatActivity {
         adapter = new CompactBaseAdapter(this, recipes, false);
         list.setAdapter(adapter);
         loadRecipes();
-        adapter.notifyDataSetChanged();
         boolean isPhone = getResources().getBoolean(R.bool.isPhone);
         if(isPhone) {
             ViewGroup.LayoutParams paramsLinear = favoritesLayout.getLayoutParams();
@@ -143,18 +142,23 @@ public class Favorites extends AppCompatActivity {
                 e.printStackTrace();
             }
             for(int id:user.getFavorites()) {
-                String idUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken + "/specific/"+id;
-                String response = sendRequest.sendGetRequest(idUrl);
+                String idUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken + "/specific/" + id;
+                final String response = sendRequest.sendGetRequest(idUrl);
                 try {
                     JSONObject responseJson = new JSONObject(response);
                     int status = responseJson.getInt("status");
-                    if(status != 200){
+                    if (status != 200) {
                         return "failed";
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                recipes.add(new Recipe(response));
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        recipes.add(new Recipe(response));
+                    }
+
+                });
             }
             return "success";
         }
