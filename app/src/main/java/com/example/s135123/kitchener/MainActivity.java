@@ -49,7 +49,6 @@ import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
-//TODO: Merge with Arne's MainActivity.java
 public class MainActivity extends AppCompatActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
@@ -153,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intentFavorites = new Intent(getApplicationContext(), Favorites.class);
                 startActivity(intentFavorites);
             case R.id.nav_third_fragment:
-                fragmentClass = Allergens.class;
-                break;
+                Intent intentAllergens = new Intent(getApplicationContext(), Allergens.class);
+                startActivity(intentAllergens);
             case R.id.nav_fourth_fragment:
                 fragmentClass = Settings.class;
                 break;
