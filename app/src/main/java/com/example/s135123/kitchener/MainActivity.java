@@ -228,17 +228,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause(){
         super.onPause();
-        if (user.getShakeEnabled()) {
             sensorManager.unregisterListener(shakeDetector);
-        }
     }
     @Override
     public void onResume(){
         super.onResume();
-        if (user.getShakeEnabled()) {
             sensorManager.registerListener(shakeDetector,
                     sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                     SensorManager.SENSOR_DELAY_NORMAL);
-        }
     }
 }

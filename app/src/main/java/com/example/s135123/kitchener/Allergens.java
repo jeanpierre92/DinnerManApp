@@ -2,6 +2,8 @@ package com.example.s135123.kitchener;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +32,8 @@ public class Allergens extends AppCompatActivity implements View.OnClickListener
     Button button_addAllergen;
     Button button_removeAllergen;
     EditText editText_allergens;
+    private SensorManager sensorManager;
+    private ShakeDetector shakeDetector;
 
     ArrayAdapter<String> adapter;
 
@@ -55,6 +59,8 @@ public class Allergens extends AppCompatActivity implements View.OnClickListener
         );
 
         list.setAdapter(adapter);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        shakeDetector = new ShakeDetector(this);
 
     }
 
@@ -89,6 +95,20 @@ public class Allergens extends AppCompatActivity implements View.OnClickListener
 
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        if (user.getShakeEnabled()) {
+            sensorManager.unregisterListener(shakeDetector);
+        }
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        sensorManager.registerListener(shakeDetector,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+    }
     @Override
     public void onClick(View v) {
         String allergen = editText_allergens.getText().toString();

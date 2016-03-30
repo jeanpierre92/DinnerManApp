@@ -15,6 +15,7 @@ import android.widget.Toast;
 public class ShakeDetector implements SensorEventListener {
     Activity activity;
     long lastTime;
+    User user = User.getInstance();
 
     public ShakeDetector(Activity activity) {
         this.activity = activity;
@@ -32,7 +33,7 @@ public class ShakeDetector implements SensorEventListener {
                 if(System.currentTimeMillis()-lastTime<1000){
                     //don't random a new recipe to avoid randoming multiple times
                 }
-                else {
+                else if(user.getShakeEnabled()){
                     lastTime = System.currentTimeMillis();
                     Thread thread = new RandomRecipeThread(activity);
                     if (isNetworkAvailable()) {

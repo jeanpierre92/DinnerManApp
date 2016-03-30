@@ -70,11 +70,9 @@ public class Settings extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        if (user.getShakeEnabled()) {
             sensorManager.registerListener(shakeDetector,
                     sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                     SensorManager.SENSOR_DELAY_NORMAL);
-        }
     }
     // Change standard amount of days for schedule
 
