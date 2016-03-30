@@ -71,10 +71,15 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
                         toast.show();
                     }
                 } else {
-                    Intent i = new Intent(getContext(), RecipeInfoActivity.class);
-                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    i.putExtra("Recipe", recipes.get(position));
-                    getContext().startActivity(i);
+                    if(getResources().getBoolean(R.bool.isPhone)) {
+                        Intent i = new Intent(getContext(), RecipeInfoActivity.class);
+                        i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        i.putExtra("Recipe", recipes.get(position));
+                        getContext().startActivity(i);
+                    }
+                    else{
+                        new RecipeInfo(getActivity()).updateContents(recipes.get(position));
+                    }
                 }
             }
         });
@@ -95,6 +100,17 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
         }
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if(!user.getDidRecTutorial()) {
+                user.setDidRecTutorial(true);
+                Intent i = new Intent(getActivity(), TutorialRec.class);
+                startActivity(i);
+            }
+        }
+    }
 
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager

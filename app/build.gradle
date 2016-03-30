@@ -33,5 +33,4 @@ dependencies {
     compile 'com.google.code.gson:gson:2.5'
     compile 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
 
-
 }

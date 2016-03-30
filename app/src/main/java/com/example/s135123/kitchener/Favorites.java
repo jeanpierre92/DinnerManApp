@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class Favorites extends AppCompatActivity {
     ArrayList<Recipe> recipes = new ArrayList<>();
     CompactBaseAdapter adapter;
     TextView noInternetTextFav;
+    RelativeLayout favoritesLayout;
     User user;
 
 
@@ -48,11 +50,16 @@ public class Favorites extends AppCompatActivity {
         setContentView(R.layout.activity_favorites);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFavorites);
         setSupportActionBar(toolbar);
+        favoritesLayout = (RelativeLayout) findViewById(R.id.favorites_layout);
+        favoritesLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadRecipes();
+            }
+        });
         user = User.getInstance();
         noInternetTextFav = (TextView) findViewById(R.id.text_fav_no_internet);
-        loadRecipes();
         list = (ListView) findViewById(R.id.listView_favorites);
-        adapter = new CompactBaseAdapter(this, recipes, false);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -72,14 +79,26 @@ public class Favorites extends AppCompatActivity {
                     }
 
                 } else {
-                    Intent i = new Intent(Favorites.this, RecipeInfoActivity.class);
-                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    i.putExtra("Recipe", recipes.get(position));
-                    Favorites.this.startActivity(i);
+                    if(getResources().getBoolean(R.bool.isPhone)) {
+                        Intent i = new Intent(Favorites.this, RecipeInfoActivity.class);
+                        i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        i.putExtra("Recipe", recipes.get(position));
+                        startActivity(i);
+                    }
+                    else{
+                        new RecipeInfo(Favorites.this).updateContents(recipes.get(position));
+                    }
                 }
             }
         });
+        adapter = new CompactBaseAdapter(this, recipes, false);
         list.setAdapter(adapter);
+        loadRecipes();
+        boolean isPhone = getResources().getBoolean(R.bool.isPhone);
+        if(isPhone) {
+            ViewGroup.LayoutParams paramsLinear = favoritesLayout.getLayoutParams();
+            paramsLinear.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        }
     }
 
     private void loadRecipes(){
@@ -87,7 +106,6 @@ public class Favorites extends AppCompatActivity {
             GetFavoritesTask task = new GetFavoritesTask();
             noInternetTextFav.setVisibility(View.GONE);
             task.execute((Void) null);
-
         } else {
             noInternetTextFav.setText("No network available to retrieve recipes. Tap to retry");
             noInternetTextFav.setVisibility(View.VISIBLE);

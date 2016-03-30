@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -41,6 +42,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
     int days = 2;//number of days to generate a schedule for
     SharedPreferences prefs;
     User user = User.getInstance();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -89,10 +91,15 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
                     }
 
                 } else {
-                    Intent i = new Intent(getContext(), RecipeInfoActivity.class);
-                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    i.putExtra("Recipe", recipes.get(position));
-                    getContext().startActivity(i);
+                    if(getResources().getBoolean(R.bool.isPhone)) {
+                        Intent i = new Intent(getContext(), RecipeInfoActivity.class);
+                        i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        i.putExtra("Recipe", recipes.get(position));
+                        getContext().startActivity(i);
+                    }
+                    else{
+                        new RecipeInfo(getActivity()).updateContents(recipes.get(position));
+                    }
                 }
             }
         });
@@ -137,7 +144,17 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         // return inflater.inflate(R.layout.tab_schedule, container, false);
 
     }
-
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if(!user.getDidScheduleTutorial()) {
+                user.setDidScheduleTutorial(true);
+                Intent intentTutorial = new Intent(getActivity(), TutorialSchedule.class);
+                startActivity(intentTutorial);
+            }
+        }
+    }
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -1,11 +1,13 @@
 package com.example.s135123.kitchener;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -22,10 +24,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -49,11 +56,11 @@ import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
-//TODO: Merge with Arne's MainActivity.java
 public class MainActivity extends AppCompatActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
+    RelativeLayout relativeMainLayout;
     CharSequence Titles[]={"Schedule","Recommendations", "Search"};
     int numboftabs =3;
     private DrawerLayout mDrawer;
@@ -61,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private SensorManager sensorManager;
     private ShakeDetector shakeDetector;
+    ImageView hamburger;
     User user = User.getInstance();
 
     @Override
@@ -68,26 +76,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        User user = User.getInstance();
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
-
         // Setup drawer view
         setupDrawerContent(nvDrawer);
-
+        hamburger = (ImageView) findViewById(R.id.hamburger_icon);
+        hamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("clicked hamburger");
+                    mDrawer.openDrawer(Gravity.LEFT);
+            }
+        });
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, numboftabs);
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
-
+        if(getIntent().getSerializableExtra("page")!=null) {
+            int page = (Integer) getIntent().getSerializableExtra("page");
+            pager.setCurrentItem(page);
+        }
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        tabs.setDistributeEvenly(false); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
         // Setting Custom Color for the Scroll bar indicator of the Tab View
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
@@ -97,7 +113,16 @@ public class MainActivity extends AppCompatActivity {
         });
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
-
+        relativeMainLayout = (RelativeLayout) findViewById(R.id.relative_main_layout);
+        boolean isPhone = getResources().getBoolean(R.bool.isPhone);
+        if(isPhone){
+            ViewGroup.LayoutParams paramsLinear = relativeMainLayout.getLayoutParams();
+            paramsLinear.width= ViewGroup.LayoutParams.MATCH_PARENT;
+            ViewGroup.LayoutParams paramsSlide = tabs.getLayoutParams();
+            paramsSlide.width= ViewGroup.LayoutParams.MATCH_PARENT;
+            ViewGroup.LayoutParams paramsPager = pager.getLayoutParams();
+            paramsPager.width= ViewGroup.LayoutParams.MATCH_PARENT;
+        }
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         shakeDetector = new ShakeDetector(this);
 
@@ -150,22 +175,18 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_first_fragment:
                 Intent intentProfile = new Intent(getApplicationContext(), Profile.class);
                 startActivity(intentProfile);
-                mDrawer.closeDrawers();
                 break;
             case R.id.nav_second_fragment:
                 Intent intentFavorites = new Intent(getApplicationContext(), Favorites.class);
                 startActivity(intentFavorites);
-                mDrawer.closeDrawers();
                 break;
             case R.id.nav_third_fragment:
                 Intent intentAllergens = new Intent(getApplicationContext(), Allergens.class);
                 startActivity(intentAllergens);
-                mDrawer.closeDrawers();
                 break;
             case R.id.nav_fourth_fragment:
                 Intent intentSettings = new Intent(getApplicationContext(), Settings.class);
                 startActivity(intentSettings);
-                mDrawer.closeDrawers();
                 break;
             case R.id.nav_fifth_fragment:
                 User user =User.getInstance();
@@ -174,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
                 intentLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentLogin);
-                mDrawer.closeDrawers();
                 break;
             default:
                 fragmentClass = Tab_Schedule.class;
