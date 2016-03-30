@@ -1,8 +1,13 @@
 package com.example.s135123.kitchener;
 
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -17,13 +22,13 @@ public class Settings extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSettings);
-        setSupportActionBar(toolbar);
-        user = User.getInstance();
+        shakeActive = (CheckBox) findViewById(R.id.shakeActive);
 
-        mShakeListener();
+        shakeActive.setOnClickListener(mShakeListener);
+
     }
 
     public void mShakeListener() {

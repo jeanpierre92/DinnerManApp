@@ -32,7 +32,7 @@ public class LoadingScreenActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         applicationContext=getApplicationContext();
-
+        User user = User.getInstance();
         //Initialize a LoadViewTask object and call the execute() method
         new LoadViewTask().execute();
     }
@@ -114,9 +114,24 @@ public class LoadingScreenActivity extends Activity
                 }
                 int length = favoritesJsonArray.length();
                 for(int i = 0; i < length; i++){
-                    publishProgress(50+50*i/length);
+                    publishProgress(50+25*i/length);
                     try {
                         user.addToFavorites(Integer.parseInt(favoritesJsonArray.get(i).toString()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                JSONArray allergensJsonArray = null;
+                try {
+                    allergensJsonArray = profile.getJSONArray("allergens");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                int lengthAllergens = allergensJsonArray.length();
+                for(int i = 0; i < lengthAllergens; i++){
+                    publishProgress(75+25*i/lengthAllergens);
+                    try {
+                        user.addAllergy(allergensJsonArray.getJSONObject(i).getString("allergen"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

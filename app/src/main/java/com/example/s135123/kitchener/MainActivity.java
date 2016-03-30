@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("clicked hamburger");
-                    mDrawer.openDrawer(Gravity.LEFT);
+                mDrawer.openDrawer(Gravity.LEFT);
             }
         });
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
     public void selectDrawerItem(MenuItem menuItem) {
         Fragment fragment = null;
 
-        Class fragmentClass;
+        Class fragmentClass=null;
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
                 Intent intentProfile = new Intent(getApplicationContext(), Profile.class);
@@ -201,17 +201,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO: maybe some error handling for activities?
-         /*
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        */
 
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        if(fragment!=null&&fragmentClass!=null) {
+            // Insert the fragment by replacing any existing fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
 
         // Highlight the selected item, update the title, and close the drawer
         // Highlight the selected item has been done by NavigationView

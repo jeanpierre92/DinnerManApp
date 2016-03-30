@@ -94,6 +94,7 @@ public class Favorites extends AppCompatActivity {
         adapter = new CompactBaseAdapter(this, recipes, false);
         list.setAdapter(adapter);
         loadRecipes();
+        adapter.notifyDataSetChanged();
         boolean isPhone = getResources().getBoolean(R.bool.isPhone);
         if(isPhone) {
             ViewGroup.LayoutParams paramsLinear = favoritesLayout.getLayoutParams();
