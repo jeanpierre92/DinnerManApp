@@ -143,8 +143,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
-        // Create a new fragment and specify the planet to show based on
-        // position
         Fragment fragment = null;
 
         Class fragmentClass;
@@ -152,15 +150,19 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_first_fragment:
                 Intent intentProfile = new Intent(getApplicationContext(), Profile.class);
                 startActivity(intentProfile);
+                break;
             case R.id.nav_second_fragment:
                 Intent intentFavorites = new Intent(getApplicationContext(), Favorites.class);
                 startActivity(intentFavorites);
+                break;
             case R.id.nav_third_fragment:
                 Intent intentAllergens = new Intent(getApplicationContext(), Allergens.class);
                 startActivity(intentAllergens);
+                break;
             case R.id.nav_fourth_fragment:
                 Intent intentSettings = new Intent(getApplicationContext(), Settings.class);
                 startActivity(intentSettings);
+                break;
             case R.id.nav_fifth_fragment:
                 User user =User.getInstance();
                 user.setPassword(null);
@@ -168,20 +170,19 @@ public class MainActivity extends AppCompatActivity {
                 Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
                 intentLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentLogin);
+                break;
             default:
-                intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
-                intentLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intentLogin);
+                fragmentClass = Tab_Schedule.class;
         }
 
         // TODO: maybe some error handling for activities?
-        /*
+         /*
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
-         */
+        */
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
