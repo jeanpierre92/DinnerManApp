@@ -178,22 +178,22 @@ public class MainActivity extends AppCompatActivity {
                 fragmentClass = Profile.class;
                 break;
             case R.id.nav_second_fragment:
-                Intent intentFavorites = new Intent(getApplicationContext(), Favorites.class);
+                Intent intentFavorites = new Intent(MainActivity.this, Favorites.class);
                 startActivity(intentFavorites);
                 break;
             case R.id.nav_third_fragment:
-                Intent intentAllergens = new Intent(getApplicationContext(), Allergens.class);
+                Intent intentAllergens = new Intent(MainActivity.this, Allergens.class);
                 startActivity(intentAllergens);
                 break;
             case R.id.nav_fourth_fragment:
-                Intent intentSettings = new Intent(getApplicationContext(), Settings.class);
+                Intent intentSettings = new Intent(MainActivity.this, Settings.class);
                 startActivity(intentSettings);
                 break;
             case R.id.nav_fifth_fragment:
                 User user =User.getInstance();
                 user.setPassword(null);
                 user.setUsername(null);
-                Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                Intent intentLogin = new Intent(MainActivity.this, LoginActivity.class);
                 intentLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentLogin);
             default:
