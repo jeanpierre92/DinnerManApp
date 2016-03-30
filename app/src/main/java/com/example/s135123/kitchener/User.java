@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class User {
     private static User user;
-    private ArrayList<Allergy> allergies = new ArrayList<>();
+    private ArrayList<String> allergies = new ArrayList<>();
     boolean gender; //male=true
     private ArrayList<Integer> favoriteRecipes = new ArrayList<>();
     boolean shakeEnabled = true;
@@ -69,13 +69,15 @@ public class User {
         return favoriteRecipes;
     }
 
-    public void addAllergy(Allergy allergy) {
+    public void addAllergy(String allergy) {
         allergies.add(allergy);
     }
 
-    public void removeAllergy(Allergy allergy) {
+    public void removeAllergy(String allergy) {
         allergies.remove(allergy);
     }
+
+    public ArrayList<String> getAllergies() { return allergies; }
 
     public void setMale() {
         gender = true;
