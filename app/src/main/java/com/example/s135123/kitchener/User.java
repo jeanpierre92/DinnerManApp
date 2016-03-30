@@ -115,7 +115,8 @@ public class User {
         }
     }
     public boolean getDidScheduleTutorial(){
-        return(prefs.getString("didScheduleTutorial", "false").equals("true"));
+        return false;
+        //return(prefs.getString("didScheduleTutorial", "false").equals("true"));
     }
     public void setDidRecTutorial(boolean b) {
         if(b) {

@@ -12,19 +12,28 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
         android:textSize="24sp"
         android:text="Here you can find your recommendations, grouped by cuisine"
         android:layout_gravity="center_horizontal"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="#008799"
+        android:textColor="#ffffff" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         android:text="Got it!"
         android:id="@+id/gotItButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="onClickGotIt"/>
+        android:onClick="onClickGotIt"
+        android:background="#00bcd5"
+        android:textColor="#ffffff"
+        android:minHeight="45dp"
+        android:minWidth="90dp" />
 </RelativeLayout>
