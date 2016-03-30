@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00BCD5</color>
-    <color name="colorPrimaryDark">#008799</color>
-    <color name="colorAccent">#E5EE9D</color>
+    <!-- Primary 500 Cyan with Accent 500 Lime -->
+    <color name="colorPrimary">#00BCD4</color>
+    <color name="colorPrimaryDark">#00838f</color>
+    <color name="colorAccent">#cddc39</color>
     <color name="windowBackground">#EDEDED</color>
     <color name="textColorPrimary">#FFFFFF</color>
-    <color name="navigationBarColor">#008799</color>
-    <color name="tabsScrollColor">#E5EE9D</color>
+    <color name="textColorSecondary">#000000</color>
+    <color name="navigationBarColor">#00838f</color>
+    <color name="tabsScrollColor">#cddc39</color>
 </resources>

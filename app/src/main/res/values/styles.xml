@@ -9,6 +9,8 @@
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:navigationBarColor">@color/navigationBarColor</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="editTextStyle">@style/App_EditTextStyle</item>
     </style>
     <style name="MyTransparentTheme" parent="android:Theme.Dialog">
     <item name="android:windowIsTranslucent">true</item>
@@ -27,5 +29,9 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="App_EditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">#DD000000</item>
+    </style>
 
 </resources>
