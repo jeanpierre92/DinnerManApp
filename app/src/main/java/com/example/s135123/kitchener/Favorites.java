@@ -59,7 +59,6 @@ public class Favorites extends AppCompatActivity {
         });
         user = User.getInstance();
         noInternetTextFav = (TextView) findViewById(R.id.text_fav_no_internet);
-        loadRecipes();
         list = (ListView) findViewById(R.id.listView_favorites);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -94,6 +93,7 @@ public class Favorites extends AppCompatActivity {
         });
         adapter = new CompactBaseAdapter(this, recipes, false);
         list.setAdapter(adapter);
+        loadRecipes();
         boolean isPhone = getResources().getBoolean(R.bool.isPhone);
         if(isPhone) {
             ViewGroup.LayoutParams paramsLinear = favoritesLayout.getLayoutParams();
@@ -106,7 +106,6 @@ public class Favorites extends AppCompatActivity {
             GetFavoritesTask task = new GetFavoritesTask();
             noInternetTextFav.setVisibility(View.GONE);
             task.execute((Void) null);
-
         } else {
             noInternetTextFav.setText("No network available to retrieve recipes. Tap to retry");
             noInternetTextFav.setVisibility(View.VISIBLE);

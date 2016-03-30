@@ -71,9 +71,11 @@ public class LoadingScreenActivity extends Activity
         {
             User user = User.getInstance();
             if(user.getUsername()==null && user.getPassword()==null) {
+                System.out.println("allebei null");
                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
+                return true;
             }
             else{
                 String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
@@ -124,7 +126,7 @@ public class LoadingScreenActivity extends Activity
                 startActivity(i);
                 return true;
             }
-            return false;
+            //return false;
         }
 
         //Update the TextView and the progress at progress bar
