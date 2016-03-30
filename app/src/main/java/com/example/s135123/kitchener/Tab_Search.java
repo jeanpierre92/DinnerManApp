@@ -264,7 +264,8 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
             }
             searchUrl += minCal+"/"+maxCal+"/"+minFat+"/"+maxFat+"/"+minProtein+"/"+maxProtein+"/"+minCarbs+"/"+maxCarbs;
             String result = sendRequest.sendGetRequest(searchUrl);
-            System.out.println(result);
+            System.out.println("searchUrl: "+searchUrl);
+            System.out.println("searchResut: "+result);
             JSONObject resultJson = null;
             try {
                 resultJson = new JSONObject(result);
