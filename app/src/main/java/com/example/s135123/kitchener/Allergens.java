@@ -7,9 +7,11 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -26,16 +28,15 @@ import java.util.Arrays;
 /**
  * Created by s142451 on 16-3-2016.
  */
-public class Allergens extends AppCompatActivity implements View.OnClickListener {
+public class Allergens extends AppCompatActivity  {
 
     ListView list;
-    Button button_addAllergen;
-    Button button_removeAllergen;
-    EditText editText_allergens;
     private SensorManager sensorManager;
     private ShakeDetector shakeDetector;
+    private ArrayList<String> allergens = new ArrayList<>();
+    private static final ArrayList<String> allAllergens = new ArrayList<>(Arrays.asList("potatoes", "pepper", "vanilla", "coconut", "cream", "cheese", "leeks", "ginger", "eggs", "salt", "paprika", "fish", "beef", "tomatoes", "cabbage", "spinach", "sugar", "shrimp", "milk", "rice", "peanut", "onions", "mushrooms", "soy sauce", "chocolate", "mutton", "apples", "honey", "lemons", "broccoli", "carrots", "chicken", "garlic", "pasta", "mustard", "cucumber", "pork", "limes", "noodles"));
 
-    ArrayAdapter<String> adapter;
+    AllergenAdapter adapter;
 
     User user;
 
@@ -45,88 +46,48 @@ public class Allergens extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_allergens);
 
         user = User.getInstance();
-
+        allergens = user.getAllergies();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_allergens);
+        setSupportActionBar(toolbar);
         // Initialising Views
         list = (ListView) findViewById(R.id.listView_allergens);
-        button_addAllergen = (Button) findViewById(R.id.button_addAllergen);
-        button_removeAllergen = (Button) findViewById(R.id.button_removeAllergen);
-        editText_allergens = (EditText) findViewById(R.id.editText_allergens);
-        System.out.println("numAllergies: "+user.getAllergies().size());
-        adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                getAllergens()
-        );
-
+        adapter = new AllergenAdapter(this,allergens);
         list.setAdapter(adapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long viewId = view.getId();
+                if (viewId == R.id.allergen_checkbox) {
+                    boolean add = !user.getAllergies().contains(allAllergens.get(position));
+                    new AllergensTask(allAllergens.get(position)).execute(add);
+                }
+            }
+        });
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         shakeDetector = new ShakeDetector(this);
 
     }
 
 
-    // List allergens
-    private String[] getAllergens() {
-        return  Arrays.copyOf(user.getAllergies().toArray(),
-                user.getAllergies().toArray().length,
-                String[].class);
-    }
 
-    // Add allergens
-    private void addAllergens(String allergen) {
-        user.addAllergy(allergen);
-        updateList();
-    }
-
-    // Remove allergens
-    private void removeAllergens(String allergen) {
-        user.removeAllergy(allergen);
-        updateList();
-    }
-
-    private void updateList() {
-        editText_allergens.setText("");
-        adapter.notifyDataSetChanged();
-
-        // TODO Make ListView list refresh more elegantly
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
-
-    }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         if (user.getShakeEnabled()) {
             sensorManager.unregisterListener(shakeDetector);
         }
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         sensorManager.registerListener(shakeDetector,
                 sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
     }
-    @Override
-    public void onClick(View v) {
-        String allergen = editText_allergens.getText().toString();
-        System.out.println("ALLERGEN:"+allergen);
-        switch (v.getId()) {
-            case R.id.button_addAllergen:
-                addAllergens(allergen);
-                new AllergensTask(allergen).execute(true);
-                break;
-            case R.id.button_removeAllergen:
-                removeAllergens(allergen);
-                new AllergensTask(allergen).execute(false);
-                break;
-            default:
-                updateList();
-                break;
-        }
-    }
+
     private class AllergensTask extends AsyncTask<Boolean, Void, String> {
         String allergen;
 
@@ -165,18 +126,20 @@ public class Allergens extends AppCompatActivity implements View.OnClickListener
                 } else {
                     if (!user.getAllergies().contains(allergen)) {
                         user.addAllergy(allergen);
+                        allergens.add(allergen);
                     }
                 }
             } else {
                 //remove from favorites
                 String addToAllergensUrl = "http://appdev-gr1.win.tue.nl:8008/api/user/" + user.getUsername() + "/" + authToken + "/deleteAllergens";
                 int statusCode = sendRequest.sendDeleteRequest(addToAllergensUrl, allergen);
-                System.out.println("allergens delete url: "+addToAllergensUrl);
-                System.out.println("allergens statuscode: "+statusCode);
+                System.out.println("allergens delete url: " + addToAllergensUrl);
+                System.out.println("allergens statuscode: " + statusCode);
                 if (statusCode != 200) {
                     return "failed";
                 } else {
                     user.removeAllergy(allergen);
+                    allergens.remove(allergen);
                 }
             }
             return "success";

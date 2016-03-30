@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
     RelativeLayout relativeMainLayout;
-    CharSequence Titles[]={"Schedule","Recommendations", "Search"};
+    CharSequence Titles[]={"Schedule","Recommend", "Search"};
     int numboftabs =3;
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;

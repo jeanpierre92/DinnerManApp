@@ -87,7 +87,8 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
 
         list = (ListView) v.findViewById(R.id.listView_reccomendations);
         View header = inflater.inflate(R.layout.search_header, null);
-        list.addHeaderView(header, null, false);list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        list.addHeaderView(header, null, false);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 long viewId = view.getId();

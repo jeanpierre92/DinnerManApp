@@ -12,7 +12,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        android:id="@+id/toolbarSettings" />
+        android:id="@+id/toolbarSettings"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="16dp"
@@ -21,7 +21,8 @@
         android:id="@+id/shakeActive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enable shake for new recipe"/>
+        android:text="Enable shake for new recipe"
+        android:layout_below="@+id/toolbarSettings"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
