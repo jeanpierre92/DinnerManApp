@@ -261,7 +261,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                             recipes.clear();
                         }
                         for(String allergen:ingredientsExclude){
-                            new AllergensTask(allergen, ingredientsExclude, adapter, getActivity()).execute(true);
+                            new AllergensTask(allergen, ingredientsExclude, ingredientAdapterExclude, getActivity()).execute(true);
                         }
                         String ingredientsString = android.text.TextUtils.join(",", ingredients.toArray());
                         ingredientsString = ingredientsString.replaceAll(" ", "%20");
@@ -276,7 +276,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                                 (int) proteinSeekBar.getSelectedMinValue(),
                                 (int) proteinSeekBar.getSelectedMaxValue()).execute((Void) null);
                         for(String allergen:ingredientsExclude){
-                            new AllergensTask(allergen, ingredientsExclude, adapter, getActivity()).execute(false);
+                            new AllergensTask(allergen, ingredientsExclude, ingredientAdapterExclude, getActivity()).execute(false);
                         }
                     }
                 } else {

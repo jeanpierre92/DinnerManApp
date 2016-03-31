@@ -121,7 +121,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
                             SharedPreferences.Editor prefsEditor = prefs.edit();
                             prefsEditor.putString("recipe" + i, null);
                             prefsEditor.commit();
-
                         }
                         new ScheduleTask().execute((Void) null);
                     }
