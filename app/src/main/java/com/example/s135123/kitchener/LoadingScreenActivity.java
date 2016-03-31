@@ -24,6 +24,7 @@ public class LoadingScreenActivity extends Activity
 {
     //creates a ViewSwitcher object, to switch between Views
     private ViewSwitcher viewSwitcher;
+    User user;
 
     public static Context applicationContext;   //used for shared preferences
     /** Called when the activity is first created. */
@@ -31,10 +32,17 @@ public class LoadingScreenActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        applicationContext=getApplicationContext();
-        User user = User.getInstance();
+        applicationContext=this;
+        user  = User.getInstance();
         //Initialize a LoadViewTask object and call the execute() method
-        new LoadViewTask().execute();
+        if(user.getUsername()==null&&user.getPassword()==null){
+            Intent i = new Intent(this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        }
+        else {
+            new LoadViewTask().execute();
+        }
     }
 
     //To use the AsyncTask, it must be subclassed
@@ -164,6 +172,8 @@ public class LoadingScreenActivity extends Activity
                 //internet connection was lost while authenticating, go to login
                 Toast toast = Toast.makeText(LoadingScreenActivity.this, "Unable to reach the server to authenticate", Toast.LENGTH_LONG);
                 toast.show();
+                user.setUsername(null);
+                user.setPassword(null);
                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);

@@ -40,7 +40,6 @@ public class User {
 
     private User() {
         prefs = new SecurePreferences(LoadingScreenActivity.applicationContext);
-
     }
 
     public static User getInstance() {

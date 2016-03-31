@@ -40,6 +40,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
     ScheduleAdapter adapter;
     SeekBar seekBar;
     Button generateButton;
+    boolean scheduleButtonEnabled = true;
     int days = 2;//number of days to generate a schedule for
     SharedPreferences prefs;
     User user = User.getInstance();
@@ -111,16 +112,19 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 System.out.println(recipes.size());
                 if (isNetworkAvailable()) {
-                    if (recipes != null) {
-                        recipes.clear();
-                    }
-                    for (int i = 0; i < 7; i++) {
-                        SharedPreferences.Editor prefsEditor = prefs.edit();
-                        prefsEditor.putString("recipe" + i, null);
-                        prefsEditor.commit();
+                    if(scheduleButtonEnabled) {
+                        scheduleButtonEnabled = false;
+                        if (recipes != null) {
+                            recipes.clear();
+                        }
+                        for (int i = 0; i < 7; i++) {
+                            SharedPreferences.Editor prefsEditor = prefs.edit();
+                            prefsEditor.putString("recipe" + i, null);
+                            prefsEditor.commit();
 
+                        }
+                        new ScheduleTask().execute((Void) null);
                     }
-                    new ScheduleTask().execute((Void) null);
                 } else {
                     Toast toast = Toast.makeText(getActivity(), "No network available to retrieve a schedule", Toast.LENGTH_LONG);
                     toast.show();
@@ -242,6 +246,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             } else {
                 adapter.notifyDataSetChanged();
             }
+            scheduleButtonEnabled = true;
         }
     }
 

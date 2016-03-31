@@ -151,7 +151,6 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 Toast toast = Toast.makeText(this, "Login not possible: no internet connection available", Toast.LENGTH_LONG);
                 toast.show();
-
             }
         }
     }

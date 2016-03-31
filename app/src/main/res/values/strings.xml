@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kitchener</string>
+    <string name="app_name">Dinnerman</string>
     <string name="action_settings">Settings</string>
 
     <string-array name="sample_recipe_titles">

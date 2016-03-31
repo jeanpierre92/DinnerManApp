@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardview_light_background"
+    android:layout_margin="64dp"
+    android:id="@+id/popup_layout">
+<ListView
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/cardview_light_background"
+    android:id="@+id/popup_list"
+    android:layout_above="@+id/buttonSearchPopup">
+
+</ListView>
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:id="@+id/buttonSearchPopup"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Close"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
