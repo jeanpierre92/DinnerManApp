@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#60000000">
+    android:background="#90000000">
 
     <!-- The ActionBar displayed at the top -->
 
@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="Here you can search for recipes best of luck"
-        android:layout_gravity="center_horizontal"
+        android:text="Here you can search for recipes by ingredients.\nTo exclude ingredients or restrict nutritional values, tap the advanced options button."
+        android:layout_gravity="center_vertical"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 

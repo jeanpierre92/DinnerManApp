@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#60000000">
+    android:background="#90000000">
 
     <!-- The ActionBar displayed at the top -->
 
@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="Use the slider to set the number of days you want a schedule for\n
-        Press generate a schedule to retrieve the schedule"
+        android:text="Use the slider to set the number of days you want a schedule for\nPress generate a schedule to retrieve the schedule.\nRecipes can be rerolled by pressing the recycle icon.\nTap the question mark in the top left corner to review this information.
+        "
         android:layout_gravity="center_horizontal"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />

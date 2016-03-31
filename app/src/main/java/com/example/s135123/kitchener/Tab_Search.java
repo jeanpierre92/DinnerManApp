@@ -252,7 +252,6 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.buttonSearch:
                 if (isNetworkAvailable()) {

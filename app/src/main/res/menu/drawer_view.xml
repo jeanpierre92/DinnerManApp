@@ -2,6 +2,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_first_fragment"
+            android:icon="@drawable/question_mark_icon2"
+            android:title="Tutorial" />
+        <item
             android:id="@+id/nav_second_fragment"
             android:icon="@drawable/ic_action_favorite"
             android:title="Favorites" />

@@ -266,7 +266,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (result.equals("success")) {
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                Intent i = new Intent(getApplicationContext(), LoadingScreenActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             } else if (result.equals("failed")) {

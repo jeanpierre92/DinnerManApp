@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="Here you can find your recommendations, grouped by cuisine"
+        android:text="Swipe between tabs to switch between them.\nTap on allergens in the navigation drawer to set allergens, recipes that contain an allergen will not be shown.\nView your favorite recipes in the favorites tab. Tap the heart icon to delete a recipe from favorites.\nEnable or disable shake for random recipe in the settings."
         android:layout_gravity="center_horizontal"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />

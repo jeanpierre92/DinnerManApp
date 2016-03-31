@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
     private ShakeDetector shakeDetector;
     ImageView hamburger;
-    User user = User.getInstance();
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         if(getResources().getBoolean(R.bool.isPhone)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-
+        user = User.getInstance();
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         User user = User.getInstance();
@@ -181,6 +181,11 @@ public class MainActivity extends AppCompatActivity {
 
         Class fragmentClass=null;
         switch(menuItem.getItemId()) {
+            case R.id.nav_first_fragment:
+                Intent intentTutorial = new Intent(MainActivity.this, TutorialGeneral.class);
+                startActivity(intentTutorial);
+
+                break;
             case R.id.nav_second_fragment:
                 Intent intentFavorites = new Intent(MainActivity.this, Favorites.class);
                 startActivity(intentFavorites);

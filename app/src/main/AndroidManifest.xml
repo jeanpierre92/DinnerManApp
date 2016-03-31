@@ -21,6 +21,7 @@
         <activity android:name=".TutorialSchedule" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".TutorialRec" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name=".TutorialSearch" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".TutorialGeneral" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity
             android:name=".MainActivity"
