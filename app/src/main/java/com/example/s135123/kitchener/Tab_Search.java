@@ -86,6 +86,12 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
     AllergenAdapter ingredientAdapter;
     private static final ArrayList<String> allAllergens = new ArrayList<>(Arrays.asList("potatoes", "pepper", "vanilla", "coconut", "cream", "cheese", "leeks", "ginger", "eggs", "salt", "paprika", "fish", "beef", "tomatoes", "cabbage", "spinach", "sugar", "shrimp", "milk", "rice", "peanut", "onions", "mushrooms", "soy sauce", "chocolate", "mutton", "apples", "honey", "lemons", "broccoli", "carrots", "chicken", "garlic", "pasta", "mustard", "cucumber", "pork", "limes", "noodles"));
 
+    TextView textViewExcludeIngredients;
+    PopupWindow popupWindowExclude;
+    ListView popupListExclude;
+    Button closePopupWindowExclude;
+    ArrayList<String> ingredientsExclude = new ArrayList<>();
+    AllergenAdapter ingredientAdapterExclude;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -124,14 +130,57 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
         adapter = new CompactBaseAdapter(getActivity(), recipes, false);
         list.setAdapter(adapter);
 
+        LayoutInflater layoutInflaterExclude = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View layoutExclude = layoutInflaterExclude.inflate(R.layout.popup_search_exclude, popupListExclude);
+        popupWindowExclude = new PopupWindow(layoutExclude, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindowExclude.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        popupWindowExclude.setOutsideTouchable(false);
+
+        ingredientAdapterExclude = new AllergenAdapter(getActivity(), ingredientsExclude);
+        popupListExclude = (ListView) layoutExclude.findViewById(R.id.popup_list_exclude);
+        popupListExclude.setAdapter(ingredientAdapterExclude);
+        popupListExclude.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long viewId = view.getId();
+                if (viewId == R.id.allergen_checkbox) {
+                    if (((CheckBox) view.findViewById(R.id.allergen_checkbox)).isChecked()) {
+                        ingredientsExclude.add(allAllergens.get(position));
+                    } else {
+                        ingredientsExclude.remove(allAllergens.get(position));
+                    }
+                    //adapter.notifyDataSetChanged();
+                }
+            }
+        });
+        closePopupWindowExclude = (Button) layoutExclude.findViewById(R.id.buttonSearchPopupExclude);
+        closePopupWindowExclude.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowExclude.dismiss();
+            }
+        });
+        textViewExcludeIngredients = (TextView) v.findViewById(R.id.selectExcludeIngredients);
+        textViewExcludeIngredients.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isPhone = getResources().getBoolean(R.bool.isPhone);
+                if (isPhone) {
+                    popupWindowExclude.showAtLocation(layoutExclude, Gravity.CENTER_VERTICAL, 0, 0);
+                } else {
+                    popupWindowExclude.showAtLocation(layoutExclude, Gravity.NO_GRAVITY, 0, 0);
+                }
+            }
+        });
+
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View layout = layoutInflater.inflate(R.layout.popup_search, popupList);
         popupWindow = new PopupWindow(layout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         popupWindow.setOutsideTouchable(false);
 
-        popupList = (ListView) layout.findViewById(R.id.popup_list);
         ingredientAdapter = new AllergenAdapter(getActivity(), ingredients);
+        popupList = (ListView) layout.findViewById(R.id.popup_list);
         popupList.setAdapter(ingredientAdapter);
         popupList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -143,7 +192,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                     } else {
                         ingredients.remove(allAllergens.get(position));
                     }
-                    adapter.notifyDataSetChanged();
+                    //adapter.notifyDataSetChanged();
                 }
             }
         });
@@ -155,7 +204,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
             }
         });
 
-                // TextView views found and hidden as default
+        // TextView views found and hidden as default
         textViewIncludeIngredients = (TextView) v.findViewById(R.id.selectIncludeIngredients);
         textViewIncludeIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,12 +255,14 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
 
         switch (v.getId()) {
             case R.id.buttonSearch:
-
                 if (isNetworkAvailable()) {
                     if (searchButtonEnabled) {
                         searchButtonEnabled = false;
                         if (recipes != null) {
                             recipes.clear();
+                        }
+                        for(String allergen:ingredientsExclude){
+                            new AllergensTask(allergen, ingredientsExclude, adapter, getActivity()).execute(true);
                         }
                         String ingredientsString = android.text.TextUtils.join(",", ingredients.toArray());
                         ingredientsString = ingredientsString.replaceAll(" ", "%20");
@@ -225,8 +276,11 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                                 (int) fatSeekBar.getSelectedMaxValue(),
                                 (int) proteinSeekBar.getSelectedMinValue(),
                                 (int) proteinSeekBar.getSelectedMaxValue()).execute((Void) null);
+                        for(String allergen:ingredientsExclude){
+                            new AllergensTask(allergen, ingredientsExclude, adapter, getActivity()).execute(false);
+                        }
                     }
-                }else {
+                } else {
                     Toast toast = Toast.makeText(getActivity(), "No network available to search for recipes", Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -339,13 +393,13 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                     e.printStackTrace();
                 }
             }
-            System.out.println("searchresult: "+result);
+            System.out.println("searchresult: " + result);
             return result;
         }
 
         @Override
         protected void onPostExecute(final String result) {
-            if(recipes.size()==0){
+            if (recipes.size() == 0) {
                 Toast toast = Toast.makeText(getActivity(), "No recipes found", Toast.LENGTH_LONG);
                 toast.show();
             }

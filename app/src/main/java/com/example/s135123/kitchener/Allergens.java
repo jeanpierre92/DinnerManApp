@@ -64,7 +64,7 @@ public class Allergens extends AppCompatActivity  {
                 long viewId = view.getId();
                 if (viewId == R.id.allergen_checkbox) {
                     boolean add = !user.getAllergies().contains(allAllergens.get(position));
-                    new AllergensTask(allAllergens.get(position)).execute(add);
+                    new AllergensTask(allAllergens.get(position), allergens, adapter, Allergens.this).execute(add);
                 }
             }
         });
@@ -90,73 +90,5 @@ public class Allergens extends AppCompatActivity  {
         sensorManager.registerListener(shakeDetector,
                 sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    private class AllergensTask extends AsyncTask<Boolean, Void, String> {
-        String allergen;
-
-        public AllergensTask(String allergen) {
-            this.allergen = allergen;
-        }
-
-        @Override
-        protected String doInBackground(Boolean... params) {
-            User user = User.getInstance();
-            //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
-            String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
-            JSONObject authTokenJson = null;
-            SendRequest sendRequest = new SendRequest();
-            try {
-                authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (authTokenJson == null) {
-                //something went wrong
-                return "failed";
-            }
-            String authToken = null;
-            try {
-                authToken = authTokenJson.getString("authToken");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (params[0]) {
-                //add to allergens
-                String addToAllergensUrl = "http://appdev-gr1.win.tue.nl:8008/api/user/" + user.getUsername() + "/" + authToken + "/addAllergens";
-                int statusCode = sendRequest.sendPostRequest(addToAllergensUrl, allergen);
-                if (statusCode != 200) {
-                    return "failed";
-                } else {
-                    if (!user.getAllergies().contains(allergen)) {
-                        user.addAllergy(allergen);
-                        allergens.add(allergen);
-                    }
-                }
-            } else {
-                //remove from favorites
-                String addToAllergensUrl = "http://appdev-gr1.win.tue.nl:8008/api/user/" + user.getUsername() + "/" + authToken + "/deleteAllergens";
-                int statusCode = sendRequest.sendDeleteRequest(addToAllergensUrl, allergen);
-                System.out.println("allergens delete url: " + addToAllergensUrl);
-                System.out.println("allergens statuscode: " + statusCode);
-                if (statusCode != 200) {
-                    return "failed";
-                } else {
-                    user.removeAllergy(allergen);
-                    allergens.remove(allergen);
-                }
-            }
-            return "success";
-        }
-
-        @Override
-        protected void onPostExecute(final String result) {
-            if (result.equals("failed")) {
-                Toast toast = Toast.makeText(Allergens.this, "Unable to reach the server to modify allergens", Toast.LENGTH_LONG);
-                toast.show();
-            } else {
-                adapter.notifyDataSetChanged();
-            }
-        }
     }
 }
