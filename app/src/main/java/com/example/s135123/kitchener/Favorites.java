@@ -3,6 +3,7 @@ package com.example.s135123.kitchener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
@@ -52,6 +53,9 @@ public class Favorites extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
+        if(getResources().getBoolean(R.bool.isPhone)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFavorites);
         setSupportActionBar(toolbar);
         favoritesLayout = (RelativeLayout) findViewById(R.id.favorites_layout);

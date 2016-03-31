@@ -17,48 +17,37 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:screenOrientation="portrait">
-        <activity android:name=".TutorialSchedule" android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait" />
-        <activity android:name=".TutorialRec" android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait" />
-        <activity android:name=".TutorialSearch" android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait" />
+        android:theme="@style/AppTheme">
+        <activity android:name=".TutorialSchedule" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".TutorialRec" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".TutorialSearch" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Settings"
             android:label="Settings"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Allergens"
             android:label="Allergens"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".RecipeInfoActivity"
             android:label="@string/title_activity_recipe_info"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Favorites"
             android:label="@string/title_activity_favorites"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"></activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".LoadingScreenActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:label="@string/app_name">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
 
@@ -67,8 +56,7 @@
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"></activity>
+            android:label="@string/app_name"></activity>
     </application>
 
 </manifest>

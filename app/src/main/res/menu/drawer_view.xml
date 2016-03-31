@@ -2,10 +2,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_first_fragment"
-            android:icon="@drawable/ic_action_person"
-            android:title="Profile" />
-        <item
             android:id="@+id/nav_second_fragment"
             android:icon="@drawable/ic_action_favorite"
             android:title="Favorites" />
