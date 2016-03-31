@@ -98,9 +98,8 @@ public class SendRequest {
         HttpURLConnection httpURLConnection = null;
         try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded");
-            httpURLConnection.setRequestMethod("DELETE");
+            httpURLConnection.setRequestProperty("X-HTTP-Method-Override", "DELETE");
+            httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setDoOutput(true);
             OutputStreamWriter wr = new OutputStreamWriter(httpURLConnection.getOutputStream());
             wr.write(delete);

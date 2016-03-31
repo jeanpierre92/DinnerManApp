@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.securepreferences.SecurePreferences;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ public class User {
     private static User user;
     private ArrayList<String> allergies = new ArrayList<>();
     boolean gender; //male=true
-    private ArrayList<Integer> favoriteRecipes = new ArrayList<>();
+    private HashSet<Integer> favoriteRecipes = new HashSet<>();
     boolean shakeEnabled = true;
     SharedPreferences prefs;
     SharedPreferences sharedPreferences;
@@ -71,7 +72,7 @@ public class User {
     }
 
     public ArrayList<Integer> getFavorites() {
-        return favoriteRecipes;
+        return new ArrayList<Integer>(favoriteRecipes);
     }
 
     public void addAllergy(String allergy) {

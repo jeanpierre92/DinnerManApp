@@ -151,7 +151,9 @@ public class Favorites extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            System.out.println("numfavoritesinuserclass: "+user.getFavorites().size());
             for(int id:user.getFavorites()) {
+
                 String idUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken + "/specific/" + id;
                 final String response = sendRequest.sendGetRequest(idUrl);
                 try {

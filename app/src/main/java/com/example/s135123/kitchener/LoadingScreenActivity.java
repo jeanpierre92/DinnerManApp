@@ -36,7 +36,7 @@ public class LoadingScreenActivity extends Activity
         if(getResources().getBoolean(R.bool.isPhone)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        applicationContext=this;
+        applicationContext=getApplicationContext();
         user  = User.getInstance();
         //Initialize a LoadViewTask object and call the execute() method
         if(user.getUsername()==null&&user.getPassword()==null){
@@ -93,6 +93,11 @@ public class LoadingScreenActivity extends Activity
                 String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
                 JSONObject authTokenJson = null;
                 SendRequest sendRequest = new SendRequest();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 try {
                     authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
                 } catch (JSONException e) {
