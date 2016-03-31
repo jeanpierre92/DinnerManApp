@@ -90,14 +90,14 @@ public class LoadingScreenActivity extends Activity
                 return true;
             }
             else{
-                String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
-                JSONObject authTokenJson = null;
-                SendRequest sendRequest = new SendRequest();
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
+                JSONObject authTokenJson = null;
+                SendRequest sendRequest = new SendRequest();
                 try {
                     authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
                 } catch (JSONException e) {
