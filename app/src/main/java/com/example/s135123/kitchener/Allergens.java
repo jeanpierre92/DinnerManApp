@@ -2,6 +2,7 @@ package com.example.s135123.kitchener;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
@@ -44,6 +45,9 @@ public class Allergens extends AppCompatActivity  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allergens);
+        if(getResources().getBoolean(R.bool.isPhone)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
 
         user = User.getInstance();
         allergens = user.getAllergies();

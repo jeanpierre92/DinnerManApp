@@ -64,7 +64,6 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
     User user = User.getInstance();
 
     //TextView views needed to hide them if an advanced search is necessary
-    TextView textViewIncludeIngredients;
     RangeSeekBar calSeekBar;
     RangeSeekBar proteinSeekBar;
     RangeSeekBar fatSeekBar;
@@ -79,6 +78,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
 
     ImageView questionMark;
 
+    TextView textViewIncludeIngredients;
     PopupWindow popupWindow;
     ListView popupList;
     Button closePopupWindow;
