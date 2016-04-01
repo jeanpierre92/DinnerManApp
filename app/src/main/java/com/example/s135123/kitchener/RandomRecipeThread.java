@@ -17,8 +17,7 @@ public class RandomRecipeThread extends Thread {
     @Override
     public void run(){
         User user = User.getInstance();
-        //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
-        String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
+        String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
         JSONObject authTokenJson=null;
         SendRequest sendRequest = new SendRequest();
         try {
@@ -32,15 +31,12 @@ public class RandomRecipeThread extends Thread {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String recipeUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/test/" + authToken + "/random";
+        String recipeUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/"+user.getUsername()+"/" + authToken + "/random";
         String recipeResult = sendRequest.sendGetRequest(recipeUrl);
         Intent i = new Intent(activity, RecipeInfoActivity.class);
         i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
         Recipe recipe =new Recipe(recipeResult);
         i.putExtra("Recipe", recipe);
         activity.startActivity(i);
-        System.out.println("INSHAKETHREAD");
-        System.out.println(recipe.getImage());
     }
-
 }

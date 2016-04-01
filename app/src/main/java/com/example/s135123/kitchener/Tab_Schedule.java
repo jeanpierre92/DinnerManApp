@@ -49,28 +49,25 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_schedule, container, false);
-        list = (ListView) v.findViewById(R.id.listView_schedule);
-        View header = inflater.inflate(R.layout.schedule_header, null);
-        list.addHeaderView(header, null, false);
         //load a schedule if there is one
         prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         Gson gson = new Gson();
         for (int i = 0; i < 7; i++) {
             String json = prefs.getString("recipe" + i, null);
-            System.out.println(json + "josn");
             if (json != null) {
-                System.out.println("not null");
                 Recipe recipe = gson.fromJson(json, Recipe.class);
                 recipes.add(recipe);
             }
-
         }
+        list = (ListView) v.findViewById(R.id.listView_schedule);
+        View header = inflater.inflate(R.layout.schedule_header, null);
+        list.addHeaderView(header, null, false);
         adapter = new ScheduleAdapter(getActivity(), recipes);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("pos in schedule: "+position);
+                System.out.println("pos in schedule: " + position);
                 long viewId = view.getId();
                 if (viewId == R.id.rerollImageView) {
                     System.out.println("started rerolling");
@@ -93,13 +90,12 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
                     }
 
                 } else {
-                    if(getResources().getBoolean(R.bool.isPhone)) {
+                    if (getResources().getBoolean(R.bool.isPhone)) {
                         Intent i = new Intent(getContext(), RecipeInfoActivity.class);
                         i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                         i.putExtra("Recipe", recipes.get(position));
                         getContext().startActivity(i);
-                    }
-                    else{
+                    } else {
                         new RecipeInfo(getActivity()).updateContents(recipes.get(position));
                     }
                 }
@@ -112,10 +108,11 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 System.out.println(recipes.size());
                 if (isNetworkAvailable()) {
-                    if(scheduleButtonEnabled) {
+                    if (scheduleButtonEnabled) {
                         scheduleButtonEnabled = false;
                         if (recipes != null) {
                             recipes.clear();
+                            adapter.notifyDataSetChanged();
                         }
                         for (int i = 0; i < 7; i++) {
                             SharedPreferences.Editor prefsEditor = prefs.edit();
@@ -156,21 +153,23 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         // return inflater.inflate(R.layout.tab_schedule, container, false);
 
     }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            if(!user.getDidScheduleTutorial()) {
+            if (!user.getDidScheduleTutorial()) {
                 user.setDidScheduleTutorial(true);
                 Intent intentTutorial = new Intent(getActivity(), TutorialSchedule.class);
                 startActivity(intentTutorial);
             }
         }
     }
+
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
-        if(adapter!=null) {
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
     }
@@ -221,8 +220,8 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             }
             SharedPreferences.Editor prefsEditor = prefs.edit();
             Gson gson = new Gson();
-            for(int i = 0 ;i<7;i++){
-                prefsEditor.putString("recipe"+i,null);
+            for (int i = 0; i < 7; i++) {
+                prefsEditor.putString("recipe" + i, null);
             }
             for (int i = 0; i < recipeArray.length(); i++) {
                 try {

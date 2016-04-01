@@ -15,8 +15,6 @@ import java.util.regex.Pattern;
  */
 public class Recipe implements Serializable{
 
-
-    //Deze waardes kunnen leeg zijn, afhankelijk van wat de API geeft
     int id;
     String title;
     String image;
@@ -39,7 +37,7 @@ public class Recipe implements Serializable{
     int protein;
     int carbs;
 
-    int servings; //number of servings I assume
+    int servings;
 
     String cuisine;
 
@@ -151,15 +149,6 @@ public class Recipe implements Serializable{
         }
     }
 
-    public String getJsonInfo(JSONObject o, String info) {
-        try {
-            return o.getJSONObject(info).toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
     public int getId() {
         return id;
     }
@@ -190,10 +179,6 @@ public class Recipe implements Serializable{
 
     public ArrayList<String> getInstructions() {
         return instructions;
-    }
-
-    public boolean isCheap() {
-        return cheap;
     }
 
     public ArrayList<String> getIngredients() {

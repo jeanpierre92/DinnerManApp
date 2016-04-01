@@ -98,7 +98,7 @@ public class ScheduleAdapter extends BaseAdapter {
                 ((ListView) parent).performItemClick(v, position, 2);
             }
         });
-        final Recipe recipe = recipes.get(position);
+        Recipe recipe = recipes.get(position);
 
         if(user.getFavorites().contains(recipe.getId())){
             favoritesImageView.setImageResource(R.drawable.favorites_full);
@@ -112,7 +112,6 @@ public class ScheduleAdapter extends BaseAdapter {
         dayNumber.setText("Day " + Integer.toString(position+1));
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
         if (!imageLoader.isInited()) {
-            System.out.println("inited image laoder");
             imageLoader.init(ImageLoaderConfiguration.createDefault(context));
         }
         DisplayImageOptions options = new DisplayImageOptions.Builder()

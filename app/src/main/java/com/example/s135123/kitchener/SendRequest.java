@@ -74,7 +74,7 @@ public class SendRequest {
 
         // Create the POST object and add the parameters
         HttpPost httpPost = new HttpPost(url);
-        StringEntity entity = new StringEntity(post, HTTP.UTF_8);
+        StringEntity entity = new StringEntity(post, HTTP.CONTENT_TYPE);
         httpPost.setEntity(entity);
         HttpResponse response = null;
         try {
@@ -88,7 +88,7 @@ public class SendRequest {
 
     //returns the status code
     public int sendDeleteRequest(String stringUrl, String delete) {
-        int statuscode=0;
+        int statuscode = 0;
         URL url = null;
         try {
             url = new URL(stringUrl);
@@ -98,13 +98,14 @@ public class SendRequest {
         HttpURLConnection httpURLConnection = null;
         try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
+            //regular delete request with payload gives an exception on kitkat...
             httpURLConnection.setRequestProperty("X-HTTP-Method-Override", "DELETE");
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setDoOutput(true);
             OutputStreamWriter wr = new OutputStreamWriter(httpURLConnection.getOutputStream());
             wr.write(delete);
             wr.flush();
-            statuscode=httpURLConnection.getResponseCode();
+            statuscode = httpURLConnection.getResponseCode();
         } catch (IOException exception) {
             exception.printStackTrace();
         } finally {
@@ -120,11 +121,10 @@ public class SendRequest {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
         String result = "";
-        while ((line = bufferedReader.readLine()) != null)
+        while ((line = bufferedReader.readLine()) != null) {
             result += line;
-
+        }
         inputStream.close();
         return result;
-
     }
 }

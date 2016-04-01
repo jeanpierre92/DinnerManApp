@@ -64,7 +64,6 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 long viewId = view.getId();
                 if (viewId == R.id.favoritesImageViewRec) {
-                    System.out.println("started favoriting");
                     if (isNetworkAvailable()) {
                         int recipeId = recipes.get(position).getId();
                         boolean addTofavorite = !user.getFavorites().contains(recipeId);
@@ -74,13 +73,12 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
                         toast.show();
                     }
                 } else {
-                    if(getResources().getBoolean(R.bool.isPhone)) {
+                    if (getResources().getBoolean(R.bool.isPhone)) {
                         Intent i = new Intent(getContext(), RecipeInfoActivity.class);
                         i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                         i.putExtra("Recipe", recipes.get(position));
                         getContext().startActivity(i);
-                    }
-                    else{
+                    } else {
                         new RecipeInfo(getActivity()).updateContents(recipes.get(position));
                     }
                 }
@@ -98,7 +96,8 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
         return v;
         // return inflater.inflate(R.layout.tab_recommendations, container, false);
     }
-    private void loadRecipes(){
+
+    private void loadRecipes() {
         if (isNetworkAvailable()) {
             RecommendRecipeTask task = new RecommendRecipeTask();
             noInternetText.setVisibility(View.GONE);
@@ -114,7 +113,7 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            if(!user.getDidRecTutorial()) {
+            if (!user.getDidRecTutorial()) {
                 user.setDidRecTutorial(true);
                 Intent i = new Intent(getActivity(), TutorialRec.class);
                 startActivity(i);
@@ -130,12 +129,13 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
-        if(adapter!=null) {
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
     }
+
     public class RecommendRecipeTask extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -150,7 +150,7 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(authTokenJson==null){
+            if (authTokenJson == null) {
                 //something went wrong
                 return "failed";
             }
@@ -183,42 +183,38 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
                     e.printStackTrace();
                 }
             }
-            for(Recipe recipe:recipeResults){
+            for (Recipe recipe : recipeResults) {
                 recipes.add(recipe);
             }
             //sort by cuisine
             ArrayList<Recipe> sortedRecipes = new ArrayList<>(recipes);
-            String cuisine="";
+            String cuisine = "";
             recipes.clear();
-            for(Recipe r:sortedRecipes){
-                if(!recipes.contains(r)){
+            //Sort recipes by cuisines, starting with the cuisine of the first recommendation
+            //then other recipes with the same cuisine
+            //then the recipes with the cuisine of the second recommendation
+            for (Recipe r : sortedRecipes) {
+                if (!recipes.contains(r)) {
                     recipes.add(r);
-                    cuisine=r.getCuisine();
-                    for(Recipe r2:sortedRecipes){
-                        if(!recipes.contains(r2) && r2.getCuisine().equals(cuisine)){
+                    cuisine = r.getCuisine();
+                    for (Recipe r2 : sortedRecipes) {
+                        if (!recipes.contains(r2) && r2.getCuisine().equals(cuisine)) {
                             recipes.add(r2);
                         }
                     }
                 }
             }
-            for(Recipe test:recipes){
-                System.out.println(test.getCuisine());
-            }
-            System.out.println("numRecipes: "+recipes.size()+", numSortedRecipes: "+sortedRecipes.size());
             return "success";
         }
 
         @Override
         protected void onPostExecute(final String result) {
-            if(result.equals("failed")){
+            if (result.equals("failed")) {
                 noInternetText.setText("Unable to reach the server. Tap to retry");
                 noInternetText.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 adapter.notifyDataSetChanged();
             }
         }
-
     }
-
 }

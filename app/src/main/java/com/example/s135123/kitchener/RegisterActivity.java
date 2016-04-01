@@ -46,7 +46,6 @@ public class RegisterActivity extends AppCompatActivity {
     private UserLoginTask mAuthTask = null;
 
 
-    // UI references.
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
