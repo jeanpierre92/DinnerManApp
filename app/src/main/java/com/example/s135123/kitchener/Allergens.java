@@ -63,6 +63,7 @@ public class Allergens extends AppCompatActivity  {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 long viewId = view.getId();
                 if (viewId == R.id.allergen_checkbox) {
+                    //add the allergen if it is not in allergens, remove it otherwise
                     boolean add = !user.getAllergies().contains(allAllergens.get(position));
                     new AllergensTask(allAllergens.get(position), allergens, adapter, Allergens.this).execute(add);
                 }
@@ -70,7 +71,6 @@ public class Allergens extends AppCompatActivity  {
         });
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         shakeDetector = new ShakeDetector(this);
-
     }
 
 

@@ -64,7 +64,7 @@ public class User {
     }
 
     public boolean getShakeEnabled() {
-        return(prefs.getString("shakeEnabled", "false").equals("true"));
+        return!(prefs.getString("shakeEnabled", "none").equals("false"));
     }
 
     public void addToFavorites(int id) {

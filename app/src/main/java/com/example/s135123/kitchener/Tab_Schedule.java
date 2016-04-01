@@ -53,7 +53,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         View header = inflater.inflate(R.layout.schedule_header, null);
         list.addHeaderView(header, null, false);
         //load a schedule if there is one
-        prefs = getActivity().getPreferences(getContext().MODE_PRIVATE);
+        prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         Gson gson = new Gson();
         for (int i = 0; i < 7; i++) {
             String json = prefs.getString("recipe" + i, null);
@@ -221,6 +221,9 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             }
             SharedPreferences.Editor prefsEditor = prefs.edit();
             Gson gson = new Gson();
+            for(int i = 0 ;i<7;i++){
+                prefsEditor.putString("recipe"+i,null);
+            }
             for (int i = 0; i < recipeArray.length(); i++) {
                 try {
                     Recipe recipe = new Recipe(recipeArray.get(i).toString());

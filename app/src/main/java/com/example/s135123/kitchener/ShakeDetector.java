@@ -10,11 +10,12 @@ import android.net.NetworkInfo;
 import android.widget.Toast;
 
 /**
- * Created by s130604 on 26-3-2016.
+ * Class that detects shaking of the device
+ * should be deregistered in activities in onPause, otherwise it will also register shakes when the app is closed
  */
 public class ShakeDetector implements SensorEventListener {
     Activity activity;
-    long lastTime;
+    long lastTime = Long.MAX_VALUE;
     User user = User.getInstance();
 
     public ShakeDetector(Activity activity) {
@@ -25,16 +26,15 @@ public class ShakeDetector implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             float[] values = event.values;
+            long time=event.timestamp;
             float x = values[0];
             float y = values[1];
             float z = values[2];
             float vector = x * x + y * y + z * z;
             if (vector > 500) {
-                if(System.currentTimeMillis()-lastTime<1000){
-                    //don't random a new recipe to avoid randoming multiple times
-                }
-                else if(user.getShakeEnabled()){
-                    lastTime = System.currentTimeMillis();
+                if(user.getShakeEnabled()&&lastTime-time>=1000){
+                    System.out.println(lastTime+" is da time");
+                    lastTime = time;
                     Thread thread = new RandomRecipeThread(activity);
                     if (isNetworkAvailable()) {
                         thread.start();

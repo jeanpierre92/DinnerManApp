@@ -17,7 +17,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import java.util.ArrayList;
 
 /**
- * Created by s130604 on 29-3-2016.
+ * Shows the recipe information in the activity that was passed
  */
 public class RecipeInfo {
     Activity activity;
@@ -42,8 +42,8 @@ public class RecipeInfo {
         recipeInfoContentLayout = (RelativeLayout) activity.findViewById(R.id.content_recipe_info_layout);
         recipeInfoContentLayout.setVisibility(View.VISIBLE);
         ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
+        //only init if this was not done before
         if (!imageLoader.isInited()) {
-            System.out.println("inited image laoder");
             imageLoader.init(ImageLoaderConfiguration.createDefault(activity));
         }
         imageView = (ImageView) activity.findViewById(R.id.imageView);
@@ -55,6 +55,8 @@ public class RecipeInfo {
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 android.view.ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
                 int finalWidth = metrics.widthPixels;
+                //if the info is displayed on a tablet, the width of the image is width of screen - width of
+                //the SlidingTablLayout (on a phone this is opened in a new activity instead)
                 if(!activity.getResources().getBoolean(R.bool.isPhone)){
                     finalWidth -=  (int) activity.getResources().getDimension(R.dimen.list_width);;
                 }
@@ -67,14 +69,9 @@ public class RecipeInfo {
         });
         summaryView = (TextView) activity.findViewById(R.id.summary);
         summaryView.setText(recipe.getSummary());
-        //summaryView.setText("Forget going out to eat or ordering takeout every time you crave African food. Try making African Beef Curry at home. This recipe serves 4 and costs $1.76 per serving. This main course has 464 calories, 36g of protein, and 10g of fat per serving. Only a few people made this recipe, and 1 would say it hit the spot. It is a good option if you're following a gluten free and dairy free diet. This recipe from Taste of Home requires green bell pepper, canned tomatoes, salt, and curry powder. To use up the raisins you could follow this main course with the Chocolate Brownies With Raisins as a dessert. From preparation to the plate, this recipe takes roughly 1 hour and 45 minutes. With a spoonacular score of 85%, this dish is awesome. If you like this recipe, take a look at these similar recipes: South African Beef Curry, African Curry, and African Veg Curry.");
-
         instructionsView = (TextView) activity.findViewById(R.id.instructions);
         instructionsView.setText("");
         ArrayList<String> instructions = recipe.getInstructions();
-        /*ArrayList<String> instructions = new ArrayList<>();
-        instructions.add("first instruction");
-        instructions.add("second instruction");*/
         int num = 1;
         for (int i = 0; i < instructions.size(); i++) {
             String instruction = instructions.get(i);
@@ -87,7 +84,6 @@ public class RecipeInfo {
             }
         }
         titleView = (TextView) activity.findViewById(R.id.title);
-        //titleView.setText("Title");
         titleView.setText(recipe.getTitle());
         cuisineView = (TextView) activity.findViewById(R.id.cuisine_textview);
         if (recipe.getCuisine().matches("[aeiou].*$")) {
@@ -104,7 +100,7 @@ public class RecipeInfo {
             servingsString+="s";
         }
         servingsString+="\n";
-        if (recipe.getPreparationMinutes() < 0) {
+        if (recipe.getPreparationMinutes() < 0) {       //time is invalid
             servingsString += "Time to prepare: unknown\n";
         } else {
             servingsString += "Time to prepare: " + recipe.getPreparationMinutes() + " minutes\n";
@@ -132,8 +128,6 @@ public class RecipeInfo {
         }
         ingredientsView.setText(ingredientsString);
 
-        //servingsView.setText("5 servings\n5 minutes to prepare\n5 minutes to cook\nTotal time: 5");
-        //ArrayList<String> instructions =recipe.getInstructions();
     }
 
 }

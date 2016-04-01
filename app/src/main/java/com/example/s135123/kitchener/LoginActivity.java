@@ -85,8 +85,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button signInButton = (Button) findViewById(R.id.sign_in_button);
+        signInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -108,8 +108,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * If there are form errors, the errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
         if (mAuthTask != null) {
@@ -134,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        // Check for a valid email address.
+        // Check if the user name is filled in
         if (TextUtils.isEmpty(username)) {
             mUsernameView.setError("Please fill in your username");
             focusView = mUsernameView;
@@ -205,7 +204,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + mUsername + "/" + mPassword;
             JSONObject authTokenJson = null;
             SendRequest sendRequest = new SendRequest();

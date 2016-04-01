@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
     int numboftabs =3;
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
-    private Toolbar toolbar;
     private SensorManager sensorManager;
     private ShakeDetector shakeDetector;
     ImageView hamburger;
@@ -226,14 +225,6 @@ public class MainActivity extends AppCompatActivity {
         mDrawer.closeDrawers();
     }
 
-
-    // Method to check if there is a network available
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-    }
     @Override
     public void onPause(){
         super.onPause();

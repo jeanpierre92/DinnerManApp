@@ -38,7 +38,6 @@ import java.util.HashMap;
  * Created by s142451 on 16-3-2016.
  */
 public class Favorites extends AppCompatActivity {
-    private TextView textView;
     ListView list;
     ArrayList<Recipe> recipes = new ArrayList<>();
     CompactBaseAdapter adapter;
@@ -59,6 +58,7 @@ public class Favorites extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFavorites);
         setSupportActionBar(toolbar);
         favoritesLayout = (RelativeLayout) findViewById(R.id.favorites_layout);
+        //reload recipes by tapping the activity (useful when there was no internet connection during onCreate())
         favoritesLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,7 +132,6 @@ public class Favorites extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
             User user = User.getInstance();
-            //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
             JSONObject authTokenJson = null;
             SendRequest sendRequest = new SendRequest();
@@ -151,9 +150,7 @@ public class Favorites extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            System.out.println("numfavoritesinuserclass: "+user.getFavorites().size());
             for(int id:user.getFavorites()) {
-
                 String idUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken + "/specific/" + id;
                 final String response = sendRequest.sendGetRequest(idUrl);
                 try {
@@ -165,6 +162,7 @@ public class Favorites extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                //data of the listview adapter must be changed from the UI thread
                 runOnUiThread(new Runnable() {
                     public void run() {
                         recipes.add(new Recipe(response));

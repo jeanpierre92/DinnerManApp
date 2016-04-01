@@ -75,6 +75,7 @@ public class CompactBaseAdapter extends BaseAdapter {
         else{
             favoritesImage.setImageResource(R.drawable.favorites_empty);
         }
+        //see onItemClick in activity
         favoritesImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +89,8 @@ public class CompactBaseAdapter extends BaseAdapter {
             }
         });
         cuisineTitle.setText(recipe.getCuisine()+" recipes");
+        //the cuisine is only shown in the recommendation tab
+        //it is only shown once: if there are multiple Dutch recipes , there is one header Dutch recipes
         if(showCuisine){
             cuisineTitle.setVisibility(View.VISIBLE);
             for(Recipe r:recipes){
@@ -105,22 +108,16 @@ public class CompactBaseAdapter extends BaseAdapter {
         title.setText(recipe.getTitle());
         time.setText(Integer.toString(recipe.getReadyInMinutes())+" min");
         description.setText(recipe.getSummary());
-        ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
+        ImageLoader imageLoader = ImageLoader.getInstance();
         if (!imageLoader.isInited()) {
-            System.out.println("inited image laoder");
             imageLoader.init(ImageLoaderConfiguration.createDefault(activity));
         }
+        //cache image so that they don't reload any time you scroll up and down
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();
         imageLoader.displayImage(recipe.getImage(), thumbnail, options);
         return convertView;
-    }
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 }

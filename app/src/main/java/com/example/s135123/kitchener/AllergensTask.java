@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by s130604 on 31-3-2016.
+ * add to or remove allergens from the profile
  */
 public class AllergensTask extends AsyncTask<Boolean, Void, String> {
     String allergen;
@@ -29,7 +29,6 @@ public class AllergensTask extends AsyncTask<Boolean, Void, String> {
     @Override
     protected String doInBackground(Boolean... params) {
         User user = User.getInstance();
-        //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
         String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
         JSONObject authTokenJson = null;
         SendRequest sendRequest = new SendRequest();
@@ -61,11 +60,9 @@ public class AllergensTask extends AsyncTask<Boolean, Void, String> {
                 }
             }
         } else {
-            //remove from favorites
+            //remove from allergens
             String addToAllergensUrl = "http://appdev-gr1.win.tue.nl:8008/api/user/" + user.getUsername() + "/" + authToken + "/deleteAllergens";
             int statusCode = sendRequest.sendDeleteRequest(addToAllergensUrl, allergen);
-            System.out.println("allergens delete url: " + addToAllergensUrl);
-            System.out.println("allergens statuscode: " + statusCode);
             if (statusCode != 200) {
                 return "failed";
             } else {
