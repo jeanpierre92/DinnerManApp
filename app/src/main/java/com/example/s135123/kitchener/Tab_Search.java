@@ -259,6 +259,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                         searchButtonEnabled = false;
                         if (recipes != null) {
                             recipes.clear();
+                            adapter.notifyDataSetChanged();
                         }
                         for(String allergen:ingredientsExclude){
                             new AllergensTask(allergen, ingredientsExclude, ingredientAdapterExclude, getActivity()).execute(true);
