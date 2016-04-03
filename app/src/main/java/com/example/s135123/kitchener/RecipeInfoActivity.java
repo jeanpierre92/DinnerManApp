@@ -48,7 +48,7 @@ public class RecipeInfoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        shakeDetector = new ShakeDetector(this);
+        shakeDetector = new ShakeDetector(this, System.currentTimeMillis());
 
         Recipe recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
         new RecipeInfo(this).updateContents(recipe);

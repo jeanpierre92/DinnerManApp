@@ -70,7 +70,7 @@ public class Allergens extends AppCompatActivity  {
             }
         });
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        shakeDetector = new ShakeDetector(this);
+        shakeDetector = new ShakeDetector(this, System.currentTimeMillis());
     }
 
 

@@ -108,7 +108,7 @@ public class Favorites extends AppCompatActivity {
             paramsLinear.width = ViewGroup.LayoutParams.MATCH_PARENT;
         }
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        shakeDetector = new ShakeDetector(this);
+        shakeDetector = new ShakeDetector(this, System.currentTimeMillis());
     }
 
     private void loadRecipes(){

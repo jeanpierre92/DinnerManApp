@@ -54,7 +54,7 @@ public class Settings extends AppCompatActivity {
         shakeActive.setChecked(user.getShakeEnabled());
         shakeActive.setOnClickListener(mShakeListener);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        shakeDetector = new ShakeDetector(this);
+        shakeDetector = new ShakeDetector(this, System.currentTimeMillis());
 
     }
 

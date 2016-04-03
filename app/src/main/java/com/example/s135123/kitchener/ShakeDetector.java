@@ -15,26 +15,28 @@ import android.widget.Toast;
  */
 public class ShakeDetector implements SensorEventListener {
     Activity activity;
-    long lastTime = Long.MAX_VALUE;
+    long lastTime;
     User user = User.getInstance();
 
-    public ShakeDetector(Activity activity) {
+    public ShakeDetector(Activity activity, long lastTime) {
         this.activity = activity;
+        this.lastTime = lastTime;
+        System.out.println("lasttime: "+lastTime);
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             float[] values = event.values;
-            long time=event.timestamp;
+            long time=System.currentTimeMillis();
             float x = values[0];
             float y = values[1];
             float z = values[2];
             float vector = x * x + y * y + z * z;
             if (vector > 500) {
-                if(user.getShakeEnabled()&&lastTime-time>=1000){
-                    System.out.println(lastTime+" is da time");
-                    lastTime = time;
+                if(user.getShakeEnabled()&&time -lastTime>=2000){
+                    long dif = time-lastTime;
+                    System.out.println("time since last shake: "+dif);
                     Thread thread = new RandomRecipeThread(activity);
                     if (isNetworkAvailable()) {
                         thread.start();

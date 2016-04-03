@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             paramsPager.width= ViewGroup.LayoutParams.MATCH_PARENT;
         }
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        shakeDetector = new ShakeDetector(this);
+        shakeDetector = new ShakeDetector(this, System.currentTimeMillis());
 
     }
 
