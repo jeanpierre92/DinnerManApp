@@ -46,6 +46,7 @@ public class Favorites extends AppCompatActivity {
     User user;
     private SensorManager sensorManager;
     private ShakeDetector shakeDetector;
+    SendRequest sendRequest = new SendRequest();
 
 
     @Override
@@ -73,7 +74,7 @@ public class Favorites extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 long viewId = view.getId();
                 if (viewId == R.id.favoritesImageViewRec) {
-                    if (isNetworkAvailable()) {
+                    if (sendRequest.isNetworkAvailable(Favorites.this)) {
                         int recipeId = recipes.get(position).getId();
                         boolean addTofavorite = !user.getFavorites().contains(recipeId);
                         new FavoritesTask(position, Favorites.this, recipeId, adapter).execute(addTofavorite);
@@ -112,7 +113,7 @@ public class Favorites extends AppCompatActivity {
     }
 
     private void loadRecipes(){
-        if (isNetworkAvailable()) {
+        if (sendRequest.isNetworkAvailable(Favorites.this)) {
             GetFavoritesTask task = new GetFavoritesTask();
             noInternetTextFav.setVisibility(View.GONE);
             task.execute((Void) null);
@@ -121,12 +122,6 @@ public class Favorites extends AppCompatActivity {
             noInternetTextFav.setVisibility(View.VISIBLE);
         }
     }
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-    }
     public class GetFavoritesTask extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -134,7 +129,6 @@ public class Favorites extends AppCompatActivity {
             User user = User.getInstance();
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
             JSONObject authTokenJson = null;
-            SendRequest sendRequest = new SendRequest();
             try {
                 authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
             } catch (JSONException e) {

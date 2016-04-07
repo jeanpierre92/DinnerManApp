@@ -38,7 +38,7 @@ public class ShakeDetector implements SensorEventListener {
                     long dif = time-lastTime;
                     System.out.println("time since last shake: "+dif);
                     Thread thread = new RandomRecipeThread(activity);
-                    if (isNetworkAvailable()) {
+                    if (new SendRequest().isNetworkAvailable(activity)) {
                         thread.start();
                     } else {
                         Toast toast = Toast.makeText(activity, "No network available to random a recipe", Toast.LENGTH_LONG);
@@ -47,13 +47,6 @@ public class ShakeDetector implements SensorEventListener {
                 }
             }
         }
-    }
-    // Method to check if there is a network available
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
     @Override

@@ -62,6 +62,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
     CompactBaseAdapter adapter;
 
     User user = User.getInstance();
+    SendRequest sendRequest = new SendRequest();
 
     //TextView views needed to hide them if an advanced search is necessary
     RangeSeekBar calSeekBar;
@@ -106,7 +107,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                 long viewId = view.getId();
                 if (viewId == R.id.favoritesImageViewRec) {
                     System.out.println("started favoriting");
-                    if (isNetworkAvailable()) {
+                    if (sendRequest.isNetworkAvailable(getActivity())) {
                         int recipeId = recipes.get(position).getId();
                         boolean addTofavorite = !user.getFavorites().contains(recipeId);
                         new FavoritesTask(position, getActivity(), recipeId, adapter).execute(addTofavorite);
@@ -254,7 +255,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonSearch:
-                if (isNetworkAvailable()) {
+                if (sendRequest.isNetworkAvailable(getActivity())) {
                     if (searchButtonEnabled) {
                         searchButtonEnabled = false;
                         if (recipes != null) {
@@ -292,13 +293,6 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                 break;
         }
 
-    }
-
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
 
@@ -347,7 +341,6 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
             //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
             JSONObject authTokenJson = null;
-            SendRequest sendRequest = new SendRequest();
             try {
                 authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
             } catch (JSONException e) {

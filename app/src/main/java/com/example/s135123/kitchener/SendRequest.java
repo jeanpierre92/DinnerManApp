@@ -1,5 +1,9 @@
 package com.example.s135123.kitchener;
 
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -74,7 +78,7 @@ public class SendRequest {
 
         // Create the POST object and add the parameters
         HttpPost httpPost = new HttpPost(url);
-        StringEntity entity = new StringEntity(post, HTTP.CONTENT_TYPE);
+        StringEntity entity = new StringEntity(post, HTTP.UTF_8);
         httpPost.setEntity(entity);
         HttpResponse response = null;
         try {
@@ -126,5 +130,11 @@ public class SendRequest {
         }
         inputStream.close();
         return result;
+    }
+    public Boolean isNetworkAvailable(Activity activity) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 }

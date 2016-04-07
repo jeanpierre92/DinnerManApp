@@ -44,6 +44,7 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
     RelativeLayout recommendationLayout;
     ImageView questionMark;
     final User user = User.getInstance();
+    SendRequest sendRequest = new SendRequest();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 long viewId = view.getId();
                 if (viewId == R.id.favoritesImageViewRec) {
-                    if (isNetworkAvailable()) {
+                    if (sendRequest.isNetworkAvailable(getActivity())) {
                         int recipeId = recipes.get(position).getId();
                         boolean addTofavorite = !user.getFavorites().contains(recipeId);
                         new FavoritesTask(position, getActivity(), recipeId, adapter).execute(addTofavorite);
@@ -98,7 +99,7 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
     }
 
     private void loadRecipes() {
-        if (isNetworkAvailable()) {
+        if (sendRequest.isNetworkAvailable(getActivity())) {
             RecommendRecipeTask task = new RecommendRecipeTask();
             noInternetText.setVisibility(View.GONE);
             task.execute((Void) null);
@@ -121,13 +122,6 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
         }
     }
 
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -144,7 +138,6 @@ public class Tab_Recommendations extends android.support.v4.app.Fragment {
             //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
             JSONObject authTokenJson = null;
-            SendRequest sendRequest = new SendRequest();
             try {
                 authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
             } catch (JSONException e) {

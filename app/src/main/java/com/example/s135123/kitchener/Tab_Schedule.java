@@ -45,6 +45,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
     SharedPreferences prefs;
     User user = User.getInstance();
     ImageView questionMark;
+    SendRequest sendRequest = new SendRequest();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
                 long viewId = view.getId();
                 if (viewId == R.id.rerollImageView) {
                     System.out.println("started rerolling");
-                    if (isNetworkAvailable()) {
+                    if (sendRequest.isNetworkAvailable(getActivity())) {
                         new RerollTask(position).execute();
                         System.out.println("started rerolling");
                     } else {
@@ -80,7 +81,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
                     }
                 } else if (viewId == R.id.favoritesImageView) {
                     System.out.println("started favoriting");
-                    if (isNetworkAvailable()) {
+                    if (sendRequest.isNetworkAvailable(getActivity())) {
                         int recipeId = recipes.get(position).getId();
                         boolean addTofavorite = !user.getFavorites().contains(recipeId);
                         new FavoritesTask(position, getActivity(), recipeId, adapter).execute(addTofavorite);
@@ -107,7 +108,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 System.out.println(recipes.size());
-                if (isNetworkAvailable()) {
+                if (sendRequest.isNetworkAvailable(getActivity())) {
                     if (scheduleButtonEnabled) {
                         scheduleButtonEnabled = false;
                         if (recipes != null) {
@@ -174,13 +175,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         }
     }
 
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-    }
-
     public class ScheduleTask extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -188,7 +182,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
             JSONObject authTokenJson = null;
-            SendRequest sendRequest = new SendRequest();
             try {
                 authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
             } catch (JSONException e) {
@@ -264,7 +257,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
             JSONObject authTokenJson = null;
-            SendRequest sendRequest = new SendRequest();
             try {
                 authTokenJson = new JSONObject(sendRequest.sendGetRequest(authTokenUrl));
             } catch (JSONException e) {

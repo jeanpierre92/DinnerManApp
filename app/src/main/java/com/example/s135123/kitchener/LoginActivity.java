@@ -61,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     private View mLoginFormView;
     private User user;
     private TextView registerText;
+    SendRequest sendRequest = new SendRequest();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            if (isNetworkAvailable()) {
+            if (sendRequest.isNetworkAvailable(this)) {
                 showProgress(true);
                 mAuthTask = new UserLoginTask(username, password);
                 mAuthTask.execute((Void) null);
@@ -156,13 +157,6 @@ public class LoginActivity extends AppCompatActivity {
                 toast.show();
             }
         }
-    }
-
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
     private void showProgress(final boolean show) {
