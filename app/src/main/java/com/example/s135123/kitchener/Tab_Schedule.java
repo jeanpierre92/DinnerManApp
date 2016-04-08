@@ -41,7 +41,7 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
     SeekBar seekBar;
     Button generateButton;
     boolean scheduleButtonEnabled = true;
-    int days = 2;//number of days to generate a schedule for
+    int days;//number of days to generate a schedule for
     SharedPreferences prefs;
     User user = User.getInstance();
     ImageView questionMark;
@@ -53,13 +53,17 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         //load a schedule if there is one
         prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         Gson gson = new Gson();
+        days = 0;
         for (int i = 0; i < 7; i++) {
             String json = prefs.getString("recipe" + i, null);
             if (json != null) {
+                days++;
                 Recipe recipe = gson.fromJson(json, Recipe.class);
                 recipes.add(recipe);
             }
         }
+        days = Math.max(days, 2);
+        System.out.println("days in oncreate: "+days);
         list = (ListView) v.findViewById(R.id.listView_schedule);
         View header = inflater.inflate(R.layout.schedule_header, null);
         list.addHeaderView(header, null, false);
@@ -129,10 +133,12 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             }
         });
         seekBar = (SeekBar) v.findViewById(R.id.schedule_seek_bar);
+        seekBar.setProgress(days-2);
+        generateButton.setText("Generate a schedule for " + days + " days");
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                generateButton.setText("Generate a schedule for " + Integer.toString(progress + 2) + " days");
                 days = progress + 2;
+                generateButton.setText("Generate a schedule for " + days + " days");
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -141,7 +147,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-        seekBar.setProgress(recipes.size());
         questionMark = (ImageView) v.findViewById(R.id.question_mark_schedule);
         questionMark.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,8 +156,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             }
         });
         return v;
-        // return inflater.inflate(R.layout.tab_schedule, container, false);
-
     }
 
     @Override
@@ -199,11 +202,15 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             }
             String recommendUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken + "/schedule/" + days;
             String result = sendRequest.sendGetRequest(recommendUrl);
+            System.out.println("ScheduleURL: "+recommendUrl);
+            System.out.println("days: "+days);
+            System.out.println("result from schedule: "+result);
             JSONObject resultJson = null;
             try {
                 resultJson = new JSONObject(result);
             } catch (JSONException e) {
                 e.printStackTrace();
+                return "";
             }
             JSONArray recipeArray = null;
             try {
@@ -254,7 +261,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         @Override
         protected String doInBackground(Void... params) {
             User user = User.getInstance();
-            //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
             JSONObject authTokenJson = null;
             try {
