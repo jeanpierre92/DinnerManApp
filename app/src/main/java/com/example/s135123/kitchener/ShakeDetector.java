@@ -40,6 +40,7 @@ public class ShakeDetector implements SensorEventListener {
                     Thread thread = new RandomRecipeThread(activity);
                     if (new SendRequest().isNetworkAvailable(activity)) {
                         thread.start();
+                        lastTime=time;
                     } else {
                         Toast toast = Toast.makeText(activity, "No network available to random a recipe", Toast.LENGTH_LONG);
                         toast.show();

@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
     RelativeLayout relativeMainLayout;
-    CharSequence Titles[]={"Schedule","Recommend", "Search"};
-    int numboftabs =3;
+    CharSequence Titles[] = {"Schedule", "Recommend", "Search"};
+    int numboftabs = 3;
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
     private SensorManager sensorManager;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(getResources().getBoolean(R.bool.isPhone)){
+        if (getResources().getBoolean(R.bool.isPhone)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         user = User.getInstance();
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
-        if(getIntent().getSerializableExtra("page")!=null) {
+        if (getIntent().getSerializableExtra("page") != null) {
             int page = (Integer) getIntent().getSerializableExtra("page");
             pager.setCurrentItem(page);
         }
@@ -118,13 +118,13 @@ public class MainActivity extends AppCompatActivity {
         tabs.setViewPager(pager);
         relativeMainLayout = (RelativeLayout) findViewById(R.id.relative_main_layout);
         boolean isPhone = getResources().getBoolean(R.bool.isPhone);
-        if(isPhone){
+        if (isPhone) {
             ViewGroup.LayoutParams paramsLinear = relativeMainLayout.getLayoutParams();
-            paramsLinear.width= ViewGroup.LayoutParams.MATCH_PARENT;
+            paramsLinear.width = ViewGroup.LayoutParams.MATCH_PARENT;
             ViewGroup.LayoutParams paramsSlide = tabs.getLayoutParams();
-            paramsSlide.width= ViewGroup.LayoutParams.MATCH_PARENT;
+            paramsSlide.width = ViewGroup.LayoutParams.MATCH_PARENT;
             ViewGroup.LayoutParams paramsPager = pager.getLayoutParams();
-            paramsPager.width= ViewGroup.LayoutParams.MATCH_PARENT;
+            paramsPager.width = ViewGroup.LayoutParams.MATCH_PARENT;
         }
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         shakeDetector = new ShakeDetector(this, System.currentTimeMillis());
@@ -158,8 +158,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
     }
+
     @Override
-     public void onBackPressed() {
+    public void onBackPressed() {
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -178,8 +179,8 @@ public class MainActivity extends AppCompatActivity {
         // position
         Fragment fragment = null;
 
-        Class fragmentClass=null;
-        switch(menuItem.getItemId()) {
+        Class fragmentClass = null;
+        switch (menuItem.getItemId()) {
             case R.id.nav_first_fragment:
                 Intent intentTutorial = new Intent(MainActivity.this, TutorialGeneral.class);
                 startActivity(intentTutorial);
@@ -198,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intentSettings);
                 break;
             case R.id.nav_fifth_fragment:
-                User user =User.getInstance();
+                User user = User.getInstance();
                 user.setPassword(null);
                 user.setUsername(null);
                 Intent intentLogin = new Intent(MainActivity.this, LoginActivity.class);
@@ -213,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(fragment!=null&&fragmentClass!=null) {
+        if (fragment != null && fragmentClass != null) {
             // Insert the fragment by replacing any existing fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
@@ -226,15 +227,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
-            sensorManager.unregisterListener(shakeDetector);
+        sensorManager.unregisterListener(shakeDetector);
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-            sensorManager.registerListener(shakeDetector,
-                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                    SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(shakeDetector,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
     }
 }

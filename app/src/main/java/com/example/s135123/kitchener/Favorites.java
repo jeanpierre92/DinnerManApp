@@ -47,6 +47,7 @@ public class Favorites extends AppCompatActivity {
     private SensorManager sensorManager;
     private ShakeDetector shakeDetector;
     SendRequest sendRequest = new SendRequest();
+    boolean loaded = false; //indicates if the favorite recipes were retrieved from the server
 
 
     @Override
@@ -63,7 +64,9 @@ public class Favorites extends AppCompatActivity {
         favoritesLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadRecipes();
+                if(!loaded) {
+                    loadRecipes();
+                }
             }
         });
         user = User.getInstance();
@@ -81,6 +84,10 @@ public class Favorites extends AppCompatActivity {
                         if(!addTofavorite){
                             recipes.remove(position);
                             adapter.notifyDataSetChanged();
+                        }
+                        if(recipes.size()==0){
+                            noInternetTextFav.setText("You currently have no favorite recipes");
+                            noInternetTextFav.setVisibility(View.VISIBLE);
                         }
                     } else {
                         Toast toast = Toast.makeText(Favorites.this, "Unable to reach the server to modify favorites", Toast.LENGTH_LONG);
@@ -114,6 +121,8 @@ public class Favorites extends AppCompatActivity {
 
     private void loadRecipes(){
         if (sendRequest.isNetworkAvailable(Favorites.this)) {
+            recipes.clear();
+            adapter.notifyDataSetChanged();
             GetFavoritesTask task = new GetFavoritesTask();
             noInternetTextFav.setVisibility(View.GONE);
             task.execute((Void) null);
@@ -174,7 +183,12 @@ public class Favorites extends AppCompatActivity {
                 noInternetTextFav.setVisibility(View.VISIBLE);
             }
             else {
+                loaded = true;
                 adapter.notifyDataSetChanged();
+                if(recipes.size()==0){
+                    noInternetTextFav.setText("You currently have no favorite recipes");
+                    noInternetTextFav.setVisibility(View.VISIBLE);
+                }
             }
         }
 
