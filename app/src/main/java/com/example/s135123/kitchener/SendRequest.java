@@ -43,7 +43,6 @@ public class SendRequest {
         InputStream inputStream = null;
         String result = "";
         try {
-
             // create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
 
@@ -57,12 +56,6 @@ public class SendRequest {
             if (inputStream != null) {
                 result = convertInputStreamToString(inputStream);
             }
-
-            /*HttpPost post = new HttpPost("http://appdev-gr1.win.tue.nl:8008/api/user/test/lfbHKQLmh0o5khy2/addFavorites");
-            HttpEntity entity = new ByteArrayEntity("adsfdfs".getBytes("UTF-8"));
-            post.setEntity(entity);
-            HttpResponse response = httpclient.execute(post);
-            System.out.println(EntityUtils.toString(response.getEntity()));*/
         } catch (Exception e) {
             e.printStackTrace();
         }

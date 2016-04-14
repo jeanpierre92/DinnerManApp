@@ -63,7 +63,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             }
         }
         days = Math.max(days, 2);
-        System.out.println("days in oncreate: "+days);
         list = (ListView) v.findViewById(R.id.listView_schedule);
         View header = inflater.inflate(R.layout.schedule_header, null);
         list.addHeaderView(header, null, false);
@@ -72,19 +71,15 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("pos in schedule: " + position);
                 long viewId = view.getId();
                 if (viewId == R.id.rerollImageView) {
-                    System.out.println("started rerolling");
                     if (sendRequest.isNetworkAvailable(getActivity())) {
                         new RerollTask(position).execute();
-                        System.out.println("started rerolling");
                     } else {
                         Toast toast = Toast.makeText(getContext(), "No network available to retrieve a new recipe", Toast.LENGTH_LONG);
                         toast.show();
                     }
                 } else if (viewId == R.id.favoritesImageView) {
-                    System.out.println("started favoriting");
                     if (sendRequest.isNetworkAvailable(getActivity())) {
                         int recipeId = recipes.get(position).getId();
                         boolean addTofavorite = !user.getFavorites().contains(recipeId);
@@ -111,7 +106,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
         generateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(recipes.size());
                 if (sendRequest.isNetworkAvailable(getActivity())) {
                     if (scheduleButtonEnabled) {
                         scheduleButtonEnabled = false;
@@ -202,9 +196,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
             }
             String recommendUrl = "http://appdev-gr1.win.tue.nl:8008/api/recipe/" + user.getUsername() + "/" + authToken + "/schedule/" + days;
             String result = sendRequest.sendGetRequest(recommendUrl);
-            System.out.println("ScheduleURL: "+recommendUrl);
-            System.out.println("days: "+days);
-            System.out.println("result from schedule: "+result);
             JSONObject resultJson = null;
             try {
                 resultJson = new JSONObject(result);
@@ -228,7 +219,6 @@ public class Tab_Schedule extends android.support.v4.app.Fragment {
                     Recipe recipe = new Recipe(recipeArray.get(i).toString());
                     recipes.add(recipe);
                     String json = gson.toJson(recipe);
-                    System.out.println("json in schedule: " + json);
                     prefsEditor.putString("recipe" + i, json);
                 } catch (JSONException e) {
                     e.printStackTrace();

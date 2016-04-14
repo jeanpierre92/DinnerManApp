@@ -101,11 +101,6 @@ public class LoginActivity extends AppCompatActivity {
         registerText.setVisibility(View.GONE);
     }
 
-    public void onRegisterClick(View v) {
-        Intent i = new Intent(this, RegisterActivity.class);
-        startActivity(i);
-    }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -209,7 +204,6 @@ public class LoginActivity extends AppCompatActivity {
             if (authTokenJson == null) {
                 return "noInternet";
             }
-            System.out.println(authTokenJson.toString());
             String authToken = null;
             try {
                 authToken = authTokenJson.getString("authToken");
@@ -222,7 +216,6 @@ public class LoginActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            System.out.println("status: " + status);
             if (status == 400) {
                 return "failed";
             }

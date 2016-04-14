@@ -27,7 +27,6 @@ public class FavoritesTask extends AsyncTask<Boolean, Void, String> {
     @Override
     protected String doInBackground(Boolean... params) {
         User user = User.getInstance();
-        //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
         String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
         JSONObject authTokenJson = null;
         SendRequest sendRequest = new SendRequest();

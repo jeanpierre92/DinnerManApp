@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        //Do nothing
     }
 
     private void setupDrawerContent(NavigationView navigationView) {

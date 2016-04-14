@@ -64,7 +64,6 @@ public class LoadingScreenActivity extends Activity {
         protected Boolean doInBackground(Void... params) {
             User user = User.getInstance();
             if (user.getUsername() == null && user.getPassword() == null) {
-                System.out.println("allebei null");
                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);

@@ -82,8 +82,5 @@ public class Settings extends AppCompatActivity {
                     sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                     SensorManager.SENSOR_DELAY_NORMAL);
     }
-    // Change standard amount of days for schedule
-
-    // Remove all favorites
 
 }

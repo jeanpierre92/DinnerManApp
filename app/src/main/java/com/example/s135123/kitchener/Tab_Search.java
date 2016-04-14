@@ -106,7 +106,6 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 long viewId = view.getId();
                 if (viewId == R.id.favoritesImageViewRec) {
-                    System.out.println("started favoriting");
                     if (sendRequest.isNetworkAvailable(getActivity())) {
                         int recipeId = recipes.get(position).getId();
                         boolean addTofavorite = !user.getFavorites().contains(recipeId);
@@ -262,6 +261,7 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                             recipes.clear();
                             adapter.notifyDataSetChanged();
                         }
+                        //exclude ingredients by temporarily adding them to allergens
                         for(String allergen:ingredientsExclude){
                             new AllergensTask(allergen, ingredientsExclude, ingredientAdapterExclude, getActivity()).execute(true);
                         }
@@ -337,8 +337,6 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
 
         @Override
         protected String doInBackground(Void... params) {
-            System.out.println("mincal: " + minCal);
-            //String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/test/test123";
             String authTokenUrl = "http://appdev-gr1.win.tue.nl:8008/api/authenticate/" + user.getUsername() + "/" + user.getPassword();
             JSONObject authTokenJson = null;
             try {
@@ -364,8 +362,6 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
             }
             searchUrl += minCal + "/" + maxCal + "/" + minFat + "/" + maxFat + "/" + minProtein + "/" + maxProtein + "/" + minCarbs + "/" + maxCarbs;
             String result = sendRequest.sendGetRequest(searchUrl);
-            System.out.println("searchUrl: " + searchUrl);
-            System.out.println("searchResut: " + result);
             JSONObject resultJson = null;
             try {
                 resultJson = new JSONObject(result);
@@ -386,7 +382,6 @@ public class Tab_Search extends android.support.v4.app.Fragment implements View.
                     e.printStackTrace();
                 }
             }
-            System.out.println("searchresult: " + result);
             return result;
         }
 
