@@ -114,7 +114,8 @@ public class SendRequest {
     }
 
     // convert inputstream to String
-    private String convertInputStreamToString(InputStream inputStream) throws IOException {
+    //public for unit test
+    public String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
         String result = "";
